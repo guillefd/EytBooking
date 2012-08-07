@@ -1,0 +1,135 @@
+/* Foundation v2.1.4 http://foundation.zurb.com */
+/* Artfully masterminded by ZURB  */
+
+/* -------------------------------------------------- 
+   Table of Contents
+-----------------------------------------------------
+:: Shared Styles
+
+*/
+
+/* LP bar */
+#lpBar {
+  background: #00001e;
+  border-bottom: solid 4px #0084CC;
+  padding: 35px 20px 13px 20px; }
+  
+
+@media handheld, only screen and (max-width: 767px) {
+	#lpBar { padding: 15px 0px 13px 0px; }
+}
+
+#lpBar h1, #lpBar h2 {
+  margin-bottom: 0;
+  line-height: 1; }
+#lpBar h1 {
+  color: white;
+  font-size: 16px;
+  font-size: 1.6em;
+  font-weight: bold; }
+#lpBar h1 a { color: #fff; }
+#lpBar h2 {
+  color: white;
+  font-size: 12px;
+  font-size: 1.2em }
+#lpBar h2 a { color: #fff; }  
+
+#lpBar strong { margin: 0; padding: 0; height: 14px; line-height: 14px; position: relative; }
+#lpBar strong a {
+  line-height: 14px;
+  color: #fff;
+  font-weight: 500;
+  padding-right: 12px;
+}
+#lpBar strong a.button { padding: 4px 10px; font-weight: bold; }
+
+#topHeader { background: #00013d; padding: 10px 0 8px; margin-bottom: 30px; margin-top: 40px; }
+#topHeader h3 { color: #fff; }
+#topHeader a { color: #fff; position: relative; top: 10px; }
+
+div.foundation-header {
+margin: 0 0 40px 0;
+padding: 30px 0 0 0;
+/* border-bottom: solid 1px #CCC; */
+}
+
+div.foundation-header.subheader {
+margin-bottom: 9px;
+}
+
+.frame {padding:4px;background:#fff;border:1px solid #e5e5e5}
+.minframe {padding:2px;background:#fff;border:1px solid #e5e5e5}
+.smalltext{ font-size: 0.7em; line-height:90%;}
+
+.txt9{ font-size: 0.9em;}
+.txt8{ font-size: 0.8em;}
+.txt7{ font-size: 0.7em;}
+.txt6{ font-size: 0.6em;}
+
+hr.price {margin: 3px;}
+
+.left       { float: left; }
+.right      { float: right; }
+.right-m      { float: right; margin-right: 10px }        
+.hide     	{ display: none; }
+.highlight 	{ background: #ff0; }
+
+h3.subh { margin-top: 15px;}
+
+/*  --------------------------------------------------
+    Lists
+    -------------------------------------------------- */ 
+    ul.nice, ol.nice { list-style: none; margin: 0; }
+    ul.nice li, ol.nice li { padding-left: 13px; position: relative; background-image: url(../images/marker-2.gif); background-repeat-x: no-repeat;
+    background-repeat: no-repeat; background-position-x: 0px; background-position-y: 6px; }
+    ul.nice li span.bullet, ol.nice li span.number { position: absolute; left: 0px; top: 0px; color: #999;}
+
+
+/* -----------------------------------------
+   Panel
+----------------------------------------- */
+.row.display { background-color: #efefef; text-indent: 3px; padding: 15px; border-radius: 3px; -webkit-border-radius: 3px; -moz-border-radius: 3px; }
+
+div.grayborder{ padding: 10px 10px 2px 10px; background: #f4f4f4; border: 1px solid #ccc; border-radius: 3px; -webkit-border-radius: 3px; -moz-border-radius: 3px; margin: 0 0 20px 0; }
+div.whiteborder{ padding: 10px; background: #fff; border: 1px solid #ccc; border-radius: 3px; -webkit-border-radius: 3px; -moz-border-radius: 3px; margin: 0 0 20px 0; }
+
+div.panel-m {
+            padding: 20px;
+            background: #efefef;
+            background: -moz-linear-gradient(top, #efefef 75%, #F4F4F4 100%);
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(100%,#F4F4F4));
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#FFFFFF', endColorstr='#F4F4F4',GradientType=0 );
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+            -webkit-box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+            -moz-box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+	}
+
+div.whitepanel-m {
+            padding: 20px 20px 2px 20px;
+            border: 1px solid #ccc;           
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#FFFFFF', endColorstr='#F4F4F4',GradientType=0 );
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+            -webkit-box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+            -moz-box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+	}        
+        
+/* -----------------------------------------
+   Form 
+----------------------------------------- */
+form.custom div.custom.dropdown { max-width: 180px; }
+
+
+
+/* -----------------------------------------
+   Page Name 2
+----------------------------------------- */
+
+
+/* -----------------------------------------
+   Orbit
+----------------------------------------- */
+
+.orbit-bullets li.has-thumb {
+    width: 75px;
+    height: 50px; 
+}
