@@ -1,0 +1,22 @@
+    {{ theme:partial name="doctype" }}
+<head>
+    {{ theme:partial name="metadata" }}
+<!-- IE Fix for HTML5 Tags -->
+<!--[if lt IE 9]>
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        {{ theme:css file="ie.css" }}
+<![endif]-->             
+</head>
+<body>
+    {{ theme:partial name="subheader" }}
+    <div class="container">	
+        <!-- content -->
+        {{ theme:partial name="header" }}
+        {{ theme:partial name="content" }}  
+        {{ template:metadata in="body" }}
+        {{ theme:partial name="footer" }}
+        {{ template:metadata in="footer" }}
+        <!-- content -->        
+    </div>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!-- Begin meta tags -->
+<!-- Set the viewport width to device width for mobile -->
+<meta name="viewport" content="width=device-width" />
+<meta charset="utf-8" />
+<meta name="author" content="EyTMedia" />
+<meta name="copyright" content="eytmedia.com" />
+<meta name="distribution" content="global" />
+<meta name="resource-type" content="document" />
+<meta name="language" content="{{ lang:code }}" />
+{{ theme:favicon file="favicon.ico" base="url" }}
+<base href="{{ url:base }}" />
+
+<!-- Begin stylesheets -->
+{{ theme:css file="foundation.css" }}
+{{ theme:css file="app.css" }}
+{{ theme:css file="addons/jquery.ui.all.css" }}
+{{ theme:css file="addons/jquery-ui-1.8.16.custom.css" }}
+<!-- End stylesheets -->
+
+<!-- Load Foundation JS before Modules/Widgets -->
+{{ theme:js file="foundation.js" }}
+{{ theme:js file="app.js" }}
+
+{{ template:metadata }}
+
+<title>{{ settings:site_name }}&nbsp;&bull;&nbsp;{{ template:title }}</title>
