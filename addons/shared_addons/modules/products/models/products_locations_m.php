@@ -9,23 +9,6 @@
  */
 class Products_locations_m extends MY_Model
 {
-	/**
-	 * Insert a new category into the database
-	 * @access public
-	 * @param array $input The data to insert
-	 * @return string
-	 */
-	public function insert($input = array())
-	{
-		$this->load->helper('text');
-		parent::insert(array(
-			'title'=>$input['title'],
-			'description'=>$input['description'],                    
-			'slug'=>url_title(strtolower(convert_accented_characters($input['title'])))
-		));
-		
-		return $input['title'];
-	}
 
 	/**
 	 * Update an existing category

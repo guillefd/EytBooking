@@ -146,6 +146,7 @@ class Module_Products extends Module {
 			  `account_id` int(11) NOT NULL default '0',   
 			  `name` varchar(100) collate utf8_unicode_ci NOT NULL default '',
 			  `slug` varchar(100) collate utf8_unicode_ci NOT NULL default '',
+                          `intro` text collate utf8_unicode_ci NOT NULL,
 			  `description` text collate utf8_unicode_ci NOT NULL,               
 			  `address_l1` varchar(150) collate utf8_unicode_ci NOT NULL default '',
 			  `address_l2` varchar(150) collate utf8_unicode_ci NOT NULL default '',                          

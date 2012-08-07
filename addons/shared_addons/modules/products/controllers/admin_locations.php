@@ -23,112 +23,112 @@ class Admin_Locations extends Admin_Controller {
 	protected $validation_rules = array(
 		array(
 			'field' => 'name',
-			'label' => 'lang:location_title_label',
-			'rules' => 'trim|required|max_length[20]|callback__check_title'
+			'label' => 'lang:location:title_label',
+			'rules' => 'trim|required|max_length[50]|callback__check_title'
 		),
 		array(
 			'field' => 'intro',
-			'label' => 'lang:location_intro_label',
-			'rules' => 'trim|required'
+			'label' => 'lang:location:intro_label',
+			'rules' => 'trim'
 		),            
 		array(
 			'field' => 'description',
-			'label' => 'lang:location_description_label',
+			'label' => 'lang:location:description_label',
 			'rules' => 'trim'
 		),            
 		array(
 			'field' => 'address_l1',
-			'label' => 'lang:location_address_label',
+			'label' => 'lang:location:address_label',
 			'rules' => 'trim'
 		),  
 		array(
 			'field' => 'address_l2',
-			'label' => 'lang:location_address_label',
+			'label' => 'lang:location:address_label',
 			'rules' => 'trim'
 		),            
 		array(
 			'field' => 'City',
-			'label' => 'lang:location_city_label',
+			'label' => 'lang:location:city_label',
 			'rules' => 'trim'
 		),                    
 		array(
 			'field' => 'CityID',
-			'label' => 'lang:location_city_label',
+			'label' => 'lang:location:city_label',
 			'rules' => 'trim|required|numeric'
 		), 
 		array(
 			'field' => 'area',
-			'label' => 'lang:location_area_label',
+			'label' => 'lang:location:area_label',
 			'rules' => 'trim'
 		),    
 		array(
 			'field' => 'zipcode',
-			'label' => 'lang:location_zipcode_label',
+			'label' => 'lang:location:zipcode_label',
 			'rules' => 'trim'
 		),             
 		array(
 			'field' => 'Latitude',
-			'label' => 'lang:location_latitude_label',
+			'label' => 'lang:location:latitude_label',
 			'rules' => 'trim'
                     ),
 		array(
 			'field' => 'Longitude',
-			'label' => 'lang:location_longitude_label',
+			'label' => 'lang:location:longitude_label',
 			'rules' => 'trim'
                     ),
 		array(
 			'field' => 'latlng_precision',
-			'label' => 'lang:location_latlng_precision_label',
+			'label' => 'lang:location:latlng_precision_label',
 			'rules' => 'trim'
                     ),            
 		array(
 			'field' => 'phone_area_code',
-			'label' => 'lang:location_phonearea_label',
+			'label' => 'lang:location:phonearea_label',
 			'rules' => 'trim'
 		),              
 		array(
 			'field' => 'phone',
-			'label' => 'lang:location_phone_label',
+			'label' => 'lang:location:phone_label',
 			'rules' => 'trim'
 		),  
 		array(
 			'field' => 'fax',
-			'label' => 'lang:location_fax_label',
+			'label' => 'lang:location:fax_label',
 			'rules' => 'trim'
 		),
 		array(
 			'field' => 'mobile',
-			'label' => 'lang:location_mobile_label',
+			'label' => 'lang:location:mobile_label',
 			'rules' => 'trim'
 		),            
 		array(
 			'field' => 'chat_hotmail',
-			'label' => 'lang:location_hotmail_label',
+			'label' => 'lang:location:hotmail_label',
 			'rules' => 'trim'
 		),      
 		array(
 			'field' => 'chat_skype',
-			'label' => 'lang:location_skype_label',
+			'label' => 'lang:location:skype_label',
 			'rules' => 'trim'
 		),   
 		array(
 			'field' => 'chat_gmail',
-			'label' => 'lang:location_gmail_label',
+			'label' => 'lang:location:gmail_label',
 			'rules' => 'trim'
 		),     
 		array(
 			'field' => 'social_twitter',
-			'label' => 'lang:location_twitter_label',
+			'label' => 'lang:location:twitter_label',
 			'rules' => 'trim'
 		),               
 		array(
 			'field' => 'social_facebook',
-			'label' => 'lang:location_facebook_label',
+			'label' => 'lang:location:facebook_label',
 			'rules' => 'trim'
 		),  
 		array(
 			'field' => 'social_google',
-			'label' => 'lang:location_google_label',
+			'label' => 'lang:location:google_label',
 			'rules' => 'trim'
 		),              
 		array(
@@ -147,12 +147,10 @@ class Admin_Locations extends Admin_Controller {
 		parent::__construct();
 		
 		$this->load->model('products_locations_m');
-		$this->lang->load(array('products','categories','locations','features'));
-		
+                $this->load->helper(array('date'));
+		$this->lang->load(array('products','categories','locations','features'));		
 		// Load the validation library along with the rules
 		$this->load->library('form_validation');
-//		ci()->load->library('geoworldmap');                
-		$this->form_validation->set_rules($this->validation_rules);
 	}
 	
 	/**
@@ -172,7 +170,7 @@ class Admin_Locations extends Admin_Controller {
 		$locations = $this->products_locations_m->order_by('name')->limit($pagination['limit'])->get_all();
 
 		$this->template
-			->title($this->module_details['name'], lang('location_list_title'))
+			->title($this->module_details['name'], lang('location:list_title'))
 			->set('locations', $locations)
 			->set('pagination', $pagination)
 			->build('admin/locations/index', $this->data);
@@ -185,16 +183,39 @@ class Admin_Locations extends Admin_Controller {
 	 */
 	public function create()
 	{
+            // Set the validation rules from the array above
+            $this->form_validation->set_rules($this->validation_rules);           
             // Validate the data
             if ($this->form_validation->run())
             {
-                    $this->products_locations_m->insert($_POST)
-                            ? $this->session->set_flashdata('success', sprintf( lang('location_add_success'), $this->input->post('title')) )
-                            : $this->session->set_flashdata('error', lang('location_add_error'));
-
+                $this->load->helper('text');
+                $data = array('name' => $this->input->post('name'),
+                              'intro' => $this->input->post('intro'),
+                              'description' => $this->input->post('description'),
+                              'slug'=>url_title(strtolower(convert_accented_characters($this->input->post('name')))),
+                              'type' => $this->input->post('type'),
+                              'author_id' => $this->current_user->id,
+                              'created_on' => now() 
+                              );
+                if($this->products_locations_m->insert($data))
+		{
+                    // All good...
+                    $this->session->set_flashdata('success', lang('location:add_success'));
                     redirect('admin/products/locations');
-                        
-            }           
+		}
+		// Something went wrong. Show them an error
+		else
+                    {
+			$this->session->set_flashdata('error', lang('location:add_error'));
+                    	redirect('admin/products/locations/create');
+                    }
+            }
+
+            foreach ($this->validation_rules AS $rule)
+            {
+                    $this->data->{$rule['field']} = $this->input->post($rule['field']);
+            }
+                             
 
             // Loop through each validation rule
             foreach ($this->validation_rules as $rule)
@@ -308,7 +329,7 @@ class Admin_Locations extends Admin_Controller {
 	{
 		if ($this->products_locations_m->check_title($title))
 		{
-			$this->form_validation->set_message('_check_title', sprintf(lang('location_already_exist_error'), $title));
+			$this->form_validation->set_message('_check_title', sprintf(lang('location:already_exist_error'), $title));
 			return FALSE;
 		}
 
@@ -337,11 +358,11 @@ class Admin_Locations extends Admin_Controller {
 			
 			if ($id > 0)
 			{
-				$message = sprintf( lang('location_add_success'), $this->input->post('title'));
+				$message = sprintf( lang('location:add_success'), $this->input->post('title'));
 			}
 			else
 			{
-				$message = lang('location_add_error');
+				$message = lang('location:add_error');
 			}
 
 			return $this->template->build_json(array(
