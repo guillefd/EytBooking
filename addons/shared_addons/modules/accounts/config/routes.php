@@ -42,3 +42,4 @@ $route['accounts/admin/contacts/action']             = 'admin_contacts/action';
 $route['accounts/admin/accounts_autocomplete_ajax']       = 'admin/accounts_autocomplete_ajax';
 $route['accounts/admin/contacts/ajax_filter']             = 'admin_contacts/ajax_filter';
 $route['accounts/admin/contacts/ajax_filter(/:num)']      = 'admin_contacts/ajax_filter$1';
+$route['accounts/admin/get_account_ajax(/:num)']           = 'admin/get_account_ajax$1';

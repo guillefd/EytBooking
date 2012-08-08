@@ -26,8 +26,7 @@ class Accounts
         $this->t_accounts = 'accounts'; 
         $this->t_contacts = 'contacts';
             
-    }    
-    
+    }        
     
 
     /**
@@ -35,9 +34,9 @@ class Accounts
         * @param type $id
         * @return boolean 
         */
-    public function get($id)
+    public function get_account($id)
     {
-        $q = $this->db->get_where($this->_table, array('account_id' => $id));      
+        $q = ci()->db->get_where($this->t_accounts, array('account_id' => $id));      
         if($q->num_rows()>0)
         {
             return $data = $q->row();

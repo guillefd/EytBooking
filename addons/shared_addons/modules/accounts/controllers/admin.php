@@ -519,6 +519,23 @@ class Admin extends Admin_Controller
             }
             
             echo json_encode($respond);    
-        }          
+        } 
+        
+        /**
+         * Returns json response with account full record
+         */
+        public function get_account_ajax($id)
+        {
+            if($id)
+            {             
+               $respond = $this->accounts_m->get($id);
+                                  
+            }else
+                {
+                    $respond = FALSE;
+                }
+            
+            echo json_encode($respond);    
+        }        
         
 }        

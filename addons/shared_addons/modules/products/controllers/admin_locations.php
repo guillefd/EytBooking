@@ -22,10 +22,25 @@ class Admin_Locations extends Admin_Controller {
 	 */
 	protected $validation_rules = array(
 		array(
+                        'field' => 'account_id',
+                        'label' => 'lang:location:account_label',
+                        'rules' => 'trim|required|callback__check_validAccountId',
+                ),
+		array(
+                        'field' => 'account',
+                        'label' => 'lang:location:account_label',
+                        'rules' => 'trim',
+                ),            
+                array(
 			'field' => 'name',
-			'label' => 'lang:location:title_label',
-			'rules' => 'trim|required|max_length[50]|callback__check_title'
+			'label' => 'lang:location:name_label',
+			'rules' => 'trim|required|max_length[40]|callback__check_name'
 		),
+		array(
+			'field' => 'slug',
+			'label' => 'lang:location:slug_label',
+			'rules' => 'trim|required|max_length[40]||callback__check_slug'
+		),            
 		array(
 			'field' => 'intro',
 			'label' => 'lang:location:intro_label',
@@ -102,35 +117,10 @@ class Admin_Locations extends Admin_Controller {
 			'rules' => 'trim'
 		),            
 		array(
-			'field' => 'chat_hotmail',
-			'label' => 'lang:location:hotmail_label',
+			'field' => 'chatSocial_accounts',
+			'label' => 'lang:location:chatSocial_label',
 			'rules' => 'trim'
-		),      
-		array(
-			'field' => 'chat_skype',
-			'label' => 'lang:location:skype_label',
-			'rules' => 'trim'
-		),   
-		array(
-			'field' => 'chat_gmail',
-			'label' => 'lang:location:gmail_label',
-			'rules' => 'trim'
-		),     
-		array(
-			'field' => 'social_twitter',
-			'label' => 'lang:location:twitter_label',
-			'rules' => 'trim'
-		),               
-		array(
-			'field' => 'social_facebook',
-			'label' => 'lang:location:facebook_label',
-			'rules' => 'trim'
-		),  
-		array(
-			'field' => 'social_google',
-			'label' => 'lang:location:google_label',
-			'rules' => 'trim'
-		),              
+		),                  
 		array(
 			'field' => 'type',
 			'rules' => 'trim|required'
@@ -149,8 +139,13 @@ class Admin_Locations extends Admin_Controller {
 		$this->load->model('products_locations_m');
                 $this->load->helper(array('date'));
 		$this->lang->load(array('products','categories','locations','features'));		
-		// Load the validation library along with the rules
-		$this->load->library('form_validation');
+		// Loads libraries
+		$this->load->library(array('form_validation','accounts'));
+                // template addons
+                $this->template->append_css('module::locations.css') 
+                               ->prepend_metadata('<script>var IMG_PATH = "'.BASE_URL.SHARED_ADDONPATH.'modules/'.$this->module.'/img/"; </script>');                
+                
+                
 	}
 	
 	/**
@@ -189,10 +184,24 @@ class Admin_Locations extends Admin_Controller {
             if ($this->form_validation->run())
             {
                 $this->load->helper('text');
-                $data = array('name' => $this->input->post('name'),
+                $data = array('account_id'=>$this->input->post('account_id'),
+                              'name' =>$this->input->post('name'),
+                              'slug'=>$this->input->post('slug'), 
                               'intro' => $this->input->post('intro'),
-                              'description' => $this->input->post('description'),
-                              'slug'=>url_title(strtolower(convert_accented_characters($this->input->post('name')))),
+                              'description' => $this->input->post('description'),                    
+                              'address_l1' => $this->input->post('address_l1'),
+                              'address_l2' => $this->input->post('address_l2'), 
+                              'area' => $this->input->post('area'), 
+                              'CityID'=>$this->input->post('CityID'),
+                              'zipcode' => $this->input->post('zipcode'), 
+                              'Latitude' => $this->input->post('Latitude'), 
+                              'Longitude' => $this->input->post('Longitude'), 
+                              'latlng_precision' => $this->input->post('latlng_precision'), 
+                              'phone_area_code' => $this->input->post('phone_area_code'), 
+                              'phone' => $this->input->post('phone'), 
+                              'fax' => $this->input->post('fax'), 
+                              'mobile' => $this->input->post('mobile'),                     
+                              'chatSocial_accounts'=>$this->input->post('chatSocial_accounts'), 
                               'type' => $this->input->post('type'),
                               'author_id' => $this->current_user->id,
                               'created_on' => now() 
@@ -229,8 +238,7 @@ class Admin_Locations extends Admin_Controller {
             $this->template
                     ->title($this->module_details['name'], lang('cat_create_title'))
                     ->append_metadata($this->load->view('fragments/wysiwyg', $this->data, TRUE)) 
-                    ->append_js('module::jquery/jquery.tagsinput.min.js')                    
-	            ->append_js('module::load_geo.js')                            
+                    ->append_js('module::jquery/jquery.tagsinput.min.js')                                    
 	            ->append_js('module::ws_autocomplete.js')                      
 	            ->append_js('module::locations_form.js')                    
                     ->append_css('module::jquery/jquery.autocomplete.css') 
@@ -325,16 +333,51 @@ class Admin_Locations extends Admin_Controller {
 	 * @param string title The title to check
 	 * @return bool
 	 */
-	public function _check_title($title = '')
+	public function _check_name($name = '')
 	{
-		if ($this->products_locations_m->check_title($title))
+		if ($this->products_locations_m->check_name($name))
 		{
-			$this->form_validation->set_message('_check_title', sprintf(lang('location:already_exist_error'), $title));
+			$this->form_validation->set_message('_check_name', sprintf(lang('location:already_exist_error'), $name));
 			return FALSE;
 		}
 
 		return TRUE;
 	}
+        
+	/**
+	 * Callback method that checks the slug of the location
+	 * @access public
+	 * @param string title The title to check
+	 * @return bool
+	 */
+	public function _check_slug($slug = '')
+	{
+		if ($this->products_locations_m->check_slug($slug))
+		{
+			$this->form_validation->set_message('_check_slug', sprintf(lang('location:slug_already_exist_error'), $slug));
+			return FALSE;
+		}
+
+		return TRUE;
+	}        
+        
+	/**
+	 * Callback method that checks the account id
+	 * @access public
+	 * @param string reg The id to check
+	 * @return bool
+	 */        
+        public function _check_validAccountId($id)
+        {
+            if(!$this->accounts->get_account($id))
+            {
+                $this->form_validation->set_message('_check_validAccountId', sprintf(lang('location:account_id_not_valid')));
+                return FALSE;
+            }else
+                {
+                    return TRUE;
+                }
+        }        
 	
 	/**
 	 * Create method, creates a new location via ajax

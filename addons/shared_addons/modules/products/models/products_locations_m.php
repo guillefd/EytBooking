@@ -32,10 +32,21 @@ class Products_locations_m extends MY_Model
 	 * @param string $title The title to validate
 	 * @return mixed
 	 */
-	public function check_title($title = '')
+	public function check_name($name = '')
 	{
-		return parent::count_by('slug', url_title($title)) > 0;
+		return parent::count_by('name', $name) > 0;
 	}
+        
+	/**
+	 * Callback method for validating the slug
+	 * @access public
+	 * @param string $title The title to validate
+	 * @return mixed
+	 */
+	public function check_slug($slug = '')
+	{
+		return parent::count_by('slug', $slug) > 0;
+	}        
 	
 	/**
 	 * Insert a new category into the database via ajax

@@ -1,9 +1,13 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 # labels
-$lang['location:name_label'] 		        = 'Nombre';
+$lang['location:account_label'] 		= 'Cuenta';
+$lang['location:accountAjax_label'] 		= 'Cuenta (auto-búsqueda)';
+$lang['location:accountAjax']   		= 'Ingrese primeras letras de la cuenta y seleccione';
+$lang['location:name_label'] 		        = 'Nombre de la locación';
+$lang['location:slug_label'] 		        = 'URL (auto-generado)';
 $lang['location:title_label'] 		        = 'Título';
-$lang['location:category_label'] 		= 'Locación';
+$lang['location:label'] 		        = 'Locación';
 $lang['location:description_label']             = 'Descripción';
 $lang['location:location_label']                = 'Ubicación';
 $lang['location:contact_label']                = 'Contacto';
@@ -14,7 +18,7 @@ $lang['location:country_label']                 = 'Pais';
 $lang['location:country+city_label']            = 'Ciudad | Región | Pais ';
 $lang['location:city_label']                    = 'Ciudad';
 $lang['location:cityid_label']                  = 'ID Ciudad';
-$lang['location:city_placeholder_label']        = 'Ingrese la ciudad y seleccione';
+$lang['location:city_placeholder_label']        = 'Ingrese primera letras y seleccione';
 $lang['location:region_label']                  = 'Region';
 $lang['location:area_label']                    = 'Area';
 $lang['location:no_country_select_label']       = '---Seleccione Pais ---';
@@ -38,6 +42,7 @@ $lang['location:social_label']                    = 'Cuentas Social';
 $lang['location:twitter_label']                    = 'Cuenta Twitter';
 $lang['location:facebook_label']                    = 'Cuenta Facebook';
 $lang['location:google_label']                    = 'Cuenta Google+';
+$lang['location:chatSocial_label']                    = 'Cuentas Chat y Social';
 $lang['location:latitude_label']                  = 'Latitud';
 $lang['location:longitude_label']                 = 'Longitud';
 $lang['location:latlng_label']                    = 'Latitud | Longitud';
@@ -54,13 +59,15 @@ $lang['location:list_title'] 			= 'Lista de locaciones';
 
 # messages
 $lang['location:no_categories'] 		= 'No hay locaciones.';
-$lang['location:add_success'] 			= 'Tu locación ha sido guardada.';
+$lang['location:add_success'] 			= 'La locación ha sido guardada.';
 $lang['location:add_error'] 			= 'Ha ocurrido un error al agregar la locación.';
-$lang['location:edit_success'] 			= 'La locación fue guardada.';
+$lang['location:edit_success'] 			= 'El cambio ha sido guardado.';
 $lang['location:edit_error'] 			= 'Ha ocurrido un error al editar la locación.';
 $lang['location:mass_delete_error'] 		= 'Ocurrió un error al tratar de eliminar la locación "%s".';
 $lang['location:mass_delete_success']           = '%s locacions de %s completamente eliminadas.';
 $lang['location:no_select_error'] 		= 'Necesitas seleccionar locaciones primero.';
 $lang['location:already_exist_error']           = 'Una locación con el nombre "%s" ya existe.';
+$lang['location:slug_already_exist_error']      = 'Una locación con el URL "%s" ya existe.';
+$lang['location:account_id_not_valid'] 		= 'La Cuenta es inválida, vuelva a seleccionarla.';
 
 /* End of file categories_lang.php */

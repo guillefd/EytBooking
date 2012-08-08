@@ -12,7 +12,7 @@
 			<thead>
 			<tr>
 				<th width="20"><?php echo form_checkbox(array('name' => 'action_to_all', 'class' => 'check-all')); ?></th>
-				<th><?php echo lang('location_category_label'); ?></th>
+				<th><?php echo lang('location:label'); ?></th>
 				<th width="150"></th>
 			</tr>
 			</thead>
@@ -44,6 +44,6 @@
 		<?php echo form_close(); ?>
 
 	<?php else: ?>
-		<div class="no_data"><?php echo lang('location_no_categories'); ?></div>
+		<div class="no_data"><?php echo lang('location:no_categories'); ?></div>
 	<?php endif; ?>
 </section>

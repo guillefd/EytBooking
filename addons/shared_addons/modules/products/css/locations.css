@@ -1,0 +1,20 @@
+/* 
+    Document   : location
+    Created on : 08/08/2012, 09:08:56
+    Author     : EYT
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+input.med{
+    width: 30em;
+}
+
+input.large{
+    width: 50em;
+}
+
+input.double{
+    width: 442px;
+}
+
