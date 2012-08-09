@@ -6,7 +6,29 @@ var img_loader_2 = '<img src="' + IMG_PATH + 'indicator.gif" style="margin:5px;"
 
 $(document).ready(function(){   
     
-		// generate a slug when the user types a title in
+//::::::::::::::: Social Field ::::::::::::::::::::::		
+                //inicializa campo hidden pago_proveedores_dias_horarios, si tiene valor los agrega al html
+                init_hidden_dias_horarios();  
+
+                //copies HTML values of select element for rewriting element after item added
+                social_list = $('select[name="dd_social"]').html();
+
+                //watcher btn ADD
+                $("#btn_add").click(function() {
+                    $("#btn_add").removeAttr('href');      
+                    processData();           
+                });
+
+//                //watcher btn BORRAR (x) item de lista de dias/horarios
+                $(document).on('click', 'a[name="btn_del"]', function(){ //do stuff here })
+                    $(this).removeAttr('href');
+                    var id = $(this).attr("id");
+                    deleteItem(id);
+                });
+//::::::::::::::: Social Field ::::::::::::::::::::::                
+                
+                
+                // generate a slug when the user types a name in
 		pyro.generate_slug('input[name="name"]', 'input[name="slug"]');
 		
 		// editor switcher

@@ -44,7 +44,7 @@ class Admin_Locations extends Admin_Controller {
 		array(
 			'field' => 'intro',
 			'label' => 'lang:location:intro_label',
-			'rules' => 'trim'
+			'rules' => 'trim|required'
 		),            
 		array(
 			'field' => 'description',
@@ -117,6 +117,11 @@ class Admin_Locations extends Admin_Controller {
 			'rules' => 'trim'
 		),            
 		array(
+			'field' => 'email',
+			'label' => 'lang:location:email_label',
+			'rules' => 'trim'
+		),             
+		array(
 			'field' => 'chatSocial_accounts',
 			'label' => 'lang:location:chatSocial_label',
 			'rules' => 'trim'
@@ -140,7 +145,9 @@ class Admin_Locations extends Admin_Controller {
                 $this->load->helper(array('date'));
 		$this->lang->load(array('products','categories','locations','features'));		
 		// Loads libraries
-		$this->load->library(array('form_validation','accounts'));
+		$this->load->library(array('form_validation','accounts','social','geoworldmap'));
+                //Gen dropdown list for social
+                $this->data->social = $this->social->get_list();                
                 // template addons
                 $this->template->append_css('module::locations.css') 
                                ->prepend_metadata('<script>var IMG_PATH = "'.BASE_URL.SHARED_ADDONPATH.'modules/'.$this->module.'/img/"; </script>');                
@@ -201,6 +208,7 @@ class Admin_Locations extends Admin_Controller {
                               'phone' => $this->input->post('phone'), 
                               'fax' => $this->input->post('fax'), 
                               'mobile' => $this->input->post('mobile'),                     
+                              'email' => $this->input->post('email'),                    
                               'chatSocial_accounts'=>$this->input->post('chatSocial_accounts'), 
                               'type' => $this->input->post('type'),
                               'author_id' => $this->current_user->id,
@@ -218,13 +226,7 @@ class Admin_Locations extends Admin_Controller {
 			$this->session->set_flashdata('error', lang('location:add_error'));
                     	redirect('admin/products/locations/create');
                     }
-            }
-
-            foreach ($this->validation_rules AS $rule)
-            {
-                    $this->data->{$rule['field']} = $this->input->post($rule['field']);
-            }
-                             
+            }                                       
 
             // Loop through each validation rule
             foreach ($this->validation_rules as $rule)
@@ -240,7 +242,8 @@ class Admin_Locations extends Admin_Controller {
                     ->append_metadata($this->load->view('fragments/wysiwyg', $this->data, TRUE)) 
                     ->append_js('module::jquery/jquery.tagsinput.min.js')                                    
 	            ->append_js('module::ws_autocomplete.js')                      
-	            ->append_js('module::locations_form.js')                    
+	            ->append_js('module::locations_form.js')
+                    ->append_js('module::model.js')
                     ->append_css('module::jquery/jquery.autocomplete.css') 
                     ->append_css('module::jquery/jquery.tagsinput.css')                                         
                     ->set('location', $location)
@@ -254,36 +257,93 @@ class Admin_Locations extends Admin_Controller {
 	 * @return void
 	 */
 	public function edit($id = 0)
-	{	
-		// Get the location
-		$location = $this->products_locations_m->get($id);
-		
-		// ID specified?
-		$location or redirect('admin/products/locations/index');
-		
-		// Validate the results
-		if ($this->form_validation->run())
-		{		
-			$this->products_locations_m->update($id, $_POST)
-				? $this->session->set_flashdata('success', sprintf( lang('cat_edit_success'), $this->input->post('title')) )
-				: $this->session->set_flashdata('error', lang('cat_edit_error'));
-			
-			redirect('admin/products/locations/index');
-		}
-		
-		// Loop through each rule
-		foreach ($this->validation_rules as $rule)
-		{
-			if ($this->input->post($rule['field']) !== FALSE)
-			{
-				$location->{$rule['field']} = $this->input->post($rule['field']);
-			}
-		}
+	{			
+            if($id==0)
+            {
+                $this->session->set_flashdata('error', lang('location:error_id_empty'));
+		redirect('admin/products/locations/index');
+            }
+            else
+            {    
+                //consulta SQL
+                $location = $this->products_locations_m->get($id); 
+                if($location == FALSE)
+                {
+                    $this->session->set_flashdata('error', lang('location:error_id_empty'));
+                    redirect('admin/products/locations/index');
+                }                
+            }
+            
+            //CONVERT ID TO TEXT
+            //Use Geoworldmap library  to query city name
+            $city = $this->geoworldmap->getCityByID($location->CityID);
+            $location->City = $city->City;
+            $account = $this->accounts->get_account($location->account_id);
+            $location->account = $account->name;
+                        
+            // Set the validation rules from the array above
+            $this->form_validation->set_rules($this->validation_rules);            
+            
+            // Validate the results
+            if ($this->form_validation->run())
+            {		
+                $this->load->helper('text');
+                $data = array('account_id'=>$this->input->post('account_id'),
+                              'name' =>$this->input->post('name'),
+                              'slug'=>$this->input->post('slug'), 
+                              'intro' => $this->input->post('intro'),
+                              'description' => $this->input->post('description'),                    
+                              'address_l1' => $this->input->post('address_l1'),
+                              'address_l2' => $this->input->post('address_l2'), 
+                              'area' => $this->input->post('area'), 
+                              'CityID'=>$this->input->post('CityID'),
+                              'zipcode' => $this->input->post('zipcode'), 
+                              'Latitude' => $this->input->post('Latitude'), 
+                              'Longitude' => $this->input->post('Longitude'), 
+                              'latlng_precision' => $this->input->post('latlng_precision'), 
+                              'phone_area_code' => $this->input->post('phone_area_code'), 
+                              'phone' => $this->input->post('phone'), 
+                              'fax' => $this->input->post('fax'), 
+                              'mobile' => $this->input->post('mobile'),                     
+                              'email' => $this->input->post('email'),                    
+                              'chatSocial_accounts'=>$this->input->post('chatSocial_accounts'), 
+                              'type' => $this->input->post('type'),
+                              //'author_id' => $this->current_user->id,
+                              'updated_on' => now() 
+                              );                    
+                if($this->products_locations_m->update($id, $data))
+                {        
+                    // All good...
+                    $this->session->set_flashdata('success', lang('location:edit_success'));
+                    redirect('admin/products/locations/index');
+                }
+                else
+                    {
+                            $this->session->set_flashdata('error', lang('location:edit_error'));
+                            redirect('admin/products/location/edit/'.$id);
+                    }
+            }
 
-		$this->template
-			->title($this->module_details['name'], sprintf(lang('cat_edit_title'), $location->title))
-			->set('location', $location)
-			->build('admin/locations/form');
+            // Loop through each rule
+            foreach ($this->validation_rules as $rule)
+            {
+                    if ($this->input->post($rule['field']) !== FALSE)
+                    {
+                            $location->{$rule['field']} = $this->input->post($rule['field']);
+                    }
+            }
+
+            $this->template
+                    ->title($this->module_details['name'], sprintf(lang('cat_edit_title'), $location->name))
+                    ->append_metadata($this->load->view('fragments/wysiwyg', $this->data, TRUE)) 
+                    ->append_js('module::jquery/jquery.tagsinput.min.js')                                    
+	            ->append_js('module::ws_autocomplete.js')                      
+	            ->append_js('module::locations_form.js')
+                    ->append_js('module::model.js')
+                    ->append_css('module::jquery/jquery.autocomplete.css') 
+                    ->append_css('module::jquery/jquery.tagsinput.css')                                         
+                    ->set('location', $location)
+                    ->build('admin/locations/form');
 	}	
 
 	/**
@@ -335,13 +395,19 @@ class Admin_Locations extends Admin_Controller {
 	 */
 	public function _check_name($name = '')
 	{
-		if ($this->products_locations_m->check_name($name))
-		{
-			$this->form_validation->set_message('_check_name', sprintf(lang('location:already_exist_error'), $name));
-			return FALSE;
-		}
-
-		return TRUE;
+            if ($reg = $this->products_locations_m->check_name($name))
+            {
+                   if($this->method == "edit")
+                   {        
+                       return TRUE;
+                   }
+                   else
+                        {
+                            $this->form_validation->set_message('_check_name', sprintf(lang('location:already_exist_error'), $name));
+                            return FALSE;
+                        }
+            }
+            return TRUE;
 	}
         
 	/**
@@ -352,13 +418,19 @@ class Admin_Locations extends Admin_Controller {
 	 */
 	public function _check_slug($slug = '')
 	{
-		if ($this->products_locations_m->check_slug($slug))
-		{
-			$this->form_validation->set_message('_check_slug', sprintf(lang('location:slug_already_exist_error'), $slug));
-			return FALSE;
-		}
-
-		return TRUE;
+            if ($reg = $this->products_locations_m->check_slug($slug))
+            {
+                if($this->method == "edit")
+                {        
+                    return TRUE;
+                }
+                else
+                    {			
+                        $this->form_validation->set_message('_check_slug', sprintf(lang('location:slug_already_exist_error'), $slug));
+                        return FALSE;
+                    }    
+            }
+            return TRUE;
 	}        
         
 	/**

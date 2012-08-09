@@ -1,6 +1,14 @@
+<!-- JAVASCRIPT GLOBAL VARS -->
+<script>
+    var ADD_SOCIAL_ACCOUNT_ERROR_MSG = "<? echo lang('location:add_social_account_error_msg') ?>";   
+    
+</script>
+<!-- END JAVASCRIPT GLOBAL VARS -->
+
+
 <section class="title">
 	<?php if ($this->controller == 'admin_locations' && $this->method === 'edit'): ?>
-	<h4><?php echo sprintf(lang('location:edit_title'), $location->title);?></h4>
+	<h4><?php echo sprintf(lang('location:edit_title'), $location->name);?></h4>
 	<?php else: ?>
 	<h4><?php echo lang('location:create_title');?></h4>
 	<?php endif; ?>
@@ -68,7 +76,7 @@
                             </div>
                         </li>
                         <li class="even">
-                            <label for="City"><?php echo lang('location:cityauto_label');?> <span> </span></label>
+                            <label for="City"><?php echo lang('location:cityauto_label');?> <span>*</span></label>
                             <div class="input">
                                 <?php echo  form_input('City', $location->City,'id="CityAjax" class="double" placeholder="'.lang('location:city_placeholder_label').'"'); ?>
                                 <?php echo  form_hidden('CityID', $location->CityID,'id="CityID" placeholder="'.lang('location:cityid_label').'"'); ?>                    
@@ -109,9 +117,17 @@
                             <div class="input"><?php echo  form_input('mobile', $location->mobile,'placeholder="'.lang('location:mobile_label').'"'); ?></div>
                         </li>
                         <li class="even">
+                            <label for="email"><?php echo lang('location:email_label');?> <span></span></label>
+                            <div class="input"><?php echo  form_input('email', $location->email,'placeholder="'.lang('location:email_label').'"'); ?></div>
+                        </li>                        
+                        <li>
                             <label for="chat"><?php echo lang('location:chatSocial_label');?> <span></span></label>
                             <div class="input">
-                                <?php echo  form_input('chatSocial_accounts', $location->chatSocial_accounts,''); ?>
+                                <?php echo form_dropdown('dd_social', $social,'','data-placeholder="'.lang('location:social_select_label').'" style="width:150px" id="dd_social"') ?>                                                             
+                                <?php echo form_input('user_account','','placeholder="'.lang('location:input_social').'"'); ?>
+                                <?php echo anchor('', lang('location:add'),'id="btn_add" class="btn gray"'); ?><br>
+                                <div id="itemBox" class="itemBox"><span><?php echo lang('location:social_accounts'); ?></span><br></div>                                
+                                <?php echo form_hidden('chatSocial_accounts', $location->chatSocial_accounts,'style="width:550px"'); ?>                                
                             </div>
                         </li>                
                     </ul>
@@ -119,7 +135,7 @@
             </div>
         </div>
 
-        <div><?php $this->load->view('admin/partials/buttons', array('buttons' => array('save','save_exit','cancel') )); ?></div>
+        <div><?php $this->load->view('admin/partials/buttons', array('buttons' => array('save','cancel') )); ?></div>
 
         <?php echo form_close(); ?>
 </section>

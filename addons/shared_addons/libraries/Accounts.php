@@ -36,7 +36,7 @@ class Accounts
         */
     public function get_account($id)
     {
-        $q = ci()->db->get_where($this->t_accounts, array('account_id' => $id));      
+        $q = ci()->db->get_where($this->t_accounts, array('account_id' => $id,'active'=>1));      
         if($q->num_rows()>0)
         {
             return $data = $q->row();

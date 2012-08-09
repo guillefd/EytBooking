@@ -1,6 +1,7 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 # labels
+$lang['location:add']            		= 'Agregar';
 $lang['location:account_label'] 		= 'Cuenta';
 $lang['location:accountAjax_label'] 		= 'Cuenta (auto-búsqueda)';
 $lang['location:accountAjax']   		= 'Ingrese primeras letras de la cuenta y seleccione';
@@ -27,14 +28,18 @@ $lang['location:no_city_select_label']          = '---Seleccione Ciudad ---';
 $lang['location:phone_label']                    = 'Teléfono';
 $lang['location:phonearea_label']                = 'Código de área';
 $lang['location:mobile_label']                    = 'Móvil';
+$lang['location:email_label']                    = 'Email';
 $lang['location:fax_label']                     = 'Fax';
 $lang['location:info_label']                    = 'Información';
-$lang['location:intro_label']                    = 'Introducción';
-$lang['location:zipcode_label']                    = 'Código Postal';
-$lang['location:autocomplete_label']                    = 'Autocompletado';
-$lang['location:cityauto_label']                    = 'Ciudad (auto-busqueda)';
+$lang['location:intro_label']                   = 'Introducción';
+$lang['location:zipcode_label']                 = 'Código Postal';
+$lang['location:autocomplete_label']            = 'Autocompletado';
+$lang['location:cityauto_label']                = 'Ciudad (auto-busqueda)';
 $lang['location:area_label']                    = 'Area | Barrio';
-$lang['location:chat_label']                    = 'Usuarios de chat';
+$lang['location:chat_label']                     = 'Usuarios de chat';
+$lang['location:social_accounts']               = 'Listado de cuentas social / chat';
+$lang['location:social_select_label']            = 'Seleccione servicio';
+$lang['location:input_social']                   = 'Ingrese nombre de usuario';
 $lang['location:skype_label']                    = 'Usuario Skype';
 $lang['location:hotmail_label']                    = 'Usuario hotmail';
 $lang['location:gmail_label']                    = 'Usuario Gmail';
@@ -62,12 +67,16 @@ $lang['location:no_categories'] 		= 'No hay locaciones.';
 $lang['location:add_success'] 			= 'La locación ha sido guardada.';
 $lang['location:add_error'] 			= 'Ha ocurrido un error al agregar la locación.';
 $lang['location:edit_success'] 			= 'El cambio ha sido guardado.';
-$lang['location:edit_error'] 			= 'Ha ocurrido un error al editar la locación.';
+$lang['location:edit_error'] 			= 'Ha ocurrido un error al guardar las modificaciones.';
+$lang['location:error_id_empty'] 		= 'Ha ocurrido un error al consultar la locación.';
 $lang['location:mass_delete_error'] 		= 'Ocurrió un error al tratar de eliminar la locación "%s".';
 $lang['location:mass_delete_success']           = '%s locacions de %s completamente eliminadas.';
 $lang['location:no_select_error'] 		= 'Necesitas seleccionar locaciones primero.';
 $lang['location:already_exist_error']           = 'Una locación con el nombre "%s" ya existe.';
 $lang['location:slug_already_exist_error']      = 'Una locación con el URL "%s" ya existe.';
 $lang['location:account_id_not_valid'] 		= 'La Cuenta es inválida, vuelva a seleccionarla.';
+$lang['location:add_social_account_error_msg']  = 'Seleccione e ingrese datos antes de agregar cuenta social';
+
+
 
 /* End of file categories_lang.php */

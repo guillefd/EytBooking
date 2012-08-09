@@ -33,7 +33,7 @@ class Accounts_m extends MY_Model {
          */
         public function get($id)
         {
-            $q = $this->db->get_where($this->_table, array('account_id' => $id));      
+            $q = $this->db->get_where($this->_table, array('account_id' => $id,'active'=>1));      
             if($q->num_rows()>0)
             {
                 return $data = $q->row();

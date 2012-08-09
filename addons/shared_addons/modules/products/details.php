@@ -160,6 +160,7 @@ class Module_Products extends Module {
 			  `phone` varchar(100) collate utf8_unicode_ci NOT NULL default '',                          
 			  `fax` varchar(100) collate utf8_unicode_ci NOT NULL default '',                                                    
 			  `mobile` varchar(100) collate utf8_unicode_ci NOT NULL default '',                                                    
+			  `email` varchar(100) collate utf8_unicode_ci NOT NULL default '',                                                                              
 			  `chatSocial_accounts` text collate utf8_unicode_ci NOT NULL,                                                    
 			  `author_id` int(11) NOT NULL default '0',
 			  `created_on` int(11) NOT NULL,

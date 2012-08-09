@@ -10,21 +10,24 @@
 class Products_locations_m extends MY_Model
 {
 
-	/**
-	 * Update an existing category
-	 * @access public
-	 * @param int $id The ID of the category
-	 * @param array $input The data to update
-	 * @return bool
-	 */
-	public function update($id, $input)
-	{
-		return parent::update($id, array(
-			'title'	=> $input['title'],
-			'description'=>$input['description'],                      
-		        'slug'	=> url_title(strtolower(convert_accented_characters($input['title'])))
-		));
+	public function __construct()
+	{		
+		parent::__construct();
+		
+		$this->_table = 'products_locations';
 	}
+    
+        /**
+         * Update
+         * @param type $id
+         * @param type $data
+         * @return type 
+         */
+        function update($id,$data)
+        {
+            $this->db->where('id', $id);
+            return $this->db->update($this->_table, $data); 
+        }
 
 	/**
 	 * Callback method for validating the title
@@ -34,7 +37,15 @@ class Products_locations_m extends MY_Model
 	 */
 	public function check_name($name = '')
 	{
-		return parent::count_by('name', $name) > 0;
+            $q = $this->db->get_where($this->_table, array('name'=>$name));  		
+            if($q->num_rows()>0)
+            {
+                return $data = $q->row();
+            }
+            else
+            {
+                return FALSE;
+            } 
 	}
         
 	/**
@@ -45,7 +56,15 @@ class Products_locations_m extends MY_Model
 	 */
 	public function check_slug($slug = '')
 	{
-		return parent::count_by('slug', $slug) > 0;
+            $q = $this->db->get_where($this->_table, array('slug'=>$slug));  		
+            if($q->num_rows()>0)
+            {
+                return $data = $q->row();
+            }
+            else
+            {
+                return FALSE;
+            } 
 	}        
 	
 	/**
@@ -65,4 +84,22 @@ class Products_locations_m extends MY_Model
 			'slug' => url_title(strtolower($input['title']))
 		));
 	}
+        
+        /**
+         * Returns unique location 
+         * @param type $id
+         * @return boolean 
+         */
+        public function get_where($data)
+        {
+            $q = $this->db->get_where($this->_table, $data);      
+            if($q->num_rows()>0)
+            {
+                return $data = $q->row();
+            }
+            else
+            {
+                return FALSE;
+            }        
+        }        
 }

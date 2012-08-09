@@ -6,6 +6,11 @@
         Purpose of the stylesheet follows.
 */
 
+input.small{
+    min-width: 5em;
+    width: 10em;
+}
+
 input.med{
     width: 30em;
 }
@@ -18,3 +23,49 @@ input.double{
     width: 442px;
 }
 
+/** SOCIAL DIV**/
+
+.itemBox{
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #D9D9D9;
+    width: 250px;
+}
+
+.itemBlock
+{
+    background: #F1F1F1;
+    padding: 5px;
+    border: 1px solid #D9D9D9;
+    border-radius: 5px;
+    width: 240px;
+    margin:5px 0 5px 0;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;    
+}
+
+.htmltag {
+/*border: 1px solid #AAA;
+-moz-border-radius: 2px;
+-webkit-border-radius: 2px;*/
+display: block;
+float: right;
+/*padding: 5px;*/
+text-decoration: none;
+/*background: #EEE;*/
+color: gray;
+/*margin-right: 5px;
+margin-bottom: 5px;*/
+font-family: helvetica;
+font-size: 13px;
+font-weight: bold;
+}
+
+.delTag {
+bottom: 0;
+right: 0;
+background: url(../img/glyphicons/glyphicons-halflings.png) -305px 1px no-repeat;
+width: 20px;
+height: 20px;
+text-indent: -9999px;
+}
