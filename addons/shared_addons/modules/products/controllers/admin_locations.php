@@ -209,7 +209,7 @@ class Admin_Locations extends Admin_Controller {
                               'fax' => $this->input->post('fax'), 
                               'mobile' => $this->input->post('mobile'),                     
                               'email' => $this->input->post('email'),                    
-                              'chatSocial_accounts'=>$this->input->post('chatSocial_accounts'), 
+                              'chatSocial_accounts'=>$this->_cleanString_socialAccounts($this->input->post('chatSocial_accounts')),  
                               'type' => $this->input->post('type'),
                               'author_id' => $this->current_user->id,
                               'created_on' => now() 
@@ -264,7 +264,7 @@ class Admin_Locations extends Admin_Controller {
 		redirect('admin/products/locations/index');
             }
             else
-            {    
+            {                    
                 //consulta SQL
                 $location = $this->products_locations_m->get($id); 
                 if($location == FALSE)
@@ -273,14 +273,14 @@ class Admin_Locations extends Admin_Controller {
                     redirect('admin/products/locations/index');
                 }                
             }
-            
+
             //CONVERT ID TO TEXT
             //Use Geoworldmap library  to query city name
             $city = $this->geoworldmap->getCityByID($location->CityID);
             $location->City = $city->City;
             $account = $this->accounts->get_account($location->account_id);
             $location->account = $account->name;
-                        
+
             // Set the validation rules from the array above
             $this->form_validation->set_rules($this->validation_rules);            
             
@@ -306,7 +306,7 @@ class Admin_Locations extends Admin_Controller {
                               'fax' => $this->input->post('fax'), 
                               'mobile' => $this->input->post('mobile'),                     
                               'email' => $this->input->post('email'),                    
-                              'chatSocial_accounts'=>$this->input->post('chatSocial_accounts'), 
+                              'chatSocial_accounts'=>$this->_cleanString_socialAccounts($this->input->post('chatSocial_accounts')), 
                               'type' => $this->input->post('type'),
                               //'author_id' => $this->current_user->id,
                               'updated_on' => now() 
@@ -386,7 +386,9 @@ class Admin_Locations extends Admin_Controller {
 		
 		redirect('admin/products/locations/index');
 	}
-		
+
+//::::: HELPERS ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::        
+        
 	/**
 	 * Callback method that checks the title of the location
 	 * @access public
@@ -399,7 +401,16 @@ class Admin_Locations extends Admin_Controller {
             {
                    if($this->method == "edit")
                    {        
-                       return TRUE;
+                       //Check name does not exist in DB and ID not equal to ID of current edited record
+                       if($this->products_locations_m->check_name_edited($name,$this->uri->segment(5)))
+                       {    
+                            $this->form_validation->set_message('_check_name', sprintf(lang('location:already_exist_error'), $name));
+                            return FALSE;                           
+                       }
+                       else
+                           {
+                                return TRUE;
+                           }
                    }
                    else
                         {
@@ -422,7 +433,16 @@ class Admin_Locations extends Admin_Controller {
             {
                 if($this->method == "edit")
                 {        
-                    return TRUE;
+                       //Check name does not exist in DB and ID not equal to ID of current edited record
+                       if($this->products_locations_m->check_slug_edited($slug,$this->uri->segment(5)))
+                       {    
+                            $this->form_validation->set_message('_check_slug', sprintf(lang('location:slug_already_exist_error'), $slug));
+                            return FALSE;                           
+                       }
+                       else
+                           {
+                                return TRUE;
+                           }
                 }
                 else
                     {			
@@ -449,8 +469,20 @@ class Admin_Locations extends Admin_Controller {
                 {
                     return TRUE;
                 }
+        }
+        
+        /**
+        * Quita valores residuales del string de dias/horarios de pago a proveedores 
+        * @param type string $string 
+        * return type string
+        */
+        function _cleanString_socialAccounts($string)
+        {
+            return str_replace('EMPTY;','',$string);    
         }        
-	
+
+//:::::::::: AJAX :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+        
 	/**
 	 * Create method, creates a new location via ajax
 	 * @access public

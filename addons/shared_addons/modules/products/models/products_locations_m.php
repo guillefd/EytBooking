@@ -49,6 +49,25 @@ class Products_locations_m extends MY_Model
 	}
         
 	/**
+	 * Callback method for validating the title
+	 * @access public
+	 * @param string $title The title to validate
+	 * @return mixed
+	 */
+	public function check_name_edited($name = '',$id = 0)
+	{
+            $q = $this->db->get_where($this->_table, array('name'=>$name,'id !='=>$id));  		
+            if($q->num_rows()>0)
+            {
+                return $data = $q->row();
+            }
+            else
+            {
+                return FALSE;
+            } 
+	}        
+        
+	/**
 	 * Callback method for validating the slug
 	 * @access public
 	 * @param string $title The title to validate
@@ -66,6 +85,25 @@ class Products_locations_m extends MY_Model
                 return FALSE;
             } 
 	}        
+        
+	/**
+	 * Callback method for validating the slug
+	 * @access public
+	 * @param string $title The title to validate
+	 * @return mixed
+	 */
+	public function check_slug_edited($slug = '',$id = 0)
+	{
+            $q = $this->db->get_where($this->_table, array('slug'=>$slug,'id !='=>$id));  		
+            if($q->num_rows()>0)
+            {
+                return $data = $q->row();
+            }
+            else
+            {
+                return FALSE;
+            } 
+	}         
 	
 	/**
 	 * Insert a new category into the database via ajax
