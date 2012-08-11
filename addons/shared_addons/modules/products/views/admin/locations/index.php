@@ -39,7 +39,7 @@
                                         <td><?php echo $location->City; ?></td>
                                         <td><?php echo $location->phone; ?></td>
 					<td class="align-center buttons buttons-small" width="190px">
-                                            	<?php echo anchor('admin/products/locations/view/' . $location->id, lang('global:view'), 'class="btn green view "'); ?>
+                                            	<?php echo anchor('admin/products/locations/preview/' . $location->id, lang('global:view'), 'rel="modal-med" class="btn green" target="_blank"'); ?>
 						<?php echo anchor('admin/products/locations/edit/' . $location->id, lang('global:edit'), 'class="btn orange edit "'); ?>
 						<?php echo anchor('admin/products/locations/delete/' . $location->id, lang('global:delete'), 'class="confirm red btn delete"') ;?>
 					</td>

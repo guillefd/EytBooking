@@ -341,7 +341,28 @@ class Admin_Locations extends Admin_Controller {
                     ->append_css('module::jquery/jquery.tagsinput.css')                                         
                     ->set('location', $location)
                     ->build('admin/locations/form');
-	}	
+	}
+        
+        
+	/**
+	 * Preview location
+	 * @access public
+	 * @param int $id the ID of the location
+	 * @return void
+	 */
+	public function preview($id = 0)
+	{
+                $location = $this->products_locations_m->get($id);
+                $location = $this->_convertIDtoText($location);
+                // set template
+		$this->template
+				->set_layout('modal','admin')
+                                ->append_css('module::workless.css')
+                                ->append_css('module::locations.css')
+				->set('location', $location)
+				->build('admin/locations/partials/location');                         
+	} 
+        
 
 	/**
 	 * Delete method, deletes an existing location (obvious isn't it?)
