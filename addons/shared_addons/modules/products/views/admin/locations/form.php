@@ -16,12 +16,13 @@
 
 <section class="item">
         <?php echo form_open($this->uri->uri_string(), 'class="crud" id="locations"'); ?>
-
+        <div class="btn_right"><?php $this->load->view('admin/partials/buttons', array('buttons' => array('save','cancel') )); ?></div>    
         <div class="tabs">        
             <ul class="tab-menu">
                     <li><a href="#locations-info-tab"><span><?php echo lang('location:info_label'); ?></span></a></li>
                     <li><a href="#locations-address-tab"><span><?php echo lang('location:location_label'); ?></span></a></li>                
                     <li><a href="#locations-contact-tab"><span><?php echo lang('location:contact_label'); ?></span></a></li>               
+                    <li><a href="#locations-content-tab"><span><?php echo lang('location:content_label'); ?></span></a></li>                                   
             </ul>        
             <div class="form_inputs" id="locations-info-tab">
                 <fieldset>
@@ -48,19 +49,6 @@
                         <br style="clear: both;" />
                         <?php echo form_textarea(array('id' => 'intro', 'name' => 'intro', 'value' => $location->intro, 'rows' => 2, 'class' => 'wysiwyg-simple')); ?>
                     </li>                                
-                    <li class="even editor">
-                        <label for="description"><?php echo lang('location:description_label'); ?></label>				
-                        <div class="input">
-                                <?php echo form_dropdown('type', array(
-                                        'html' => 'html',
-                                        'markdown' => 'markdown',
-                                        'wysiwyg-simple' => 'wysiwyg-simple',
-                                        'wysiwyg-advanced' => 'wysiwyg-advanced',
-                                ), $location->type); ?>
-                        </div>				
-                        <br style="clear:both"/>				
-                        <?php echo form_textarea(array('id' => 'description', 'name' => 'description', 'value' => $location->description, 'rows' => 30, 'class' => $location->type)); ?>				
-                    </li>
                 </ul>
                 </fieldset>
             </div>
@@ -132,6 +120,25 @@
                         </li>                
                     </ul>
                 </fieldset>    	
+            </div>
+            <div class="form_inputs" id="locations-content-tab">
+                <fieldset>
+                    <ul>
+                    <li class="even editor">
+                        <label for="description"><?php echo lang('location:description_label'); ?></label>				
+                        <div class="input">
+                                <?php echo form_dropdown('type', array(
+                                        'html' => 'html',
+                                        'markdown' => 'markdown',
+                                        'wysiwyg-simple' => 'wysiwyg-simple',
+                                        'wysiwyg-advanced' => 'wysiwyg-advanced',
+                                ), $location->type); ?>
+                        </div>				
+                        <br style="clear:both"/>				
+                        <?php echo form_textarea(array('id' => 'description', 'name' => 'description', 'value' => $location->description, 'rows' => 30, 'class' => $location->type)); ?>				
+                    </li>                        
+                    </ul>  
+                </fieldset>
             </div>
         </div>
 

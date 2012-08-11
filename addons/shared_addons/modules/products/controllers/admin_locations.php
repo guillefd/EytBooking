@@ -170,6 +170,9 @@ class Admin_Locations extends Admin_Controller {
 			
 		// Using this data, get the relevant results
 		$locations = $this->products_locations_m->order_by('name')->limit($pagination['limit'])->get_all();
+                //CONVERT ID TO TEXT
+                $this->_convertIDtoText($locations);
+                $this->_formatValuesForView($locations);
 
 		$this->template
 			->title($this->module_details['name'], lang('location:list_title'))
@@ -273,14 +276,8 @@ class Admin_Locations extends Admin_Controller {
                     redirect('admin/products/locations/index');
                 }                
             }
-
             //CONVERT ID TO TEXT
-            //Use Geoworldmap library  to query city name
-            $city = $this->geoworldmap->getCityByID($location->CityID);
-            $location->City = $city->City;
-            $account = $this->accounts->get_account($location->account_id);
-            $location->account = $account->name;
-
+            $this->_convertIDtoText($location);             
             // Set the validation rules from the array above
             $this->form_validation->set_rules($this->validation_rules);            
             
@@ -388,6 +385,55 @@ class Admin_Locations extends Admin_Controller {
 	}
 
 //::::: HELPERS ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::        
+        
+
+        /**
+         * Convierte ID´s de resultado SQL a texto - acepta objeto o arrays de objetos
+         * @param result array resultado SQL
+         * @return result object 
+         */
+        public function _convertIDtoText($results)
+        {  
+            if(is_array($results))
+            {                
+                foreach($results as $reg)
+                {
+                    $this->_convertIDtoText_run($reg);
+                }
+            }else
+                {
+                    $this->_convertIDtoText_run($results);
+                }
+            return $results;              
+        }
+        
+        public function _convertIDtoText_run($reg)
+        {          
+            //Use Geoworldmap library - nombre de la ciudad
+            $city = $this->geoworldmap->getCityByID($reg->CityID);
+            $reg->City = $city ? $city->City : '';                
+            //nombre de la cuenta
+            $account = $this->accounts->get_account($reg->account_id);
+            $reg->account = $account ? $account->name : '';        
+        }        
+        
+        /**
+         * Formats values for correct view in index
+         * @param type $result
+         * @return type 
+         */
+        public function _formatValuesForView($result)
+        {
+            foreach($result as $reg)
+            {
+                $reg->intro = substr($reg->intro, 0, 300);
+                $reg->intro = wordwrap($reg->intro, 100, "<br />\n");
+            }
+            return $result;
+        }        
+        
+
+        
         
 	/**
 	 * Callback method that checks the title of the location
