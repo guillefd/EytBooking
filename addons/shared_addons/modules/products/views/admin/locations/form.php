@@ -43,12 +43,7 @@
                         <div class="input">
                             <?php echo  form_input('slug', $location->slug, ' placeholder="'.lang('location:slug_label').'" readonly'); ?>
                         </div>                
-                    </li>
-                    <li>
-                        <label for="intro"><?php echo lang('location:intro_label'); ?> <span>*</span></label>
-                        <br style="clear: both;" />
-                        <?php echo form_textarea(array('id' => 'intro', 'name' => 'intro', 'value' => $location->intro, 'rows' => 2, 'class' => 'wysiwyg-simple')); ?>
-                    </li>                                
+                    </li>                              
                 </ul>
                 </fieldset>
             </div>
@@ -124,8 +119,13 @@
             <div class="form_inputs" id="locations-content-tab">
                 <fieldset>
                     <ul>
+                    <li>
+                        <label for="intro"><?php echo lang('location:intro_short_label'); ?> <span>*</span></label>
+                        <br style="clear: both;" />
+                        <?php echo form_textarea(array('id' => 'intro', 'name' => 'intro', 'value' => $location->intro, 'rows' => 2)); ?>
+                    </li>                          
                     <li class="even editor">
-                        <label for="description"><?php echo lang('location:description_label'); ?></label>				
+                        <label for="description"><?php echo lang('location:description_long_label'); ?></label>				
                         <div class="input">
                                 <?php echo form_dropdown('type', array(
                                         'html' => 'html',

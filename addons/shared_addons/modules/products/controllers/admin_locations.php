@@ -165,11 +165,12 @@ class Admin_Locations extends Admin_Controller {
 		$this->pyrocache->delete_all('modules_m');
 		
 		// Create pagination links
-		$total_rows = $this->products_locations_m->count_all();
-		$pagination = create_pagination('admin/products/locations/index', $total_rows, NULL, 5);
-			
+		$total_rows = $this->products_locations_m->search('counts');
+		$pagination = create_pagination('admin/products/locations/index', $total_rows, 10, 5);
+                $post_data['pagination']  = $pagination;
+                $post_data['active'] = 1; //only active accounts - IMPROVE!!!                         			
 		// Using this data, get the relevant results
-		$locations = $this->products_locations_m->order_by('name')->limit($pagination['limit'])->get_all();
+		$locations = $this->products_locations_m->search('results',$post_data);
                 //CONVERT ID TO TEXT
                 $this->_convertIDtoText($locations);
                 $this->_formatValuesForView($locations);
@@ -177,7 +178,10 @@ class Admin_Locations extends Admin_Controller {
 		$this->template
 			->title($this->module_details['name'], lang('location:list_title'))
 			->set('locations', $locations)
-			->set('pagination', $pagination)
+			->set('pagination', $pagination)                        
+                        ->append_js('module::locations_index.js')
+                        ->append_js('module::model.js')                        
+                        ->append_css('module::jquery/jquery.autocomplete.css')
 			->build('admin/locations/index', $this->data);
 	}
 	
@@ -238,7 +242,7 @@ class Admin_Locations extends Admin_Controller {
             }
 
             // if it's a fresh new article lets show them the advanced editor
-            if ($location->type == '') $location->type = 'wysiwyg-advanced';               
+            if ($location->type == '') $location->type = 'wysiwyg-simple';               
 
             $this->template
                     ->title($this->module_details['name'], lang('cat_create_title'))
@@ -363,47 +367,38 @@ class Admin_Locations extends Admin_Controller {
 				->build('admin/locations/partials/location');                         
 	} 
         
-
 	/**
-	 * Delete method, deletes an existing location (obvious isn't it?)
-	 * @access public
-	 * @param int id The ID of the location to edit
-	 * @return void
-	 */
-	public function delete($id = 0)
-	{	
-		$id_array = (!empty($id)) ? array($id) : $this->input->post('action_to');
-		
-		// Delete multiple
-		if (!empty($id_array))
+         * Delete - no se borra, se deja inactivo
+         * @param type $id 
+         */
+        public function delete($id = 0)
+	{
+		// make sure the button was clicked and that there is an array of ids
+		if (isset($_POST['btnAction']) AND is_array($_POST['action_to']))
 		{
-			$deleted = 0;
-			$to_delete = 0;
-			foreach ($id_array as $id)
-			{
-				if ($this->products_locations_m->delete($id))
-				{
-					$deleted++;
-				}
-				else
-				{
-					$this->session->set_flashdata('error', sprintf(lang('cat_mass_delete_error'), $id));
-				}
-				$to_delete++;
-			}
-			
-			if ( $deleted > 0 )
-			{
-				$this->session->set_flashdata('success', sprintf(lang('cat_mass_delete_success'), $deleted, $to_delete));
-			}
-		}		
-		else
-		{
-			$this->session->set_flashdata('error', lang('cat_no_select_error'));
+			// pass the ids and let MY_Model delete the items
+			$this->products_locations_m->inactive_many($this->input->post('action_to'));
 		}
-		
+		elseif (is_numeric($id))
+		{
+                        $data = array('active' => 0);
+			// they just clicked the link so we'll delete that one
+			if($this->products_locations_m->inactive($id))
+                        {        
+                            // All good...
+                            $this->session->set_flashdata('success', lang('location:delete_success'));
+                            redirect('admin/products/locations/index');
+                        }
+                         else
+                            {
+                                $this->session->set_flashdata('error', lang('location:delete_error'));
+                                redirect('admin/products/locations/index');
+                            }
+		}
 		redirect('admin/products/locations/index');
-	}
+	}        
+        
+
 
 //::::: HELPERS ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::        
         
@@ -447,8 +442,8 @@ class Admin_Locations extends Admin_Controller {
         {
             foreach($result as $reg)
             {
-                $reg->intro = substr($reg->intro, 0, 300);
-                $reg->intro = wordwrap($reg->intro, 100, "<br />\n");
+                $reg->intro = substr($reg->intro, 0, 110);
+                $reg->intro = wordwrap($reg->intro, 60, "<br />\n");
             }
             return $result;
         }        
@@ -603,4 +598,49 @@ class Admin_Locations extends Admin_Controller {
 			echo $form;
 		}
 	}
+        
+        
+// AJAX :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+        
+        /**
+	 * method to fetch filtered results for account list
+	 * @access public
+	 * @return void
+	 */
+	public function ajax_filter()
+	{
+                //captura post
+                $post_data = array();
+                if($this->input->post('f_account'))
+                {
+                    $post_data['account_id'] = $this->input->post('f_account');                  
+                }    
+                if($this->input->post('f_keywords'))
+                {    
+                    $post_data['keywords'] = $this->input->post('f_keywords');
+                }    
+                if($this->input->post('f_city'))
+                {
+                    $post_data['CityID'] = $this->input->post('f_city');                   
+                }                
+                $post_data['active'] = 1;
+                //pagination
+                $total_rows = $this->products_locations_m->search('counts',$post_data);
+                //params (URL -for links-, Total records, records per page, segmnet number )
+		$pagination = create_pagination('admin/products/locations/index', $total_rows, 10, 5);
+                $post_data['pagination'] = $pagination;                
+                //query with limits
+                $locations = $this->products_locations_m->search('results',$post_data);                             
+                $locations = $this->_convertIDtoText($locations);
+                $this->_formatValuesForView($locations);                
+		//set the layout to false and load the view
+                $this->input->is_ajax_request() ? $this->template->set_layout(FALSE) : '';                 
+		$this->template
+			->title($this->module_details['name'], lang('location:list_title'))
+			->set('locations', $locations)
+			->set('pagination', $pagination)                        
+                        ->append_js('module::locations_index.js')
+                        ->append_css('module::jquery/jquery.autocomplete.css')
+                        ->build('admin/locations/partials/locations', $this->data);
+	}        
 }

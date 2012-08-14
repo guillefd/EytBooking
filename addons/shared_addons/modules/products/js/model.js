@@ -74,9 +74,9 @@ function deleteItem(index)
     $('input[name="chatSocial_accounts"]').val(VectoString());    
 }
 
-///**
-// * Inicializa valores de dias-horarios de pago_provs
-// */
+/**
+ *  Inicializa valores de dias-horarios de pago_provs
+ */
 function init_hidden_dias_horarios()
 {
         var input = $('input[name="chatSocial_accounts"]').val();
@@ -101,4 +101,41 @@ function init_hidden_dias_horarios()
             }
             Nitem = num;
         }        
+}
+
+
+/**
+ * Do ajax request for Index - table view
+ * @param keyword_filter select object selector
+ * @param account_filter select object selector
+ * @param city_filter input object selector
+ * @param link URL to send query, responds HTML
+ * success updates #table with new values
+ */
+function doAjaxQuery(keyword_filter, account_filter, city_filter, link)
+{
+
+    var form_data = {
+        f_account : account_filter.val(),  
+        f_keywords: keyword_filter.val(),
+        f_city: city_filter.val()
+    };
+
+    $.ajax({
+        type: "POST",
+        url: link,
+        data: form_data,
+        dataType: 'html',
+        success: function(result){
+            $('#btnCancel').attr('class','cancel btn orange');            
+            //replace Table with new values 
+            $('#indexTable').replaceWith(result);            
+            // remove GIF
+            $('#loader').remove();                          
+        },
+        error: function()
+        {
+            $('#loader').remove(); 
+        }
+    });         
 }

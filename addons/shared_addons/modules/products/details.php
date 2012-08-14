@@ -166,6 +166,7 @@ class Module_Products extends Module {
 			  `created_on` int(11) NOT NULL,
 			  `updated_on` int(11) NOT NULL default 0,
 			  `type` set('html','markdown','wysiwyg-advanced','wysiwyg-simple') collate utf8_unicode_ci NOT NULL,
+			  `active` tinyint NOT NULL default '1',                          
 			  PRIMARY KEY  (`id`),
 			  UNIQUE KEY `name` (`name`),
 			  KEY `account_id - normal` (`account_id`),
