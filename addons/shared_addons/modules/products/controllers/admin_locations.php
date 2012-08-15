@@ -149,7 +149,7 @@ class Admin_Locations extends Admin_Controller {
                 //Gen dropdown list for social
                 $this->data->social = $this->social->get_list();                
                 // template addons
-                $this->template->append_css('module::locations.css') 
+                $this->template->append_css('module::products.css') 
                                ->prepend_metadata('<script>var IMG_PATH = "'.BASE_URL.SHARED_ADDONPATH.'modules/'.$this->module.'/img/"; </script>');                
                 
                 
@@ -362,7 +362,6 @@ class Admin_Locations extends Admin_Controller {
 		$this->template
 				->set_layout('modal','admin')
                                 ->append_css('module::workless.css')
-                                ->append_css('module::locations.css')
 				->set('location', $location)
 				->build('admin/locations/partials/location');                         
 	} 

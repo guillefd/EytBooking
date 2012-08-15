@@ -8,7 +8,7 @@ $lang['cat_description_label']          = 'Descripcion';
 # titles
 $lang['cat_create_title'] 			= 'Crear una categoría';
 $lang['cat_edit_title'] 			= 'Editar categoría "%s"';
-$lang['cat_list_title'] 			= 'Lista de categorias';
+$lang['cat_list_title'] 			= 'Categorias de producto';
 
 # messages
 $lang['cat_no_categories'] 			= 'No hay categorías.';

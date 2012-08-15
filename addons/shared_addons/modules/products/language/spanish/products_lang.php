@@ -70,4 +70,7 @@ $lang['products_twitter_error'] 				= 'Error de Twitter';
 // date
 $lang['products_archive_date_format']			= "%B %Y";
 
+// defaults
+$lang['splitter']                                       = " ::: ";
+
 /* End of file products_lang.php */

@@ -40,20 +40,6 @@ class Module_Products extends Module {
                                                                          ),
                                                                    ),
                                                     ),
-                                      'categories' => array
-                                                      (
-                                                       'name' => 'cat_list_title',
-                                                       'uri' => 'admin/products/categories',
-                                                       'shortcuts' => array
-                                                                      (
-                                                                        array
-                                                                            (
-                                                                            'name' => 'cat_create_title',
-                                                                            'uri' => 'admin/products/categories/create',
-                                                                            'class' => 'add'
-                                                                            ),
-                                                                        ),
-                                                        ),
                                       'locations' => array
                                                       (
                                                        'name' => 'location:list_title',
@@ -68,15 +54,34 @@ class Module_Products extends Module {
                                                                             ),
                                                                         ),
                                                         ),
+                                      'splitter' => array
+                                                      (
+                                                       'name' => 'splitter',
+                                                       'uri' => ''
+                                                       ),
+                                      'categories' => array
+                                                      (
+                                                       'name' => 'cat_list_title',
+                                                       'uri' => 'admin/products/categories',
+                                                       'shortcuts' => array
+                                                                      (
+                                                                        array
+                                                                            (
+                                                                            'name' => 'cat_create_title',
+                                                                            'uri' => 'admin/products/categories/create',
+                                                                            'class' => 'add'
+                                                                            ),
+                                                                        ),
+                                                        ),                            
                                       'features' => array
                                                       (
-                                                       'name' => 'feature_list_title',
+                                                       'name' => 'features:list_title',
                                                        'uri' => 'admin/products/features',
                                                        'shortcuts' => array
                                                                       (
                                                                         array
                                                                             (
-                                                                            'name' => 'feature_create_title',
+                                                                            'name' => 'features:create_title',
                                                                             'uri' => 'admin/products/features/create',
                                                                             'class' => 'add'
                                                                             ),
@@ -263,27 +268,25 @@ class Module_Products extends Module {
 		$products_features_categories = "
 			CREATE TABLE " . $this->db->dbprefix('products_features_categories') . " (
 			  `id` int(11) NOT NULL auto_increment,
-			  `title` varchar(100) collate utf8_unicode_ci NOT NULL default '',
-			  `slug` varchar(100) collate utf8_unicode_ci NOT NULL default '',                          
+			  `name` varchar(100) collate utf8_unicode_ci NOT NULL default '',
 			  `description` text collate utf8_unicode_ci NOT NULL,
 			  PRIMARY KEY  (`id`),
-			  UNIQUE KEY `slug - unique` (`slug`),
-			  UNIQUE KEY `title - unique` (`title`),
-			  KEY `slug - normal` (`slug`)
+			  UNIQUE KEY `name - unique` (`name`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Products Features Categories.';
 		";                
 
 		$products_features_defaults = "
 			CREATE TABLE " . $this->db->dbprefix('products_features_defaults') . " (
 			  `id` int(11) NOT NULL auto_increment,
-			  `category_feature_id` int(11) NOT NULL,                           
-			  `title` varchar(100) collate utf8_unicode_ci NOT NULL default '',
-			  `slug` varchar(100) collate utf8_unicode_ci NOT NULL default '',                          
+			  `cat_feature_id` int(11) NOT NULL,                           
+			  `cat_product_id` int(11) NOT NULL,                                                     
+			  `name` varchar(100) collate utf8_unicode_ci NOT NULL default '',
 			  `description` text collate utf8_unicode_ci NOT NULL,
+                          `usageunit_id` int(11) NOT NULL,                                                     
+                          `value` decimal(20,2) NOT NULL default '0.00',                                                      
+                          `group` varchar(100) collate utf8_unicode_ci NOT NULL default '',                          
 			  PRIMARY KEY  (`id`),
-			  UNIQUE KEY `slug - unique` (`slug`),
-			  UNIQUE KEY `title - unique` (`title`),
-			  KEY `slug - normal` (`slug`)
+			  KEY `group - normal` (`group`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Products Features Defaults.';
 		";                   
 
@@ -291,18 +294,14 @@ class Module_Products extends Module {
 			CREATE TABLE " . $this->db->dbprefix('products_features') . " (
 			  `id` int(11) NOT NULL auto_increment,
 			  `product_id` int(11) NOT NULL,                           
-			  `title` varchar(100) collate utf8_unicode_ci NOT NULL default '',
-			  `slug` varchar(100) collate utf8_unicode_ci NOT NULL default '',                          
+			  `cat_feature_id` int(11) NOT NULL,                           
+			  `name` varchar(100) collate utf8_unicode_ci NOT NULL default '',
 			  `description` text collate utf8_unicode_ci NOT NULL,
-                          `quantity` decimal(20,2) NOT NULL default '0.00',                            
-                          `weight` decimal(20,2) NOT NULL default '0.00',    
-                          `width` decimal(20,2) NOT NULL default '0.00',  
-                          `length` decimal(20,2) NOT NULL default '0.00',                              
-                          `size` decimal(20,2) NOT NULL default '0.00',                           
+                          `usageunit_id` int(11) NOT NULL,                            
+                          `value` decimal(20,2) NOT NULL default '0.00',                            
+                          `group` varchar(100) collate utf8_unicode_ci NOT NULL default '',                                                    
 			  PRIMARY KEY  (`id`),
-			  UNIQUE KEY `slug - unique` (`slug`),
-			  UNIQUE KEY `title - unique` (`title`),
-			  KEY `slug - normal` (`slug`)
+			  KEY `product_id - normal` (`product_id`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Products Features';
 		";                    
                 
