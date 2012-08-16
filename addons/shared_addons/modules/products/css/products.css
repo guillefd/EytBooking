@@ -23,6 +23,11 @@ input.double{
     width: 442px;
 }
 
+textarea.med{
+    width: 40em;
+    height: 40px;
+}
+
 /** SOCIAL DIV**/
 
 .itemBox{

@@ -218,6 +218,14 @@ jQuery(function($) {
                                 onComplete: function(){ pyro.chosen() }
                         });
                 }); 
+                $('a[rel=modal-form-small], a.modal-form-small').livequery(function() {
+                        $(this).colorbox({
+                                width: "70%",
+                                height: "600px",
+                                scrolling: false,                                
+                                onComplete: function(){ pyro.chosen() }
+                        });
+                });                  
 // END MODIFICACION :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 		$('a[rel="modal-large"], a.modal-large').livequery(function() {
 			$(this).colorbox({

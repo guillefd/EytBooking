@@ -24,7 +24,7 @@ class Admin_Categories extends Admin_Controller {
 		array(
 			'field' => 'title',
 			'label' => 'lang:cat_title_label',
-			'rules' => 'trim|required|max_length[20]|callback__check_title'
+			'rules' => 'trim|required|max_length[50]|callback__check_title'
 		),
 		array(
 			'field' => 'description',

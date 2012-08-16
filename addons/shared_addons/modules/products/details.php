@@ -268,7 +268,7 @@ class Module_Products extends Module {
 		$products_features_categories = "
 			CREATE TABLE " . $this->db->dbprefix('products_features_categories') . " (
 			  `id` int(11) NOT NULL auto_increment,
-			  `name` varchar(100) collate utf8_unicode_ci NOT NULL default '',
+			  `name` text collate utf8_unicode_ci NOT NULL,                      
 			  `description` text collate utf8_unicode_ci NOT NULL,
 			  PRIMARY KEY  (`id`),
 			  UNIQUE KEY `name - unique` (`name`)
