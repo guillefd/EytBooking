@@ -13,10 +13,13 @@ $(document).ready(function(){
     $('input[name="heigth"]').change(function() {    
         checkData(this);
     });
-        $('input[name="length"]').change(function() {    
+    $('input[name="length"]').change(function() {    
         checkData(this);
     });
-
+    $('input[name="square_mt"]').change(function() {    
+        checkData(this);
+    });    
+    
 
     $("#locationAjax").autocomplete({
         source: function( request, response ) {
@@ -33,7 +36,7 @@ $(document).ready(function(){
                                         return {
                                                 label: item.name + " [ " + item.account + " | " + item.City + " ]",
                                                 value: item.name + " [ " + item.account + " | " + item.City + " ]",
-                                                locationid: item.location_id                                                              
+                                                locationid: item.id                                                              
                                         }
                                 }));
                                 $('#loader').remove(); 

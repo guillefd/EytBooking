@@ -1,6 +1,5 @@
 <!-- JAVASCRIPT GLOBAL VARS -->
 <script>
-    var ADD_DIMENTION_ERROR_MSG = "<? echo lang('spaces:add_dimention_error_msg') ?>";   
     var ADD_DIMENTION_VALUE_ERROR_MSG = "<? echo lang('spaces:add_dimention_value_error_msg') ?>";       
     
 </script>
@@ -28,13 +27,13 @@
                         <label for="location"><?php echo lang('spaces:locationAjax');?> <span>*</span></label>
                         <div class="input">
                             <?php echo  form_input('location', $space->location , 'placeholder="'.lang('spaces:Ajax').'" id="locationAjax" '); ?>
-                            <?php echo  form_hidden('location_id', $space->location_id , 'id="location_id" '); ?>                           
+                            <?php echo  form_hidden('location_id', $space->location_id ); ?>                           
                         </div>
                     </li>                   
                     <li>
                         <label for="name"><?php echo lang('spaces:denomination').' | '.lang('spaces:name');?> <span>*</span></label>
                         <div class="input">
-                            <?php echo form_dropdown('denomination_id',array('') + $denominations_array,set_value('denomination_id',$space->denomination_id),'data-placeholder="'.lang('spaces:select_denomination').'" style="width:200px" id="denomination_id"') ?>                            
+                            <?php echo form_dropdown('denomination_id',array(''=>'') + $denominations_array,set_value('denomination_id',$space->denomination_id),'data-placeholder="'.lang('spaces:select_denomination').'" style="width:200px" id="denomination_id"') ?>                            
                             <?php echo form_input('name', $space->name , ' placeholder="'.lang('spaces:name').'" '); ?>                            
                         </div>              
                     </li>                    
@@ -55,9 +54,27 @@
                         </div>              
                        <label for="square_mt"><?php echo lang('spaces:square_mt');?></label>
                        <div class="input">
-                            <?php echo  form_input('square_mt', $space->square_mt , ' placeholder="'.lang('spaces:square_mt').'" id="square_mt"'); ?>                                                       
+                            <?php echo  form_input('square_mt', $space->square_mt , ' placeholder="'.lang('spaces:square_mt_PH').'" id="square_mt" class="small"'); ?>                                                       
                        </div>
-                    </li>                                                            
+                    </li>
+                    <li>
+                        <label for="shape"><?php echo lang('spaces:shape');?> <span></span></label>
+                        <div class="input">
+                            <?php echo form_dropdown('shape_id',array(''=>'') + $shapes_array,set_value('shape_id',$space->shape_id),'data-placeholder="'.lang('spaces:select').'" style="width:200px" ') ?>                            
+                        </div>              
+                    </li>                     
+                    <li>
+                        <label for="layouts"><?php echo lang('spaces:layouts');?> <span></span></label>
+                        <div class="input">
+                            <?php echo form_dropdown('layouts',array(''=>''),set_value('layouts',$space->layouts),'data-placeholder="'.lang('spaces:select').'" style="width:200px" ') ?>                            
+                        </div>              
+                    </li> 
+                    <li>
+                        <label for="facilities"><?php echo lang('spaces:facilities');?> <span></span></label>
+                        <div class="input">
+                            <?php echo form_dropdown('facilities',array(''=>''),set_value('shape_id',$space->facilities),'data-placeholder="'.lang('spaces:select').'" style="width:200px" ') ?>                            
+                        </div>              
+                    </li>                     
                     <li>
                         <label for="intro"><?php echo lang('spaces:description'); ?> <span></span></label>
                         <br style="clear: both;" />

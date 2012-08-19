@@ -112,6 +112,9 @@ class Module_Products extends Module {
 		$this->dbforge->drop_table('products_currency');                
 		$this->dbforge->drop_table('products_usageunit');                
 		$this->dbforge->drop_table('products_taxtype');                
+                $this->dbforge->drop_table('products_spaces_shapes');                  
+                $this->dbforge->drop_table('products_spaces_layouts');                  
+                $this->dbforge->drop_table('products_spaces_facilities');                                  
 		$this->dbforge->drop_table('products_spaces_denominations');                
 		$this->dbforge->drop_table('products_features_category');                
 		$this->dbforge->drop_table('products_features_defaults');                
@@ -198,12 +201,13 @@ class Module_Products extends Module {
 			  `name` varchar(100) collate utf8_unicode_ci NOT NULL default '',
 			  `description` text collate utf8_unicode_ci NOT NULL,               
 			  `level` varchar(100) collate utf8_unicode_ci NOT NULL default '',                                                   
-			  `dimensions` varchar(100) collate utf8_unicode_ci NOT NULL default '',                      
+			  `width` varchar(20) collate utf8_unicode_ci NOT NULL default '',                      
+			  `height` varchar(20) collate utf8_unicode_ci NOT NULL default '',
+			  `length` varchar(20) collate utf8_unicode_ci NOT NULL default '',                          
 			  `square_mt` varchar(20) collate utf8_unicode_ci NOT NULL default '',                           
 			  `shape_id` tinyint NOT NULL default '0', 
 			  `layouts` text collate utf8_unicode_ci NOT NULL, 
-			  `room_type_id` tinyint NOT NULL default '0', 
-			  `features` text collate utf8_unicode_ci NOT NULL, 
+			  `facilities` text collate utf8_unicode_ci NOT NULL, 
 			  `author_id` int(11) NOT NULL default '0',
 			  `created_on` int(11) NOT NULL,
 			  `updated_on` int(11) NOT NULL default 0,                          
@@ -316,6 +320,34 @@ class Module_Products extends Module {
 			  PRIMARY KEY  (`id`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Products Spaces Denominations.';
 		"; 
+                
+                $products_spaces_shapes = "
+			CREATE TABLE " . $this->db->dbprefix('products_spaces_shapes') . " (
+			  `id` int(11) NOT NULL auto_increment,
+			  `name` varchar(100) collate utf8_unicode_ci NOT NULL default '',                     
+			  `description` text collate utf8_unicode_ci NOT NULL,
+			  PRIMARY KEY  (`id`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Products Spaces Shapes.';
+		";                 
+                
+                $products_spaces_layouts = "
+			CREATE TABLE " . $this->db->dbprefix('products_spaces_layouts') . " (
+			  `id` int(11) NOT NULL auto_increment,
+			  `name` varchar(100) collate utf8_unicode_ci NOT NULL default '',                     
+			  `description` text collate utf8_unicode_ci NOT NULL,
+			  PRIMARY KEY  (`id`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Products Spaces Layouts.';
+		";                 
+
+                $products_spaces_facilities = "
+			CREATE TABLE " . $this->db->dbprefix('products_spaces_facilities') . " (
+			  `id` int(11) NOT NULL auto_increment,
+			  `name` varchar(100) collate utf8_unicode_ci NOT NULL default '',                     
+			  `description` text collate utf8_unicode_ci NOT NULL,
+                          `value` varchar(100) collate utf8_unicode_ci NOT NULL default '',
+			  PRIMARY KEY  (`id`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Products Spaces Layouts.';
+		";                 
 
 		$products_features_defaults = "
 			CREATE TABLE " . $this->db->dbprefix('products_features_defaults') . " (
@@ -357,6 +389,9 @@ class Module_Products extends Module {
                         && $this->db->query($products_currency)
                         && $this->db->query($products_usageunit)
                         && $this->db->query($products_taxtype)
+                        && $this->db->query($products_spaces_shapes)
+                        && $this->db->query($products_spaces_layouts)                        
+                        && $this->db->query($products_spaces_facilities)                        
                         && $this->db->query($products_spaces_denominations)                        
                         && $this->db->query($products_features_categories)
                         && $this->db->query($products_features_defaults)
@@ -374,11 +409,14 @@ class Module_Products extends Module {
             $this->dbforge->drop_table('products_locations');
             $this->dbforge->drop_table('products_spaces');
             $this->dbforge->drop_table('products_files');
-            $this->dbforge->drop_table('products_files_folder');
+            $this->dbforge->drop_table('products_files_folders');
             $this->dbforge->drop_table('products_listprice');
             $this->dbforge->drop_table('products_currency');
             $this->dbforge->drop_table('products_usageunit');
             $this->dbforge->drop_table('products_taxtype');
+            $this->dbforge->drop_table('products_spaces_shapes');
+            $this->dbforge->drop_table('products_spaces_layouts');     
+            $this->dbforge->drop_table('products_spaces_facilities');     
             $this->dbforge->drop_table('products_spaces_denominations');            
             $this->dbforge->drop_table('products_features_categories');
             $this->dbforge->drop_table('products_features_defaults');

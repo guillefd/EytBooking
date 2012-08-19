@@ -15,15 +15,15 @@ function checkData(selector)
 {        
         var value = $('input[name=' + selector.name + ']').val();
         if(isNaN(value))
-            {
-                alert(ADD_DIMENTION_VALUE_ERROR_MSG);             
-                $('input[name=' + selector.name + ']').val("");
-                $('input[name=' + selector.name + ']').focus();
-            }
-            else
-            {
-                calculateSquare();
-            }
+        {
+            alert(ADD_DIMENTION_VALUE_ERROR_MSG);             
+            $('input[name=' + selector.name + ']').val("");
+            $('input[name=' + selector.name + ']').focus();
+        }
+        else
+        {
+            if(selector.name!="square_mt")calculateSquare();
+        }
     }
 
 

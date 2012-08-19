@@ -29,7 +29,7 @@ class Admin_Spaces extends Admin_Controller {
 		array(
                         'field' => 'location_id',
                         'label' => 'lang:spaces:location',
-                        'rules' => 'trim|required',
+                        'rules' => 'trim|required|callback__check_validLocationId',
                 ),
 		array(
                         'field' => 'denomination_id',
@@ -82,15 +82,10 @@ class Admin_Spaces extends Admin_Controller {
                         'rules' => 'trim',
                 ),            
 		array(
-                        'field' => 'room_type_id',
-                        'label' => 'lang:spaces:room_type',
+                        'field' => 'facilities',
+                        'label' => 'lang:spaces:facilities',
                         'rules' => 'trim',
-                ),            
-		array(
-                        'field' => 'features',
-                        'label' => 'lang:spaces:features',
-                        'rules' => 'trim',
-                )                                   
+                )                                  
             );
         
 	/**
@@ -106,7 +101,7 @@ class Admin_Spaces extends Admin_Controller {
                 $this->load->helper(array('date'));
 		$this->lang->load(array('products','categories','locations','features','spaces'));		
 		// Loads libraries
-		$this->load->library(array('form_validation','accounts','spaces_denominations'));            
+		$this->load->library(array('form_validation','accounts','spaces_denominations','products','shapes'));            
                 // template addons
                 $this->template->append_css('module::products.css') 
                                ->prepend_metadata('<script>var IMG_PATH = "'.BASE_URL.SHARED_ADDONPATH.'modules/'.$this->module.'/img/"; </script>');                
@@ -117,7 +112,7 @@ class Admin_Spaces extends Admin_Controller {
         function _gen_dropdown_list()
         {
             $this->data->denominations_array = $this->spaces_denominations->gen_dd_array();
-            $this->data->dimensions_array = array(''=>'','height'=>lang('spaces:height'),'width'=>lang('spaces:width'),'length'=>lang('spaces:length'));
+            $this->data->shapes_array = $this->shapes->gen_dd_array();            
         }        
         
         
@@ -162,15 +157,17 @@ class Admin_Spaces extends Admin_Controller {
             if ($this->form_validation->run())
             {
                 $data = array('location_id'=>$this->input->post('location_id'),
+                              'denomination_id'=>$this->input->post('location_id'),          
                               'name' =>$this->input->post('name'),
                               'description' => $this->input->post('description'),                    
                               'level' => $this->input->post('level'),
-                              'dimension' => $this->input->post('dimensions'), 
-                              'square_mt' => $this->input->post('square_mt'), 
+                              'width' => $this->input->post('width'), 
+                              'height' => $this->input->post('height'), 
+                              'length' => $this->input->post('length'),                     
+                              'square_mt'=> $this->input->post('square_mt'), 
                               'shape_id'=>$this->input->post('shape_id'),
-                              'layouts' => $this->input->post('layouts'), 
-                              'room_type_id' => $this->input->post('room_type_id'), 
-                              'features' => $this->input->post('features'), 
+                              'layouts' => $this->input->post('layouts'),  
+                              'facilities' => $this->input->post('facilities'), 
                               'author_id' => $this->current_user->id,
                               'created_on' => now() 
                               );
@@ -187,7 +184,6 @@ class Admin_Spaces extends Admin_Controller {
                     	redirect('admin/products/spaces/create');
                     }
             }                                       
-
             $this->_gen_dropdown_list();    
             // Loop through each validation rule
             foreach ($this->validation_rules as $rule)
@@ -202,7 +198,31 @@ class Admin_Spaces extends Admin_Controller {
                     ->append_css('module::jquery/jquery.autocomplete.css')                                       
                     ->set('space', $space)
                     ->build('admin/spaces/form',$this->data);	
-	}        
+	}
+        
+        
+// CHECK ID ::::::::::::::::::::::::::::::::::::::::::::::::::
+        	/**
+	 * Callback method that checks the location id
+	 * @access public
+	 * @param id The id to check
+	 * @return bool
+	 */        
+        public function _check_validLocationId($id)
+        {
+            if(!$this->products->get_location($id))
+            {
+                if($this->method == "edit" && $this->products->get_location($id,0))//2nd param active = 0
+                {
+                    return TRUE; //devuelve TRUE porque el ID fue seleccionado cuando locacíon estuvo activa
+                }
+                $this->form_validation->set_message('_check_validLocationId', sprintf(lang('spaces:location_id_not_valid')));
+                return FALSE;
+            }else
+                {
+                    return TRUE;
+                }
+        }
 
         
         
