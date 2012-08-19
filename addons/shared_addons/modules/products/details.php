@@ -28,7 +28,7 @@ class Module_Products extends Module {
                                       (
                                       'products' => array
                                                     (
-                                                    'name' => 'products_list_title',
+                                                    'name' => 'products_list',
                                                     'uri' => 'admin/products',
                                                     'shortcuts' => array
                                                                    (
@@ -39,10 +39,24 @@ class Module_Products extends Module {
                                                                         'class' => 'add'
                                                                          ),
                                                                    ),
-                                                    ),
+                                                    ),                        
+                                      'spaces' => array
+                                                      (
+                                                       'name' => 'spaces:list',
+                                                       'uri' => 'admin/products/spaces',
+                                                       'shortcuts' => array
+                                                                      (
+                                                                        array
+                                                                            (
+                                                                            'name' => 'spaces:create_title',
+                                                                            'uri' => 'admin/products/spaces/create',
+                                                                            'class' => 'add'
+                                                                            ),
+                                                                        ),
+                                                        ),                            
                                       'locations' => array
                                                       (
-                                                       'name' => 'location:list_title',
+                                                       'name' => 'location:list',
                                                        'uri' => 'admin/products/locations',
                                                        'shortcuts' => array
                                                                       (
@@ -54,11 +68,6 @@ class Module_Products extends Module {
                                                                             ),
                                                                         ),
                                                         ),
-                                      'splitter' => array
-                                                      (
-                                                       'name' => 'splitter',
-                                                       'uri' => ''
-                                                       ),
                                       'categories' => array
                                                       (
                                                        'name' => 'cat_list_title',
@@ -96,12 +105,14 @@ class Module_Products extends Module {
 		$this->dbforge->drop_table('products');
                 $this->dbforge->drop_table('products_categories');
 		$this->dbforge->drop_table('products_locations');                
+		$this->dbforge->drop_table('products_spaces');                 
 		$this->dbforge->drop_table('products_files');
                 $this->dbforge->drop_table('products_files_folders');               
 		$this->dbforge->drop_table('products_listprice');                
 		$this->dbforge->drop_table('products_currency');                
 		$this->dbforge->drop_table('products_usageunit');                
 		$this->dbforge->drop_table('products_taxtype');                
+		$this->dbforge->drop_table('products_spaces_denominations');                
 		$this->dbforge->drop_table('products_features_category');                
 		$this->dbforge->drop_table('products_features_defaults');                
 		$this->dbforge->drop_table('products_features');                
@@ -109,8 +120,8 @@ class Module_Products extends Module {
 		$products_categories = "
 			CREATE TABLE " . $this->db->dbprefix('products_categories') . " (
 			  `id` int(11) NOT NULL auto_increment,
-			  `slug` varchar(20) collate utf8_unicode_ci NOT NULL default '',
-			  `title` varchar(20) collate utf8_unicode_ci NOT NULL default '',
+			  `slug` varchar(100) collate utf8_unicode_ci NOT NULL default '',
+			  `title` varchar(100) collate utf8_unicode_ci NOT NULL default '',
 			  `description` text collate utf8_unicode_ci NOT NULL,
 			  PRIMARY KEY  (`id`),
 			  UNIQUE KEY `slug - unique` (`slug`),
@@ -177,6 +188,29 @@ class Module_Products extends Module {
 			  KEY `account_id - normal` (`account_id`),
 			  KEY `CityID - normal` (`CityID`)                          
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Products Locations.';
+		";    
+                
+		$products_spaces = "
+			CREATE TABLE " . $this->db->dbprefix('products_spaces') . " (
+			  `space_id` int(11) NOT NULL auto_increment,
+			  `location_id` int(11) NOT NULL default '0',                        
+                          `denomination_id` tinyint NOT NULL default '0', 
+			  `name` varchar(100) collate utf8_unicode_ci NOT NULL default '',
+			  `description` text collate utf8_unicode_ci NOT NULL,               
+			  `level` varchar(100) collate utf8_unicode_ci NOT NULL default '',                                                   
+			  `dimensions` varchar(100) collate utf8_unicode_ci NOT NULL default '',                      
+			  `square_mt` varchar(20) collate utf8_unicode_ci NOT NULL default '',                           
+			  `shape_id` tinyint NOT NULL default '0', 
+			  `layouts` text collate utf8_unicode_ci NOT NULL, 
+			  `room_type_id` tinyint NOT NULL default '0', 
+			  `features` text collate utf8_unicode_ci NOT NULL, 
+			  `author_id` int(11) NOT NULL default '0',
+			  `created_on` int(11) NOT NULL,
+			  `updated_on` int(11) NOT NULL default 0,                          
+			  `active` tinyint NOT NULL default '1',                          
+			  PRIMARY KEY  (`space_id`),
+			  KEY `account_id - normal` (`location_id`)                     
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Locations spaces.';
 		";                
 
 		$products_files = "
@@ -258,9 +292,9 @@ class Module_Products extends Module {
 		$products_taxtype = "
 			CREATE TABLE " . $this->db->dbprefix('products_taxtype') . " (
 			  `id` int(11) NOT NULL AUTO_INCREMENT,
-			  `name` varchar(50) NOT NULL,                      
-			  `symbol` varchar(5) NOT NULL,  
-			  `tax` decimal(3,2) NOT NULL default '0.00',                      
+			  `name` varchar(100) NOT NULL,                      
+			  `symbol` varchar(10) NOT NULL,  
+			  `tax` double NOT NULL default '0.00',                      
 			  PRIMARY KEY (`id`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 		";                   
@@ -268,12 +302,20 @@ class Module_Products extends Module {
 		$products_features_categories = "
 			CREATE TABLE " . $this->db->dbprefix('products_features_categories') . " (
 			  `id` int(11) NOT NULL auto_increment,
-			  `name` text collate utf8_unicode_ci NOT NULL,                      
+			  `name` varchar(100) collate utf8_unicode_ci NOT NULL default '',                     
 			  `description` text collate utf8_unicode_ci NOT NULL,
-			  PRIMARY KEY  (`id`),
-			  UNIQUE KEY `name - unique` (`name`)
+			  PRIMARY KEY  (`id`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Products Features Categories.';
-		";                
+		";   
+
+                $products_spaces_denominations = "
+			CREATE TABLE " . $this->db->dbprefix('products_spaces_denominations') . " (
+			  `id` int(11) NOT NULL auto_increment,
+			  `name` varchar(100) collate utf8_unicode_ci NOT NULL default '',                     
+			  `description` text collate utf8_unicode_ci NOT NULL,
+			  PRIMARY KEY  (`id`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Products Spaces Denominations.';
+		"; 
 
 		$products_features_defaults = "
 			CREATE TABLE " . $this->db->dbprefix('products_features_defaults') . " (
@@ -307,6 +349,7 @@ class Module_Products extends Module {
                 
 		if ($this->db->query($products_categories) 
                         && $this->db->query($products) 
+                        && $this->db->query($products_spaces)                         
                         && $this->db->query($products_locations) 
                         && $this->db->query($products_files)
                         && $this->db->query($products_files_folders)                        
@@ -314,6 +357,7 @@ class Module_Products extends Module {
                         && $this->db->query($products_currency)
                         && $this->db->query($products_usageunit)
                         && $this->db->query($products_taxtype)
+                        && $this->db->query($products_spaces_denominations)                        
                         && $this->db->query($products_features_categories)
                         && $this->db->query($products_features_defaults)
                         && $this->db->query($products_features)
@@ -328,12 +372,14 @@ class Module_Products extends Module {
             $this->dbforge->drop_table('products');
             $this->dbforge->drop_table('products_categories');
             $this->dbforge->drop_table('products_locations');
+            $this->dbforge->drop_table('products_spaces');
             $this->dbforge->drop_table('products_files');
             $this->dbforge->drop_table('products_files_folder');
             $this->dbforge->drop_table('products_listprice');
             $this->dbforge->drop_table('products_currency');
             $this->dbforge->drop_table('products_usageunit');
             $this->dbforge->drop_table('products_taxtype');
+            $this->dbforge->drop_table('products_spaces_denominations');            
             $this->dbforge->drop_table('products_features_categories');
             $this->dbforge->drop_table('products_features_defaults');
             $this->dbforge->drop_table('products_features');                                   

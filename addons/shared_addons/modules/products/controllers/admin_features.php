@@ -69,7 +69,7 @@ class Admin_Features extends Admin_Controller {
 		
 		$this->load->model(array('products_features_m','products_categories_m'));
                 $this->load->helper(array('products_dropdown','date'));
-		$this->lang->load(array('products','categories','locations','features'));		
+		$this->lang->load(array('products','categories','locations','features','spaces'));		
 		// Loads libraries
 		$this->load->library(array('form_validation','features_categories','usageunit'));
                 // template addons

@@ -68,7 +68,8 @@ $lang['location:ajax_label']        = 'Ingrese primera letras y seleccione';
 # titles
 $lang['location:create_title'] 			= 'Crear una locación';
 $lang['location:edit_title'] 			= 'Editar locación "%s"';
-$lang['location:list_title'] 			= 'Lista de locaciones';
+$lang['location:list_title'] 			= 'Lista de Locaciones';
+$lang['location:list']                          = 'Locaciones';
 
 # messages
 $lang['location:no_categories'] 		= 'No hay locaciones.';

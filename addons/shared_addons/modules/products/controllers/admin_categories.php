@@ -43,11 +43,12 @@ class Admin_Categories extends Admin_Controller {
 		parent::__construct();
 		
 		$this->load->model('products_categories_m');
-		$this->lang->load(array('categories','products','locations','features'));
+		$this->lang->load(array('products','categories','locations','features','spaces'));
 		
 		// Load the validation library along with the rules
 		$this->load->library('form_validation');
 		$this->form_validation->set_rules($this->validation_rules);
+                $this->template->append_css('module::products.css');                 
 	}
 	
 	/**

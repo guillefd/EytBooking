@@ -143,7 +143,7 @@ class Admin_Locations extends Admin_Controller {
 		
 		$this->load->model('products_locations_m');
                 $this->load->helper(array('date'));
-		$this->lang->load(array('products','categories','locations','features'));		
+		$this->lang->load(array('products','categories','locations','features','spaces'));		
 		// Loads libraries
 		$this->load->library(array('form_validation','accounts','social','geoworldmap'));
                 //Gen dropdown list for social
@@ -598,9 +598,7 @@ class Admin_Locations extends Admin_Controller {
 		}
 	}
         
-        
-// AJAX :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-        
+                
         /**
 	 * method to fetch filtered results for account list
 	 * @access public
@@ -641,5 +639,32 @@ class Admin_Locations extends Admin_Controller {
                         ->append_js('module::locations_index.js')
                         ->append_css('module::jquery/jquery.autocomplete.css')
                         ->build('admin/locations/partials/locations', $this->data);
-	}        
+	}
+        
+        
+        /**
+         * Returns json response with locations list, given "keyword" search
+         */
+        public function locations_autocomplete_ajax()
+        {
+            $respond->locations = array();
+            $respond->count = 0;
+            if($this->input->get('term'))
+            {             
+		$post_data['keywords'] = $this->input->get('term');
+                $post_data['pagination']['limit'] = $this->input->get('limit');
+                $post_data['active'] = 1;
+                if ($result = $this->products_locations_m->search('results',$post_data))
+		{
+			foreach ($result as $location)
+			{
+                            $this->_convertIDtoText($location);
+                            $respond->locations[] = $location;
+                            $respond->count++;
+			}
+		}                                   
+            }
+            
+            echo json_encode($respond);    
+        }        
 }

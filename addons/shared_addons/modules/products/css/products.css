@@ -6,9 +6,19 @@
         Purpose of the stylesheet follows.
 */
 
-input.small{
-    min-width: 5em;
-    width: 10em;
+select
+{
+    min-width: 50px;
+}
+
+.input input.tiny{
+    min-width: 10px!important;
+    width: 40px;
+}
+
+.input input.small{
+    min-width: 10px!important;
+    width: 80px;
 }
 
 input.med{
@@ -78,3 +88,9 @@ text-indent: -9999px;
 div.btn_right{
     float: right;
 }
+
+/* HACK for ADMIN MENU ITEMS BAR*/
+/*.sections_bar ul li.current a, .sections_bar ul li a:hover {
+    color: #151f3c;
+    text-shadow: 0 0 0.2em #fff, 0 0 0.2em #fff;  
+}*/

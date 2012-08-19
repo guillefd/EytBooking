@@ -47,6 +47,7 @@ $lang['products_posts_title'] 					= 'Productos';
 $lang['products_rss_posts_title'] 				= 'Producto de %s';
 $lang['products_products_title'] 					= 'Noticias';
 $lang['products_list_title'] 					= 'Lista de productos';
+$lang['products_list'] 					= 'Productos';
 
 // messages
 $lang['products_no_posts'] 						= 'No hay productos.';

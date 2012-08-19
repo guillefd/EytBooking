@@ -29,3 +29,6 @@ $route['(products)/rss/(:any).rss']		= 'rss/category/$2';
 $route['products/admin/categories(/:any)?']	= 'admin_categories$1';
 $route['products/admin/locations(/:any)?']	= 'admin_locations$1';
 $route['products/admin/features(/:any)?']	= 'admin_features$1';
+$route['products/admin/spaces(/:any)?']	        = 'admin_spaces$1';
+//AJAX
+$route['products/admin/locations_autocomplete_ajax']       = 'admin_locations/locations_autocomplete_ajax';

@@ -99,7 +99,7 @@ class Admin extends Admin_Controller
 		//Events::trigger('products_article_published');
 		
 		$this->load->model(array('products_m', 'products_categories_m'));
-		$this->lang->load(array('products', 'categories', 'locations','features'));
+		$this->lang->load(array('products', 'categories', 'locations','features','spaces'));
 		
 		$this->load->library(array('keywords/keywords', 'form_validation'));
 
@@ -115,6 +115,7 @@ class Admin extends Admin_Controller
 				$this->data->categories[$category->id] = $category->title;
 			}
 		}
+                $this->template->append_css('module::products.css');                 
 	}
 
 	/**
