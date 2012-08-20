@@ -29,8 +29,9 @@ $lang['spaces:width']           = 'ancho';
 $lang['spaces:height']          = 'alto';
 $lang['spaces:length']          = 'largo';
 $lang['spaces:shape']           = 'Forma';
-$lang['spaces:layouts']          = 'Armado';
+$lang['spaces:layouts']          = 'Armados posibles';
 $lang['spaces:facilities']      = 'Facilidades';
+$lang['spaces:capacity']      = 'Capacidad';
 
 
 

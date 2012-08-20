@@ -82,9 +82,9 @@ class Admin_Spaces extends Admin_Controller {
                         'rules' => 'trim',
                 ),            
 		array(
-                        'field' => 'facilities',
+                        'field' => 'facilities[]',
                         'label' => 'lang:spaces:facilities',
-                        'rules' => 'trim',
+                        'rules' => 'callback__check_facilities_id',
                 )                                  
             );
         
@@ -101,7 +101,7 @@ class Admin_Spaces extends Admin_Controller {
                 $this->load->helper(array('date'));
 		$this->lang->load(array('products','categories','locations','features','spaces'));		
 		// Loads libraries
-		$this->load->library(array('form_validation','accounts','spaces_denominations','products','shapes'));            
+		$this->load->library(array('form_validation','accounts','spaces_denominations','products','shapes','layouts','facilities'));            
                 // template addons
                 $this->template->append_css('module::products.css') 
                                ->prepend_metadata('<script>var IMG_PATH = "'.BASE_URL.SHARED_ADDONPATH.'modules/'.$this->module.'/img/"; </script>');                
@@ -113,6 +113,8 @@ class Admin_Spaces extends Admin_Controller {
         {
             $this->data->denominations_array = $this->spaces_denominations->gen_dd_array();
             $this->data->shapes_array = $this->shapes->gen_dd_array();            
+            $this->data->layouts_array = $this->layouts->gen_dd_array();            
+            $this->data->facilities_array = $this->facilities->gen_dd_array();            
         }        
         
         
@@ -183,12 +185,13 @@ class Admin_Spaces extends Admin_Controller {
 			$this->session->set_flashdata('error', lang('spaces:add_error'));
                     	redirect('admin/products/spaces/create');
                     }
-            }                                       
+            }  
+
             $this->_gen_dropdown_list();    
             // Loop through each validation rule
             foreach ($this->validation_rules as $rule)
             {
-                    $space->{$rule['field']} = set_value($rule['field']);                  
+                $space->{$rule['field']} = set_value($rule['field']);    
             }
             
             $this->template
@@ -222,6 +225,12 @@ class Admin_Spaces extends Admin_Controller {
                 {
                     return TRUE;
                 }
+        }
+        
+        public function _check_facilities_id()
+        {
+            //multiple
+            return $this->input->post('facilities');
         }
 
         

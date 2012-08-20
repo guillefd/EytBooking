@@ -66,13 +66,16 @@
                     <li>
                         <label for="layouts"><?php echo lang('spaces:layouts');?> <span></span></label>
                         <div class="input">
-                            <?php echo form_dropdown('layouts',array(''=>''),set_value('layouts',$space->layouts),'data-placeholder="'.lang('spaces:select').'" style="width:200px" ') ?>                            
+                            <?php echo form_dropdown('layouts',array(''=>'') + $layouts_array,set_value('layouts',$space->layouts),'data-placeholder="'.lang('spaces:select').'" style="width:200px" ') ?>                            
+                            <?php echo form_input('capacity','',' placeholder="'.lang('spaces:capacity').'" class="small"'); ?>
+                            <?php echo anchor('', lang('spaces:add'),'id="btn_add" class="btn gray"'); ?>  
+                            <div id="itemBox" class="itemBox"><span><?php echo lang('spaces:layouts'); ?></span><br></div>                                                            
                         </div>              
                     </li> 
                     <li>
                         <label for="facilities"><?php echo lang('spaces:facilities');?> <span></span></label>
                         <div class="input">
-                            <?php echo form_dropdown('facilities',array(''=>''),set_value('shape_id',$space->facilities),'data-placeholder="'.lang('spaces:select').'" style="width:200px" ') ?>                            
+                            <?php echo form_dropdown('facilities[]',array(''=>'') + $facilities_array,set_value('facilities[]'),'multiple data-placeholder="'.lang('spaces:select').'" style="width:400px" ') ?>                            
                         </div>              
                     </li>                     
                     <li>
