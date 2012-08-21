@@ -31,6 +31,7 @@ $lang['spaces:length']          = 'largo';
 $lang['spaces:shape']           = 'Forma';
 $lang['spaces:layouts']          = 'Armados posibles';
 $lang['spaces:facilities']      = 'Facilidades';
+$lang['spaces:facilities_PH']      = 'click aquí para seleccionar';
 $lang['spaces:capacity']      = 'Capacidad';
 
 

@@ -82,7 +82,7 @@ class Admin_Spaces extends Admin_Controller {
                         'rules' => 'trim',
                 ),            
 		array(
-                        'field' => 'facilities[]',
+                        'field' => 'facilities',
                         'label' => 'lang:spaces:facilities',
                         'rules' => 'callback__check_facilities_id',
                 )                                  
@@ -152,7 +152,7 @@ class Admin_Spaces extends Admin_Controller {
 	 * @return void
 	 */
 	public function create()
-	{
+	{           
             // Set the validation rules from the array above
             $this->form_validation->set_rules($this->validation_rules);           
             // Validate the data
@@ -169,7 +169,7 @@ class Admin_Spaces extends Admin_Controller {
                               'square_mt'=> $this->input->post('square_mt'), 
                               'shape_id'=>$this->input->post('shape_id'),
                               'layouts' => $this->input->post('layouts'),  
-                              'facilities' => $this->input->post('facilities'), 
+                              'facilities' => serialize($this->input->post('facilities')), 
                               'author_id' => $this->current_user->id,
                               'created_on' => now() 
                               );
@@ -202,7 +202,11 @@ class Admin_Spaces extends Admin_Controller {
                     ->set('space', $space)
                     ->build('admin/spaces/form',$this->data);	
 	}
+
         
+// HELPERS :::::::::::::::::::::::::::::::::::::::::::::::::::
+        
+
         
 // CHECK ID ::::::::::::::::::::::::::::::::::::::::::::::::::
         	/**

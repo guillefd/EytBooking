@@ -60,7 +60,7 @@
                     <li>
                         <label for="shape"><?php echo lang('spaces:shape');?> <span></span></label>
                         <div class="input">
-                            <?php echo form_dropdown('shape_id',array(''=>'') + $shapes_array,set_value('shape_id',$space->shape_id),'data-placeholder="'.lang('spaces:select').'" style="width:200px" ') ?>                            
+                            <?php echo form_dropdown('shape_id',array(0=>'') + $shapes_array,set_value('shape_id',$space->shape_id),'data-placeholder="'.lang('spaces:select').'" style="width:200px" ') ?>                            
                         </div>              
                     </li>                     
                     <li>
@@ -75,7 +75,7 @@
                     <li>
                         <label for="facilities"><?php echo lang('spaces:facilities');?> <span></span></label>
                         <div class="input">
-                            <?php echo form_dropdown('facilities[]',array(''=>'') + $facilities_array,set_value('facilities[]'),'multiple data-placeholder="'.lang('spaces:select').'" style="width:400px" ') ?>                            
+                            <?php echo form_dropdown('facilities[]',array(''=>'') + $facilities_array,set_value('facilities'),'multiple data-placeholder="'.lang('spaces:facilities_PH').'" style="width:400px" ') ?>                            
                         </div>              
                     </li>                     
                     <li>
