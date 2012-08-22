@@ -1,7 +1,7 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 # labels
-$lang['spaces:title_label'] 		= 'Título';
+$lang['spaces:name'] 		= 'Nombre';
 $lang['spaces:category_label'] 	        = 'Categoría';
 $lang['spaces:description']           = 'Descripción';
 $lang['spaces:name']           = 'Nombre';

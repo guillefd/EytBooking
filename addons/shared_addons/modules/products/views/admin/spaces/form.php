@@ -75,7 +75,7 @@
                     <li>
                         <label for="facilities"><?php echo lang('spaces:facilities');?> <span></span></label>
                         <div class="input">
-                            <?php echo form_dropdown('facilities[]',array(''=>'') + $facilities_array,set_value('facilities',$space->facilities),'multiple data-placeholder="'.lang('spaces:facilities_PH').'" style="width:400px" ') ?>                            
+                            <?php echo form_dropdown('facilities[]',array(''=>'') + $facilities_array,set_value('facilities[]',$space->facilities),'multiple data-placeholder="'.lang('spaces:facilities_PH').'" style="width:400px" ') ?>                            
                         </div>              
                     </li>                     
                     <li>

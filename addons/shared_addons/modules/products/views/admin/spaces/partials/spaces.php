@@ -2,7 +2,8 @@
         <thead>
         <tr>
                 <th width="20"><?php echo form_checkbox(array('name' => 'action_to_all', 'class' => 'check-all')); ?></th>
-                <th><?php echo lang('spaces:spaces'); ?></th>
+                <th><?php echo lang('spaces:denomination'); ?></th>
+                <th><?php echo lang('spaces:name'); ?></th>
                 <th><?php echo lang('spaces:description'); ?></th>                              
                 <th width="150"></th>
         </tr>
@@ -18,6 +19,7 @@
                 <?php foreach ($spaces as $space): ?>
                 <tr>
                         <td><?php echo form_checkbox('action_to[]', $space->space_id); ?></td>
+                        <td><?php echo $space->denomination; ?></td>
                         <td><?php echo $space->name; ?></td>
                         <td><?php echo $space->description; ?>...</td>                                        
                         <td class="align-center buttons buttons-small" width="190px">

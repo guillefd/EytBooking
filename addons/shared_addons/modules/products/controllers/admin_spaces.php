@@ -32,6 +32,11 @@ class Admin_Spaces extends Admin_Controller {
                         'rules' => 'trim|required|callback__check_validLocationId',
                 ),
 		array(
+                        'field' => 'denomination',
+                        'label' => 'lang:spaces:denomination',
+                        'rules' => 'trim',
+                ),             
+		array(
                         'field' => 'denomination_id',
                         'label' => 'lang:spaces:denomination',
                         'rules' => 'trim|required',
@@ -84,7 +89,7 @@ class Admin_Spaces extends Admin_Controller {
 		array(
                         'field' => 'facilities',
                         'label' => 'lang:spaces:facilities',
-                        'rules' => 'callback__check_facilities_id',
+                        'rules' => '',
                 )                                  
             );
         
@@ -133,7 +138,8 @@ class Admin_Spaces extends Admin_Controller {
 		// Using this data, get the relevant results
 		$spaces = $this->products_spaces_m->search('results',$post_data);
                 //CONVERT ID TO TEXT
-                //$this->_convertIDtoText($spaces);
+                $this->_gen_dropdown_list();
+                $this->_convertIDtoText($spaces);
                 //$this->_formatValuesForView($spaces);
 
 		$this->template
@@ -220,17 +226,15 @@ class Admin_Spaces extends Admin_Controller {
             else
             {                    
                 //consulta SQL
-                $space = $this->products_spaces_m->get_where(array('space_id'=>$id)); 
+                $space = $this->products_spaces_m->get_where(array('space_id'=>$id));                
                 if($space == FALSE)
                 {
                     $this->session->set_flashdata('error', lang('spaces:error_id_empty'));
                     redirect('admin/products/spaces/index');
-                }                
-            }
-
-            //CONVERT ID TO TEXT
-            $this->_convertIDtoText($space);                           
-            $space->facilities = unserialize($space->facilities);                     
+                }
+                //convert facilities value to array
+                $space->facilities =  unserialize($space->facilities);
+            }                      
             // Set the validation rules from the array above
             $this->form_validation->set_rules($this->validation_rules);           
             
@@ -238,7 +242,7 @@ class Admin_Spaces extends Admin_Controller {
             if ($this->form_validation->run())
             {		
                 $data = array('location_id'=>$this->input->post('location_id'),
-                              'denomination_id'=>$this->input->post('location_id'),          
+                              'denomination_id'=>$this->input->post('denomination_id'),          
                               'name' =>$this->input->post('name'),
                               'description' => $this->input->post('description'),                    
                               'level' => $this->input->post('level'),
@@ -264,7 +268,10 @@ class Admin_Spaces extends Admin_Controller {
                     }
             }
             // Loop through each rule
-            $this->_gen_dropdown_list();    
+            $this->_gen_dropdown_list();
+            //CONVERT ID TO TEXT
+            $this->_convertIDtoText($space);  
+
             // Loop through each rule
             foreach ($this->validation_rules as $rule)
             {
@@ -272,8 +279,7 @@ class Admin_Spaces extends Admin_Controller {
                     {
                             $space->{$rule['field']} = $this->input->post($rule['field']);
                     }
-            }
-
+            }         
             $this->template
                     ->title($this->module_details['name'], lang('spaces:edit_title'))
 	            ->append_js('module::spaces_form.js')
@@ -320,6 +326,7 @@ class Admin_Spaces extends Admin_Controller {
                 {
                     $reg->location = " --- Error ---";
                 }
+            $reg->denomination = $this->data->denominations_array[$reg->denomination_id];    
         }       
         
 // CHECK ID ::::::::::::::::::::::::::::::::::::::::::::::::::
