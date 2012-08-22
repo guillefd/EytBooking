@@ -57,41 +57,21 @@ class Facilities
         {
             foreach($result as $reg)
             {                              
-                $cat = $this->explode_id_cat($reg->category);
-                $vec_name = $this->explode_name_lang($reg->name);
-                //multidimensional array
-                $vec[$cat[CURRENT_LANGUAGE]][$reg->id] =  array_key_exists(CURRENT_LANGUAGE,$vec_name) ? $vec_name[CURRENT_LANGUAGE] : $vec_name['en'];
+                $category = $this->explode_string_to_array($reg->category);
+                $vec_name = $this->explode_string_to_array($reg->name);
+                //multidimensional array for select dropdown grouping
+                $vec[$category[CURRENT_LANGUAGE]][$reg->id] =  array_key_exists(CURRENT_LANGUAGE,$vec_name) ? $vec_name[CURRENT_LANGUAGE] : $vec_name['en'];
             }
         }
         return $vec;
     }
-
-    /**
-     * Devuelve array de nombres por idiomas
-     * @param type $string 
-     */
-    public function explode_name_lang($string)
-    {
-        $names = array();
-        $vec = explode(';',$string);       
-        foreach($vec as $reg)
-        {
-            $name = explode(':',$reg);
-            if(!empty($name[0]))
-            { 
-                $names[$name[0]] = $name[1];                 
-            }
-        }      
-        return $names;       
-    }
-    
     
     /**
      * Devuelve array
      * @param type $string 
      * return array id + languages
      */
-    public function explode_id_cat($string)
+    public function explode_string_to_array($string)
     {
         $cat = array();
         $vec = explode(';',$string);       
