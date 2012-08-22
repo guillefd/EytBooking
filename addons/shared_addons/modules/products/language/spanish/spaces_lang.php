@@ -53,6 +53,7 @@ $lang['spaces:add_success'] 			= 'El espacio ha sido guardada.';
 $lang['spaces:add_error'] 			= 'Ha ocurrido un error al agregar la espacio.';
 $lang['spaces:edit_success'] 			= 'El espacio fue guardada.';
 $lang['spaces:edit_error'] 			= 'Ha ocurrido un error al editar la espacio.';
+$lang['spaces:error_id_empty'] 			= 'Error al intentar editar un espacio.';
 $lang['spaces:mass_delete_error'] 		= 'Ocurrió un error al tratar de eliminar la espacio "%s".';
 $lang['spaces:mass_delete_success']	= '%s locacions de %s completamente eliminadas.';
 $lang['spaces:no_select_error'] 		= 'Necesitas seleccionar locaciones primero.';

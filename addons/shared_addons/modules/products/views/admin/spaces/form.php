@@ -6,7 +6,7 @@
 <!-- END JAVASCRIPT GLOBAL VARS -->
 
 <section class="title">
-	<?php if ($this->controller == 'admin_rooms' && $this->method === 'edit'): ?>
+	<?php if ($this->controller == 'admin_spaces' && $this->method === 'edit'): ?>
 	<h4><?php echo sprintf(lang('spaces:edit_title'), $space->name);?></h4>
 	<?php else: ?>
 	<h4><?php echo lang('spaces:create_title');?></h4>
@@ -66,7 +66,7 @@
                     <li>
                         <label for="layouts"><?php echo lang('spaces:layouts');?> <span></span></label>
                         <div class="input">
-                            <?php echo form_dropdown('layouts',array(''=>'') + $layouts_array,set_value('layouts',$space->layouts),'data-placeholder="'.lang('spaces:select').'" style="width:200px" ') ?>                            
+                            <?php echo form_dropdown('layouts',array(''=>'') + $layouts_array,set_value('layouts',$space->layouts),'data-placeholder="'.lang('spaces:select').'" style="width:110px" ') ?>                            
                             <?php echo form_input('capacity','',' placeholder="'.lang('spaces:capacity').'" class="small"'); ?>
                             <?php echo anchor('', lang('spaces:add'),'id="btn_add" class="btn gray"'); ?>  
                             <div id="itemBox" class="itemBox"><span><?php echo lang('spaces:layouts'); ?></span><br></div>                                                            
@@ -75,7 +75,7 @@
                     <li>
                         <label for="facilities"><?php echo lang('spaces:facilities');?> <span></span></label>
                         <div class="input">
-                            <?php echo form_dropdown('facilities[]',array(''=>'') + $facilities_array,set_value('facilities'),'multiple data-placeholder="'.lang('spaces:facilities_PH').'" style="width:400px" ') ?>                            
+                            <?php echo form_dropdown('facilities[]',array(''=>'') + $facilities_array,set_value('facilities',$space->facilities),'multiple data-placeholder="'.lang('spaces:facilities_PH').'" style="width:400px" ') ?>                            
                         </div>              
                     </li>                     
                     <li>

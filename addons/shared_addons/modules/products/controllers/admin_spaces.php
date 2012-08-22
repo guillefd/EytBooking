@@ -101,7 +101,7 @@ class Admin_Spaces extends Admin_Controller {
                 $this->load->helper(array('date'));
 		$this->lang->load(array('products','categories','locations','features','spaces'));		
 		// Loads libraries
-		$this->load->library(array('form_validation','accounts','spaces_denominations','products','shapes','layouts','facilities'));            
+		$this->load->library(array('form_validation','accounts','spaces_denominations','products','shapes','layouts','facilities','geoworldmap'));            
                 // template addons
                 $this->template->append_css('module::products.css') 
                                ->prepend_metadata('<script>var IMG_PATH = "'.BASE_URL.SHARED_ADDONPATH.'modules/'.$this->module.'/img/"; </script>');                
@@ -147,7 +147,7 @@ class Admin_Spaces extends Admin_Controller {
 	}
         
 	/**
-	 * Create method, creates a new room
+	 * Create method, creates a new space
 	 * @access public
 	 * @return void
 	 */
@@ -202,11 +202,125 @@ class Admin_Spaces extends Admin_Controller {
                     ->set('space', $space)
                     ->build('admin/spaces/form',$this->data);	
 	}
+        
+        
+	/**
+	 * Edit method, edits an existing space
+	 * @access public
+	 * @param int id The ID of the location to edit
+	 * @return void
+	 */
+	public function edit($id = 0)
+	{			
+            if($id==0)
+            {
+                $this->session->set_flashdata('error', lang('spaces:error_id_empty'));
+		redirect('admin/products/spaces/index');
+            }
+            else
+            {                    
+                //consulta SQL
+                $space = $this->products_spaces_m->get_where(array('space_id'=>$id)); 
+                if($space == FALSE)
+                {
+                    $this->session->set_flashdata('error', lang('spaces:error_id_empty'));
+                    redirect('admin/products/spaces/index');
+                }                
+            }
+
+            //CONVERT ID TO TEXT
+            $this->_convertIDtoText($space);                           
+            $space->facilities = unserialize($space->facilities);                     
+            // Set the validation rules from the array above
+            $this->form_validation->set_rules($this->validation_rules);           
+            
+            // Validate the results
+            if ($this->form_validation->run())
+            {		
+                $data = array('location_id'=>$this->input->post('location_id'),
+                              'denomination_id'=>$this->input->post('location_id'),          
+                              'name' =>$this->input->post('name'),
+                              'description' => $this->input->post('description'),                    
+                              'level' => $this->input->post('level'),
+                              'width' => $this->input->post('width'), 
+                              'height' => $this->input->post('height'), 
+                              'length' => $this->input->post('length'),                     
+                              'square_mt'=> $this->input->post('square_mt'), 
+                              'shape_id'=>$this->input->post('shape_id'),
+                              'layouts' => $this->input->post('layouts'),  
+                              'facilities' => serialize($this->input->post('facilities')), 
+                              'updated_on' => now() 
+                              );                 
+                if($this->products_spaces_m->update($id, $data))
+                {        
+                    // All good...
+                    $this->session->set_flashdata('success', lang('spaces:edit_success'));
+                    redirect('admin/products/spaces/index');
+                }
+                else
+                    {
+                            $this->session->set_flashdata('error', lang('spaces:edit_error'));
+                            redirect('admin/products/spaces/edit/'.$id);
+                    }
+            }
+            // Loop through each rule
+            $this->_gen_dropdown_list();    
+            // Loop through each rule
+            foreach ($this->validation_rules as $rule)
+            {
+                    if ($this->input->post($rule['field']) !== FALSE)
+                    {
+                            $space->{$rule['field']} = $this->input->post($rule['field']);
+                    }
+            }
+
+            $this->template
+                    ->title($this->module_details['name'], lang('spaces:edit_title'))
+	            ->append_js('module::spaces_form.js')
+	            ->append_js('module::spaces_form_model.js')                    
+                    ->append_css('module::jquery/jquery.autocomplete.css')                                       
+                    ->set('space', $space)
+                    ->build('admin/spaces/form',$this->data);
+	}        
 
         
 // HELPERS :::::::::::::::::::::::::::::::::::::::::::::::::::
         
-
+        /**
+         * Convierte ID´s de resultado SQL a texto - acepta objeto o arrays de objetos
+         * @param result array resultado SQL
+         * @return result object 
+         */
+        public function _convertIDtoText($results)
+        {  
+            if(is_array($results))
+            {                
+                foreach($results as $reg)
+                {
+                    $this->_convertIDtoText_run($reg);
+                }
+            }else
+                {
+                    $this->_convertIDtoText_run($results);
+                }
+            return $results;              
+        }
+        
+        public function _convertIDtoText_run($reg)
+        {          
+            if($location = $this->products->get_location($reg->location_id))
+            {    
+                //nombre de la cuenta
+                $account = $this->accounts->get_account($location->account_id);            
+                //Use Geoworldmap library - nombre de la ciudad
+                $city = $this->geoworldmap->getCityByID($account->CityID);
+                $reg->location = $location->name.' ['.$account->name.' | '.$city->City.']';
+            }
+            else
+                {
+                    $reg->location = " --- Error ---";
+                }
+        }       
         
 // CHECK ID ::::::::::::::::::::::::::::::::::::::::::::::::::
         	/**

@@ -16,7 +16,40 @@ class Products_spaces_m extends MY_Model
 		
 		$this->_table = 'products_spaces';
 	}
-    
+
+        /**
+         * Returns unique location 
+         * @param type $id
+         * @return boolean 
+         */
+        public function get_where($data)
+        {
+            $q = $this->db->get_where($this->_table, $data);      
+            if($q->num_rows()>0)
+            {
+                return $data = $q->row();
+            }
+            else
+            {
+                return FALSE;
+            }        
+        }
+        
+        /**
+         * INACTIVE - Poner espacio inactivo
+         * @param type $id
+         * @param type $data
+         * @return type 
+         */
+        function inactive($id)
+        {            
+            $data = array(
+               'active' => 0
+            );
+            $this->db->where('space_id', $id);
+            return $this->db->update($this->_table, $data); 
+        }
+        
         /**
          * Update
          * @param type $id
@@ -25,7 +58,7 @@ class Products_spaces_m extends MY_Model
          */
         function update($id,$data)
         {
-            $this->db->where('id', $id);
+            $this->db->where('space_id', $id);
             return $this->db->update($this->_table, $data); 
         }
         

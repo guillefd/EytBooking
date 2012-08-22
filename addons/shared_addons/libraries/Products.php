@@ -33,7 +33,7 @@ class Products
         * @param type $id
         * @return boolean 
         */
-    public function get_location($id,$active = 1)
+    public function get_location($id, $active = 1)
     {
         $q = ci()->db->get_where($this->t_locations, array('id' => $id,'active'=>$active));      
         if($q->num_rows()>0)
