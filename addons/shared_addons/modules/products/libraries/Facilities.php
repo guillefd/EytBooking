@@ -48,7 +48,7 @@ class Facilities
     /**
      * genera array para dropdowns form
      * @param type $result
-     * @return array 
+     * @return array multidimensional
      */
     public function gen_dd_array()
     {
@@ -56,9 +56,11 @@ class Facilities
         if($result = $this->get() )
         {
             foreach($result as $reg)
-            {              
+            {                              
+                $cat = $this->explode_id_cat($reg->category);
                 $vec_name = $this->explode_name_lang($reg->name);
-                $vec[$reg->id] =  array_key_exists(CURRENT_LANGUAGE,$vec_name) ? $vec_name[CURRENT_LANGUAGE] : $vec_name['en'];
+                //multidimensional array
+                $vec[$cat[CURRENT_LANGUAGE]][$reg->id] =  array_key_exists(CURRENT_LANGUAGE,$vec_name) ? $vec_name[CURRENT_LANGUAGE] : $vec_name['en'];
             }
         }
         return $vec;
@@ -82,5 +84,26 @@ class Facilities
         }      
         return $names;       
     }
+    
+    
+    /**
+     * Devuelve array
+     * @param type $string 
+     * return array id + languages
+     */
+    public function explode_id_cat($string)
+    {
+        $cat = array();
+        $vec = explode(';',$string);       
+        foreach($vec as $reg)
+        {
+            $reg = explode(':',$reg);
+            if(!empty($reg[0]))
+            { 
+                $cat[$reg[0]] = $reg[1];                   
+            }
+        }      
+        return $cat;       
+    }    
     
 } 

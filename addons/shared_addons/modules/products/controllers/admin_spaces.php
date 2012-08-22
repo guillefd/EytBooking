@@ -165,7 +165,7 @@ class Admin_Spaces extends Admin_Controller {
             if ($this->form_validation->run())
             {
                 $data = array('location_id'=>$this->input->post('location_id'),
-                              'denomination_id'=>$this->input->post('location_id'),          
+                              'denomination_id'=>$this->input->post('denomination_id'),          
                               'name' =>$this->input->post('name'),
                               'description' => $this->input->post('description'),                    
                               'level' => $this->input->post('level'),
@@ -196,9 +196,11 @@ class Admin_Spaces extends Admin_Controller {
             $this->_gen_dropdown_list();    
             // Loop through each validation rule
             foreach ($this->validation_rules as $rule)
-            {
-                $space->{$rule['field']} = set_value($rule['field']);    
+            {           
+                $space->{$rule['field']} = set_value($rule['field']);      
             }
+            //facilities[] array value for re-populating form
+            $space->facilities = $this->input->post('facilities');
             
             $this->template
                     ->title($this->module_details['name'], lang('spaces:create_title'))

@@ -342,6 +342,7 @@ class Module_Products extends Module {
                 $products_spaces_facilities = "
 			CREATE TABLE " . $this->db->dbprefix('products_spaces_facilities') . " (
 			  `id` int(11) NOT NULL auto_increment,
+			  `category` varchar(100) collate utf8_unicode_ci NOT NULL default '',                                               
 			  `name` varchar(100) collate utf8_unicode_ci NOT NULL default '',                     
 			  `description` text collate utf8_unicode_ci NOT NULL,
                           `value` varchar(100) collate utf8_unicode_ci NOT NULL default '',
