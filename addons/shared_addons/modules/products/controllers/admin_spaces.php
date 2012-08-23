@@ -319,17 +319,38 @@ class Admin_Spaces extends Admin_Controller {
             if($location = $this->products->get_location($reg->location_id))
             {    
                 //nombre de la cuenta
-                $account = $this->accounts->get_account($location->account_id);            
+                $account = $this->accounts->get_account($location->account_id);
                 //Use Geoworldmap library - nombre de la ciudad
                 $city = $this->geoworldmap->getCityByID($account->CityID);
-                $reg->location = $location->name.' ['.$account->name.' | '.$city->City.']';
+                $reg->location = $location->name.' [ '.$account->name.' | '.$city->City.' ]';
             }
             else
                 {
-                    $reg->location = " --- Error ---";
+                    $reg->location = " --- ";
                 }
-            $reg->denomination = $this->data->denominations_array[$reg->denomination_id];    
+            $reg->denomination = $reg->denomination_id > 0 ? $this->data->denominations_array[$reg->denomination_id] : '';
+            $reg->shape = $reg->shape_id > 0 ? $this->data->shapes_array[$reg->shape_id] : '';
+            $reg->layouts_txt = $this->convertLayoutsToText($reg->layouts);
         }       
+        
+        public function convertLayoutsToText($string)
+        {
+            $txt = "";            
+            if (!empty($string))
+            {
+                $strvecs = explode(';',$string);
+                foreach($strvecs as $vec)
+                {
+                    if(!empty($vec))
+                    {
+                        $reg = explode(',',$vec);
+                        $txt.= $this->data->layouts_array[$reg[0]].': '.$reg[1].'<br>';
+                    }
+                }
+                        
+            }
+            return $txt;
+        }
         
 // CHECK ID ::::::::::::::::::::::::::::::::::::::::::::::::::
         	/**

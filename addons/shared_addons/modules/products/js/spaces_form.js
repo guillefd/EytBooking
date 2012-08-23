@@ -5,7 +5,31 @@ var img_loader_2 = '<img src="' + IMG_PATH + 'indicator.gif" style="margin:5px;"
 
 
 $(document).ready(function(){  
-    
+
+//::::::::::::::: Layouts Field ::::::::::::::::::::::		
+                //inicializa campo hidden pago_proveedores_dias_horarios, si tiene valor los agrega al html
+                init_hidden_layouts();  
+
+                //copies HTML values of select element for rewriting element after item added
+                layouts_list = $('select[name="dd_layouts"]').html();
+
+                //watcher btn ADD
+                $("#btn_add").click(function() {
+                    $("#btn_add").removeAttr('href');      
+                    processData();           
+                });
+
+//                //watcher btn BORRAR (x) item de lista de dias/horarios
+                $(document).on('click', 'a[name="btn_del"]', function(){ //do stuff here })
+                    $(this).removeAttr('href');
+                    var id = $(this).attr("id");
+                    deleteItem(id);
+                });
+//::::::::::::::: Layouts Field ::::::::::::::::::::::   
+
+
+
+
     //watcher input dimentions
     $('input[name="width"]').change(function() {    
         checkData(this);

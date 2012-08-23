@@ -9,6 +9,7 @@ $lang['spaces:select_cat']           = 'Seleccione una categoría';
 $lang['spaces:usageunit']           = 'Unidad de medida';
 $lang['spaces:select_usageunit']           = 'Seleccione la Unidad de medida';
 $lang['spaces:info_label']            = 'Info';
+$lang['spaces:complete_form_label']            = 'Complete el formulario';
 $lang['spaces:value']            = 'Valor';
 $lang['spaces:group']            = 'Grupo';
 $lang['spaces:usageunit_value']           = 'Unidad de medida y valor por defecto';
@@ -22,6 +23,9 @@ $lang['spaces:dimensions']          = 'Dimensiones [ ancho, largo, alto ] en met
 $lang['spaces:square_mt_PH']          = 'm2';
 $lang['spaces:square_mt']          = 'Metros cuadrados';
 $lang['spaces:location']          = 'Locación';
+$lang['spaces:location_extended']          = 'Locación [ Cuenta | Ciudad ]';
+$lang['spaces:account']          = 'Cuenta';
+$lang['spaces:city']          = 'Ciudad';
 $lang['spaces:denomination']          = 'Denominación';
 $lang['spaces:select_denomination']          = 'Seleccione Denominación';
 $lang['spaces:select']          = 'Seleccione';
@@ -29,10 +33,12 @@ $lang['spaces:width']           = 'ancho';
 $lang['spaces:height']          = 'alto';
 $lang['spaces:length']          = 'largo';
 $lang['spaces:shape']           = 'Forma';
-$lang['spaces:layouts']          = 'Armados posibles';
+$lang['spaces:layouts']          = 'Armados disponibles';
+$lang['spaces:layout']          = 'Armado';
 $lang['spaces:facilities']      = 'Facilidades';
 $lang['spaces:facilities_PH']      = 'click aquí para seleccionar';
 $lang['spaces:capacity']      = 'Capacidad';
+$lang['spaces:mts'] = 'mts';
 
 
 
@@ -42,8 +48,8 @@ $lang['spaces:add_unit']           = 'Agregar unidad';
 $lang['spaces:add']           = 'Agregar';
 
 # titles
-$lang['spaces:create_title'] 			= 'Agregar un espacio';
-$lang['spaces:edit_title'] 			= 'Editar espacio "%s"';
+$lang['spaces:create_title'] 			= 'Agregar un Espacio';
+$lang['spaces:edit_title'] 			= 'Editar Espacio "%s"';
 $lang['spaces:list_title'] 			= 'Lista de espacios';
 $lang['spaces:list'] 			= 'Espacios';
 
@@ -58,8 +64,11 @@ $lang['spaces:mass_delete_error'] 		= 'Ocurrió un error al tratar de eliminar l
 $lang['spaces:mass_delete_success']	= '%s locacions de %s completamente eliminadas.';
 $lang['spaces:no_select_error'] 		= 'Necesitas seleccionar locaciones primero.';
 $lang['spaces:already_exist_error']	= 'Una espacio con el nombre "%s" ya existe.';
+$lang['spaces:location_id_not_valid'] 		= 'La locación es inválida, vuelva a seleccionarla.';
+#JS
 $lang['spaces:add_dimention_error_msg'] = 'Seleccione magnitud e ingrese un valor';
 $lang['spaces:add_dimention_value_error_msg'] = 'El valor debe ser un número real, para decimales usar punto.';
-$lang['spaces:location_id_not_valid'] 		= 'La locación es inválida, vuelva a seleccionarla.';
+$lang['spaces:add_layout_error_msg'] = 'Seleccione Armado e ingrese Valor de capacidad.';
+$lang['spaces:isnan_value_error_msg'] = 'El valor debe ser un número entero.';
 
 /* End of file categories_lang.php */

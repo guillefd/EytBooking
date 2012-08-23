@@ -1,6 +1,9 @@
 <!-- JAVASCRIPT GLOBAL VARS -->
 <script>
     var ADD_DIMENTION_VALUE_ERROR_MSG = "<? echo lang('spaces:add_dimention_value_error_msg') ?>";       
+    var ADD_LAYOUT_ERROR_MSG = "<? echo lang('spaces:add_layout_error_msg') ?>";           
+    var ISNAN_VALUE_ERROR_MSG = "<? echo lang('spaces:isnan_value_error_msg') ?>";
+    var dd_layouts_array = <? echo json_encode($layouts_array) ?>;
     
 </script>
 <!-- END JAVASCRIPT GLOBAL VARS -->
@@ -18,7 +21,7 @@
         <div class="btn_right"><?php $this->load->view('admin/partials/buttons', array('buttons' => array('save','cancel') )); ?></div>    
         <div class="tabs">        
             <ul class="tab-menu">
-                    <li><a href="#spaces-info-tab"><span><?php echo lang('spaces:info_label'); ?></span></a></li>                                  
+                    <li><a href="#spaces-info-tab"><span><?php echo lang('spaces:complete_form_label'); ?></span></a></li>                                  
             </ul>        
             <div class="form_inputs" id="spaces-info-tab">
                 <fieldset>
@@ -66,10 +69,11 @@
                     <li>
                         <label for="layouts"><?php echo lang('spaces:layouts');?> <span></span></label>
                         <div class="input">
-                            <?php echo form_dropdown('layouts',array(''=>'') + $layouts_array,set_value('layouts',$space->layouts),'data-placeholder="'.lang('spaces:select').'" style="width:110px" ') ?>                            
+                            <table id="itemBox" class="tableBox"><tr><th><?php echo lang('spaces:layout'); ?></th><th><?php echo lang('spaces:capacity'); ?></th><th></th></table>                                 
+                            <?php echo form_dropdown('dd_layouts',array(''=>'') + $layouts_array,'','data-placeholder="'.lang('spaces:select').'" style="width:110px" ') ?>                            
                             <?php echo form_input('capacity','',' placeholder="'.lang('spaces:capacity').'" class="small"'); ?>
                             <?php echo anchor('', lang('spaces:add'),'id="btn_add" class="btn gray"'); ?>  
-                            <div id="itemBox" class="itemBox"><span><?php echo lang('spaces:layouts'); ?></span><br></div>                                                            
+                            <?php echo form_hidden('layouts',set_value('layouts',$space->layouts)); ?>
                         </div>              
                     </li> 
                     <li>
