@@ -1,7 +1,10 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 # labels
+$lang['spaces:space'] 		= 'Espacio';
 $lang['spaces:name'] 		= 'Nombre';
+$lang['spaces:address'] 		= 'Dirección';
+$lang['spaces:area'] 		= 'Area';
 $lang['spaces:category_label'] 	        = 'Categoría';
 $lang['spaces:description']           = 'Descripción';
 $lang['spaces:name']           = 'Nombre';
@@ -19,11 +22,11 @@ $lang['spaces:locationAjax']          = 'Locación (Auto-búsqueda)';
 $lang['spaces:Ajax']          = 'Ingrese primeras letras y seleccione...';
 $lang['spaces:level']          = 'Nivel';
 $lang['spaces:level_expl']    ='(Piso, area, etc)';
-$lang['spaces:dimensions']          = 'Dimensiones [ ancho, largo, alto ] en metros';
+$lang['spaces:dimensions']          = 'Dimensiones<br>[ ancho, largo, alto ]';
 $lang['spaces:square_mt_PH']          = 'm2';
 $lang['spaces:square_mt']          = 'Metros cuadrados';
 $lang['spaces:location']          = 'Locación';
-$lang['spaces:location_extended']          = 'Locación [ Cuenta | Ciudad ]';
+$lang['spaces:location_extended']          = 'Locación [ Cuenta ]';
 $lang['spaces:account']          = 'Cuenta';
 $lang['spaces:city']          = 'Ciudad';
 $lang['spaces:denomination']          = 'Denominación';
@@ -62,7 +65,9 @@ $lang['spaces:edit_error'] 			= 'Ha ocurrido un error al editar la espacio.';
 $lang['spaces:error_id_empty'] 			= 'Error al intentar editar un espacio.';
 $lang['spaces:mass_delete_error'] 		= 'Ocurrió un error al tratar de eliminar la espacio "%s".';
 $lang['spaces:mass_delete_success']	= '%s locacions de %s completamente eliminadas.';
-$lang['spaces:no_select_error'] 		= 'Necesitas seleccionar locaciones primero.';
+$lang['spaces:delete_error']                    = 'Ocurrió un error al tratar de eliminar el espacio "%s".';
+$lang['spaces:delete_success']                  = 'El espacio %s ha sido desactivado.';
+$lang['spaces:no_select_error'] 		= 'Necesitas seleccionar espacios primero.';
 $lang['spaces:already_exist_error']	= 'Una espacio con el nombre "%s" ya existe.';
 $lang['spaces:location_id_not_valid'] 		= 'La locación es inválida, vuelva a seleccionarla.';
 #JS

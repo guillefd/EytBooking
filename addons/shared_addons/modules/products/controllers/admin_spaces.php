@@ -289,6 +289,57 @@ class Admin_Spaces extends Admin_Controller {
                     ->append_css('module::jquery/jquery.autocomplete.css')                                       
                     ->set('space', $space)
                     ->build('admin/spaces/form',$this->data);
+	}
+        
+	/**
+         * Delete - no se borra, se deja inactivo
+         * @param type $id 
+         */
+        public function delete($id = 0)
+	{
+		// make sure the button was clicked and that there is an array of ids
+		if (isset($_POST['btnAction']) AND is_array($_POST['action_to']))
+		{
+			// pass the ids and let MY_Model delete the items
+			$this->products_spaces_m->inactive_many($this->input->post('action_to'));
+		}
+		elseif (is_numeric($id))
+		{
+			// they just clicked the link so we'll delete that one
+			if($this->products_spaces_m->inactive($id))
+                        {        
+                            // All good...
+                            $this->session->set_flashdata('success', lang('spaces:delete_success'),$id);
+                            redirect('admin/products/spaces/index');
+                        }
+                         else
+                            {
+                                $this->session->set_flashdata('error', lang('spaces:delete_error'));
+                                redirect('admin/products/spaces/index');
+                            }
+		}
+		redirect('admin/products/spaces/index');
+	}          
+
+	/**
+	 * Preview Space
+	 * @access public
+	 * @param int $id the ID of the location
+	 * @return void
+	 */
+	public function preview($id = 0)
+	{
+                $space = $this->products_spaces_m->get_where(array('space_id'=>$id));
+                $this->_gen_dropdown_list();                 
+                //convert facilities value to array
+                $space->facilities_txt =  $this->convertFacilitiesToText(unserialize($space->facilities));               
+                $space = $this->_convertIDtoText($space);
+                // set template
+		$this->template
+				->set_layout('modal','admin')
+                                ->append_css('module::workless.css')
+				->set('space', $space)
+				->build('admin/spaces/partials/space');                         
 	}        
 
         
@@ -322,7 +373,12 @@ class Admin_Spaces extends Admin_Controller {
                 $account = $this->accounts->get_account($location->account_id);
                 //Use Geoworldmap library - nombre de la ciudad
                 $city = $this->geoworldmap->getCityByID($account->CityID);
-                $reg->location = $location->name.' [ '.$account->name.' | '.$city->City.' ]';
+                $reg->location_extended = $location->name.' [ '.$account->name.' ]';
+                $reg->account = $account->name;
+                $reg->location = $location->name;
+                $reg->address = $location->address_l1.' '.$location->address_l2;
+                $reg->area = $location->area;
+                $reg->city = $city->City;
             }
             else
                 {
@@ -349,6 +405,22 @@ class Admin_Spaces extends Admin_Controller {
                 }
                         
             }
+            return $txt;
+        }
+        
+        public function convertFacilitiesToText($array)
+        {
+            $txt = '<table><th colspan="2">'.lang('spaces:facilities').'</th>';
+            foreach($this->data->facilities_array as $key => $subVec)
+            {
+                $txt.='<tr><td>'.$key.': </td><td>';
+                foreach($subVec as $skey =>$reg)
+                {
+                    $txt.= in_array($skey, $array) ? ' ['.$reg.']' : '';
+                }
+                $txt.='</td></tr>';
+            }
+            $txt.='</table>';
             return $txt;
         }
         
