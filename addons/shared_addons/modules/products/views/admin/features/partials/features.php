@@ -2,12 +2,12 @@
         <thead>
         <tr>
                 <th width="20"><?php echo form_checkbox(array('name' => 'action_to_all', 'class' => 'check-all')); ?></th>
-                <th><?php echo lang('feature:label'); ?></th>
-                <th><?php echo lang('feature:intro_label'); ?></th>
-                <th><?php echo lang('feature:slugSH_label'); ?></th>
-                <th><?php echo lang('feature:account_label'); ?></th>    
-                <th><?php echo lang('feature:city_label'); ?></th>                                
-                <th><?php echo lang('feature:phone_label'); ?></th>                                
+                <th><?php echo lang('features:name'); ?></th>
+                <th><?php echo lang('features:category_label'); ?></th>
+                <th><?php echo lang('features:cat_product'); ?></th>
+                <th><?php echo lang('features:usageunit'); ?></th>    
+                <th><?php echo lang('features:description'); ?></th>                                
+                <th><?php echo lang('features:group'); ?></th>                                
                 <th width="150"></th>
         </tr>
         </thead>
@@ -19,15 +19,15 @@
                 </tr>
         </tfoot>
         <tbody>
-                <?php foreach ($locations as $location): ?>
+                <?php foreach ($features as $feature): ?>
                 <tr>
                         <td><?php echo form_checkbox('action_to[]', $feature->id); ?></td>
                         <td><?php echo $feature->name; ?></td>
-                        <td><?php echo $feature->intro; ?>...</td>                                        
-                        <td><?php echo $feature->slug; ?></td>
-                        <td><?php echo $feature->account; ?></td>
-                        <td><?php echo $feature->City; ?></td>
-                        <td><?php echo $feature->phone; ?></td>
+                        <td><?php echo $feature->cat_feature; ?></td>                                        
+                        <td><?php echo $feature->cat_product; ?></td>
+                        <td><?php echo $feature->usageunit; ?></td>
+                        <td><?php echo $feature->description; ?></td>
+                        <td><?php echo $feature->group; ?></td>
                         <td class="align-center buttons buttons-small" width="190px">
                                 <?php echo anchor('admin/products/features/preview/' . $feature->id, lang('global:view'), 'rel="modal-med" class="btn green" target="_blank"'); ?>
                                 <?php echo anchor('admin/products/features/edit/' . $feature->id, lang('global:edit'), 'class="btn orange edit "'); ?>

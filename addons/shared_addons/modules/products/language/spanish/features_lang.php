@@ -2,7 +2,7 @@
 
 # labels
 $lang['features:title_label'] 		= 'Título';
-$lang['features:category_label'] 	= 'característica';
+$lang['features:category_label'] 	= 'Categoria de Característica';
 $lang['features:description']           = 'Descripción';
 $lang['features:name']           = 'Nombre';
 $lang['features:select_cat']           = 'Seleccione una categoría';

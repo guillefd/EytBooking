@@ -18,6 +18,52 @@ class Products_features_m extends MY_Model
 	}
         
         
+        /**
+         * Returns unique location 
+         * @param type $id
+         * @return boolean 
+         */
+        public function get_where($data)
+        {
+            $q = $this->db->get_where($this->_table, $data);      
+            if($q->num_rows()>0)
+            {
+                return $data = $q->row();
+            }
+            else
+            {
+                return FALSE;
+            }        
+        }
+        
+        /**
+         * INACTIVE - Poner espacio inactivo
+         * @param type $id
+         * @param type $data
+         * @return type 
+         */
+        function inactive($id)
+        {            
+            $data = array(
+               'active' => 0
+            );
+            $this->db->where('space_id', $id);
+            return $this->db->update($this->_table, $data); 
+        }
+        
+        /**
+         * Update
+         * @param type $id
+         * @param type $data
+         * @return type 
+         */
+        function update($id,$data)
+        {
+            $this->db->where('feature_id', $id);
+            return $this->db->update($this->_table, $data); 
+        }        
+        
+        
     	/**
 	 * Searches items based on supplied data array
 	 * @param $mode var to select return type: counts or results
