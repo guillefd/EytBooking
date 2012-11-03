@@ -103,6 +103,7 @@ class Module_Products extends Module {
 	public function install()
 	{
 		$this->dbforge->drop_table('products');
+                $this->dbforge->drop_table('products_type');                
                 $this->dbforge->drop_table('products_categories');
 		$this->dbforge->drop_table('products_locations');                
 		$this->dbforge->drop_table('products_spaces');                 
@@ -132,30 +133,35 @@ class Module_Products extends Module {
 			  KEY `slug - normal` (`slug`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Products Categories.';
 		";
+                
+		$products_type = "
+			CREATE TABLE " . $this->db->dbprefix('products_type') . " (
+			  `id` int(11) NOT NULL auto_increment,
+			  `title` varchar(100) collate utf8_unicode_ci NOT NULL default '',
+			  `description` text collate utf8_unicode_ci NOT NULL,
+			  PRIMARY KEY  (`id`),
+			  UNIQUE KEY `title - unique` (`title`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Products Type.';
+		";                
 
 		$products = "
 			CREATE TABLE " . $this->db->dbprefix('products') . " (
-			  `id` int(11) NOT NULL auto_increment,
-			  `title` varchar(100) collate utf8_unicode_ci NOT NULL default '',
-			  `slug` varchar(100) collate utf8_unicode_ci NOT NULL default '',
+			  `product_id` int(11) NOT NULL auto_increment,
 			  `category_id` int(11) NOT NULL,
-			  `location_id` int(11) NOT NULL default '0',                     
-			  `attachment` varchar(255) collate utf8_unicode_ci NOT NULL default '',
-			  `thumbnail` varchar(255) collate utf8_unicode_ci NOT NULL default '',                          
+			  `space_id` int(11) NOT NULL default '0',                           
+			  `name` varchar(100) collate utf8_unicode_ci NOT NULL default '',
+			  `slug` varchar(100) collate utf8_unicode_ci NOT NULL default '',                                             
 			  `intro` text collate utf8_unicode_ci NOT NULL,
 			  `body` text collate utf8_unicode_ci NOT NULL,
-			  `parsed` text collate utf8_unicode_ci NOT NULL,
+			  `images` varchar(255) collate utf8_unicode_ci NOT NULL default '',                            
 			  `keywords` varchar(32) NOT NULL default '',                       
 			  `author_id` int(11) NOT NULL default '0',
 			  `created_on` int(11) NOT NULL,
 			  `updated_on` int(11) NOT NULL default 0,
-                          `comments_enabled` INT(1)  NOT NULL default '1',
-			  `status` enum('draft','live') collate utf8_unicode_ci NOT NULL default 'draft',
-			  `type` set('html','markdown','wysiwyg-advanced','wysiwyg-simple') collate utf8_unicode_ci NOT NULL,
-			  PRIMARY KEY  (`id`),
-			  UNIQUE KEY `title` (`title`),
+			  `active` tinyint NOT NULL default '1',  
+			  PRIMARY KEY  (`product_id`),
 			  KEY `category_id - normal` (`category_id`),
-			  KEY `location_id - normal` (`location_id`)                          
+			  KEY `space_id - normal` (`space_id`)                          
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Products';
 		";
 
@@ -381,6 +387,7 @@ class Module_Products extends Module {
 		";                    
                 
 		if ($this->db->query($products_categories) 
+                        && $this->db->query($products_type)
                         && $this->db->query($products) 
                         && $this->db->query($products_spaces)                         
                         && $this->db->query($products_locations) 
@@ -406,7 +413,8 @@ class Module_Products extends Module {
 	public function uninstall()
 	{
             $this->dbforge->drop_table('products');
-            $this->dbforge->drop_table('products_categories');
+            $this->dbforge->drop_table('products_type');
+            $this->dbforge->drop_table('products_categories');            
             $this->dbforge->drop_table('products_locations');
             $this->dbforge->drop_table('products_spaces');
             $this->dbforge->drop_table('products_files');

@@ -20,12 +20,17 @@ class Admin extends Admin_Controller
 	 * @var array
 	 */
 	protected $validation_rules = array(
-		'title' => array(
-			'field' => 'title',
+		array(
+			'field' => 'type_id',
+			'label' => 'lang:products_type_label',
+			'rules' => 'trim|numeric'
+		),
+                array(
+			'field' => 'name',
 			'label' => 'lang:products_title_label',
 			'rules' => 'trim|htmlspecialchars|required|max_length[100]|callback__check_title'
 		),
-		'slug' => array(
+		array(
 			'field' => 'slug',
 			'label' => 'lang:products_slug_label',
 			'rules' => 'trim|required|alpha_dot_dash|max_length[100]|callback__check_slug'
@@ -79,7 +84,7 @@ class Admin extends Admin_Controller
 			'label' => 'lang:products_created_minute',
 			'rules' => 'trim|numeric|required'
 		),
-        array(
+                array(
 			'field' => 'comments_enabled',
 			'label'	=> 'lang:products_comments_enabled_label',
 			'rules'	=> 'trim|numeric'
@@ -99,24 +104,29 @@ class Admin extends Admin_Controller
 		//Events::trigger('products_article_published');
 		
 		$this->load->model(array('products_m', 'products_categories_m'));
+                $this->load->helper(array('products_dropdown', 'date'));                
 		$this->lang->load(array('products', 'categories', 'locations','features','spaces'));
 		
-		$this->load->library(array('keywords/keywords', 'form_validation'));
+                //Load Libraries
+		$this->load->library(array('keywords/keywords', 'form_validation','features_categories', 'usageunit', 'product_type'));            
 
 		// Date ranges for select boxes
 		$this->data->hours = array_combine($hours = range(0, 23), $hours);
 		$this->data->minutes = array_combine($minutes = range(0, 59), $minutes);
 
-		$this->data->categories = array();
-		if ($categories = $this->products_categories_m->order_by('title')->get_all())
-		{
-			foreach ($categories as $category)
-			{
-				$this->data->categories[$category->id] = $category->title;
-			}
-		}
                 $this->template->append_css('module::products.css');                 
 	}
+        
+        /**
+         * Generate dropdown array list from libraries 
+         */
+        public function _gen_dropdown_list() 
+        {
+            $this->data->cat_features_array = $this->features_categories->gen_dd_array();
+            $this->data->usageunit_array = $this->usageunit->gen_dd_array();
+            $this->data->type_array = $this->product_type->gen_dd_array();
+            $this->data->cat_products_array = gen_dd_cat_products($this->products_categories_m->get_all());
+        }        
 
 	/**
 	 * Show all created products posts
@@ -163,16 +173,6 @@ class Admin extends Admin_Controller
 	public function create()
 	{
 		$this->form_validation->set_rules($this->validation_rules);
-
-		if ($this->input->post('created_on'))
-		{
-			$created_on = strtotime(sprintf('%s %s:%s', $this->input->post('created_on'), $this->input->post('created_on_hour'), $this->input->post('created_on_minute')));
-		}
-
-		else
-		{
-			$created_on = now();
-		}
 
 		if ($this->form_validation->run())
 		{
@@ -224,11 +224,12 @@ class Admin extends Admin_Controller
 			{
 				$post->$field['field'] = set_value($field['field']);
 			}
-			$post->created_on = $created_on;
 			// if it's a fresh new article lets show them the advanced editor
 			if ($post->type == '') $post->type = 'wysiwyg-advanced';
 		}
-
+                
+                $this->_gen_dropdown_list();
+                
 		$this->template
 			->title($this->module_details['name'], lang('products_create_title'))
 			->append_metadata($this->load->view('fragments/wysiwyg', $this->data, TRUE))
@@ -236,7 +237,7 @@ class Admin extends Admin_Controller
 			->append_js('module::products_form.js')
 			->append_css('module::jquery/jquery.tagsinput.css')
 			->set('post', $post)
-			->build('admin/form');
+			->build('admin/form',$this->data);
 	}
 
 	/**

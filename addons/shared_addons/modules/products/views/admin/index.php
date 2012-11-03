@@ -13,7 +13,7 @@
 
 	<?php echo form_open('admin/products/action'); ?>
 
-		<?php echo $this->load->view('admin/tables/posts'); ?>
+		<?php echo $this->load->view('admin/tables/products'); ?>
 
 	<?php echo form_close(); ?>
 	

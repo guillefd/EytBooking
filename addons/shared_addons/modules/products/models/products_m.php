@@ -19,7 +19,7 @@ class Products_m extends MY_Model {
 	{
 		return $this->db->select('products.*, profiles.display_name')
 					->join('profiles', 'profiles.user_id = products.author_id', 'left')
-					->where(array('products.id' => $id))
+					->where(array('products.product_id' => $id))
 					->get('products')
 					->row();
 	}

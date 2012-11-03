@@ -2,7 +2,7 @@
 <?php if ($this->method == 'create'): ?>
 	<h4><?php echo lang('products_create_title'); ?></h4>
 <?php else: ?>
-	<h4><?php echo sprintf(lang('products_edit_title'), $post->title); ?></h4>
+	<h4><?php echo sprintf(lang('products_edit_title'), $post->name); ?></h4>
 <?php endif; ?>
 </section>
 
@@ -23,34 +23,27 @@
 	<!-- Info tab -->
 	<div class="form_inputs" id="products-setup-tab">		
 		<fieldset>	
-		<ul>
+		<ul>                    
+                        <li class="even">
+				<label for="type_id"><?php echo lang('products_type_label'); ?> <span>*</span></label>
+				<div class="input">
+				<?php echo form_dropdown('type_id', array(''=>'') + $type_array, $post->type_id,' data-placeholder="'.lang('products_no_type_select_label').'"') ?>
+				</div>
+			</li>                     
+                        <li class="even">
+				<label for="category_id"><?php echo lang('products_category_label'); ?> <span>*</span></label>
+				<div class="input">
+                                    <?php echo form_dropdown('category_id', array(''=>'') + $cat_products_array, $post->category_id,' data-placeholder="'.lang('products_no_category_select_label').'"') ?>					
+				</div>
+			</li>                    
 			<li class="even">
 				<label for="location_id"><?php echo lang('products_location_label'); ?> <span>*</span></label>
 				<div class="input"><?php echo form_input('location_id', htmlspecialchars_decode($post->location_id), 'id="location_id"'); ?></div>				
-			</li>                    
-                        <li>
-				<label for="category_id"><?php echo lang('products_category_label'); ?></label>
-				<div class="input">
-				<?php echo form_dropdown('category_id', array(lang('products_no_category_select_label')) + $categories, @$post->category_id) ?>
-					[ <?php echo anchor('admin/products/categories/create', lang('products_new_category_label'), 'target="_blank"'); ?> ]
-				</div>
-			</li>			
+			</li>                    			
 			<li class="even">
-				<label for="keywords"><?php echo lang('global:keywords'); ?></label>
+				<label for="keywords"><?php echo lang('products_keywords_label'); ?></label>
 				<div class="input"><?php echo form_input('keywords', $post->keywords, 'id="keywords"') ?></div>
 			</li>                        
-			<li class="even">
-				<label for="status"><?php echo lang('products_status_label'); ?></label>
-				<div class="input"><?php echo form_dropdown('status', array('draft' => lang('products_draft_label'), 'live' => lang('products_live_label')), $post->status) ?></div>
-			</li>
-			<li class="date-meta">
-				<label><?php echo lang('products_date_label'); ?></label>				
-				<div class="input datetime_input">
-				<?php echo form_input('created_on', date('Y-m-d', $post->created_on), 'maxlength="10" id="datepicker" class="text width-20"'); ?> &nbsp;
-				<?php echo form_dropdown('created_on_hour', $hours, date('H', $post->created_on)) ?> : 
-				<?php echo form_dropdown('created_on_minute', $minutes, date('i', ltrim($post->created_on, '0'))) ?>				
-				</div>
-			</li>
 			<li class="even">
 				<label for="comments_enabled"><?php echo lang('products_comments_enabled_label');?></label>
 				<div class="input"><?php echo form_checkbox('comments_enabled', 1, ($this->method == 'create' && ! $_POST) or $post->comments_enabled == 1, 'id="comments_enabled"'); ?></div>
@@ -65,8 +58,8 @@
             <fieldset>	
             <ul>            
 			<li class="even">
-				<label for="title"><?php echo lang('products_title_label'); ?> <span>*</span></label>
-				<div class="input"><?php echo form_input('title', htmlspecialchars_decode($post->title), 'maxlength="100" id="title"'); ?></div>				
+				<label for="name"><?php echo lang('products_name_label'); ?> <span>*</span></label>
+				<div class="input"><?php echo form_input('name', htmlspecialchars_decode($post->name), 'maxlength="100" id="name"'); ?></div>				
 			</li>
 			<li>
 				<label for="slug"><?php echo lang('products_slug_label'); ?> <span>*</span></label>

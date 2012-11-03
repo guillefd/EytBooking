@@ -61,7 +61,7 @@ class Accounts_m extends MY_Model {
             }
             if (array_key_exists('account_type', $data) && $data['account_type']!=0)
             {
-                $query.= ' AND`account_type` = '.$data['account_type'];
+                $query.= ' AND (`account_type` = 3 OR `account_type` = '.$data['account_type'].') ';
             }
 
             if (array_key_exists('keywords', $data))

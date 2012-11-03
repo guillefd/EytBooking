@@ -20,7 +20,7 @@
 		<tbody>
 			<?php foreach ($products as $post) : ?>
 				<tr>
-					<td><?php echo form_checkbox('action_to[]', $post->id); ?></td>
+					<td><?php echo form_checkbox('action_to[]', $post->product_id); ?></td>
 					<td><?php echo $post->title; ?></td>
 					<td class="collapse"><?php echo $post->category_title; ?></td>
 					<td class="collapse"><?php echo format_date($post->created_on); ?></td>
@@ -33,9 +33,9 @@
 					</td>
 					<td><?php echo lang('products_'.$post->status.'_label'); ?></td>
 					<td>
-						<?php echo anchor('admin/products/preview/' . $post->id, lang($post->status == 'live' ? 'global:view' : 'global:preview'), 'rel="modal-large" class="iframe btn green" target="_blank"'); ?>
-						<?php echo anchor('admin/products/edit/' . $post->id, lang('global:edit'), 'class="btn orange edit"'); ?>
-						<?php echo anchor('admin/products/delete/' . $post->id, lang('global:delete'), array('class'=>'confirm btn red delete')); ?>
+						<?php echo anchor('admin/products/preview/' . $post->product_id, lang($post->status == 'live' ? 'global:view' : 'global:preview'), 'rel="modal-large" class="iframe btn green" target="_blank"'); ?>
+						<?php echo anchor('admin/products/edit/' . $post->product_id, lang('global:edit'), 'class="btn orange edit"'); ?>
+						<?php echo anchor('admin/products/delete/' . $post->product_id, lang('global:delete'), array('class'=>'confirm btn red delete')); ?>
 					</td>
 				</tr>
 			<?php endforeach; ?>
