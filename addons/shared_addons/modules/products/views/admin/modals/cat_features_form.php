@@ -15,10 +15,14 @@
                     <div class="form_inputs">		
                             <fieldset>	
                             <ul>
-                                    <li>
-                                            <label for="name"><?php echo lang('features:name'); ?> <span>*</span></label>
-                                            <div class="input"><?php echo form_input('name', '') ?></div>
-                                    </li>                     
+                                <li>
+                                    <label for="type"><?php echo lang('cat_type_label'); ?><span> *</span></label>
+                                    <div class="input"><?php echo form_dropdown('type_id',array(''=>'') + $type_array, '',' data-placeholder="'.lang('cat_select_label').'"id="type_id" class="med" ') ?></div>
+                                </li>                                  
+                                <li>
+                                    <label for="name"><?php echo lang('features:name'); ?> <span>*</span></label>
+                                    <div class="input"><?php echo form_input('name', '') ?></div>
+                                </li>                     
                             </ul>		
                             </fieldset>		
                     </div>

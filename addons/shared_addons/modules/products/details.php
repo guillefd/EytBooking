@@ -124,6 +124,7 @@ class Module_Products extends Module {
 		$products_categories = "
 			CREATE TABLE " . $this->db->dbprefix('products_categories') . " (
 			  `id` int(11) NOT NULL auto_increment,
+			  `type_id` int(11) NOT NULL,                          
 			  `slug` varchar(100) collate utf8_unicode_ci NOT NULL default '',
 			  `title` varchar(100) collate utf8_unicode_ci NOT NULL default '',
 			  `description` text collate utf8_unicode_ci NOT NULL,
@@ -148,6 +149,7 @@ class Module_Products extends Module {
 			CREATE TABLE " . $this->db->dbprefix('products') . " (
 			  `product_id` int(11) NOT NULL auto_increment,
 			  `category_id` int(11) NOT NULL,
+                          `location_id` int(11) NOT NULL default '0',                           
 			  `space_id` int(11) NOT NULL default '0',                           
 			  `name` varchar(100) collate utf8_unicode_ci NOT NULL default '',
 			  `slug` varchar(100) collate utf8_unicode_ci NOT NULL default '',                                             
@@ -388,6 +390,7 @@ class Module_Products extends Module {
                 
 		if ($this->db->query($products_categories) 
                         && $this->db->query($products_type)
+                        && $this->db->query($products_categories)                        
                         && $this->db->query($products) 
                         && $this->db->query($products_spaces)                         
                         && $this->db->query($products_locations) 

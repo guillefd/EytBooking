@@ -5,10 +5,13 @@ $lang['products_posted_label']					= 'Escrito';
 $lang['products_keywords_label']				= 'Keywords'; #translate
 $lang['products_tagged_label']					= 'Tagged'; #translate
 $lang['products_category_label'] 				= 'Categoría';
-$lang['products_type_label'] 				= 'Tipo';
+$lang['products_account_label'] 				= 'Cuenta (Proveedor | Autobúsqueda)';
+$lang['products_type_label']            			= 'Tipo';
 $lang['products_written_by_label']				= 'Creado por'; #translate
 $lang['products_author_unknown']				= 'Unknown'; #translate
 $lang['products_post_label'] 					= 'Producto';
+$lang['products_status_label'] 					= 'Estado';
+$lang['products_active']            			= 'Activo';
 $lang['products_date_label'] 					= 'Publicar en Fecha';
 $lang['products_time_label'] 					= 'Hora';
 $lang['products_status_label'] 					= 'Estado';
@@ -40,7 +43,10 @@ $lang['products_setup_label'] 				= 'Seteo';
 $lang['products_features_label'] 			= 'Características';
 $lang['products_images_label'] 				= 'Imagenes';
 $lang['products_prices_label'] 				= 'Precios';
-$lang['products_location_label'] 				= 'Locacion';
+$lang['products_location_label'] 				= 'Locacion (Autobúsqueda)';
+$lang['products_space_label'] 				= 'Espacio (Autobúsqueda)';
+$lang['products_Ajax'] 				= 'Ingrese primeras letras y seleccione...';
+
 
 // titles
 $lang['products_create_title'] 					= 'Crear un producto';
@@ -70,6 +76,7 @@ $lang['products_already_exist_error'] 			= 'Ya existe un producto con esta URL.'
 
 $lang['products_twitter_posted']				= 'Escrito "%s" %s';
 $lang['products_twitter_error'] 				= 'Error de Twitter';
+$lang['products_no_translation'] 						= '<< No translation >>';
 
 // date
 $lang['products_archive_date_format']			= "%B %Y";

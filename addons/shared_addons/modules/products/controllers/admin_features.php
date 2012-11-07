@@ -71,10 +71,10 @@ class Admin_Features extends Admin_Controller {
         parent::__construct();
 
         $this->load->model(array('products_features_m', 'products_categories_m'));
-        $this->load->helper(array('products_dropdown', 'date'));
+        $this->load->helper(array('date'));
         $this->lang->load(array('products', 'categories', 'locations', 'features', 'spaces'));
         // Loads libraries
-        $this->load->library(array('form_validation', 'features_categories', 'usageunit'));
+        $this->load->library(array('form_validation', 'features_categories', 'usageunit','product_type','categories'));
         // template addons
         $this->template->append_css('module::products.css')
                 ->prepend_metadata('<script>var IMG_PATH = "' . BASE_URL . SHARED_ADDONPATH . 'modules/' . $this->module . '/img/"; </script>');
@@ -83,7 +83,9 @@ class Admin_Features extends Admin_Controller {
     function _gen_dropdown_list() {
         $this->data->cat_features_array = $this->features_categories->gen_dd_array();
         $this->data->usageunit_array = $this->usageunit->gen_dd_array();
-        $this->data->cat_products_array = gen_dd_cat_products($this->products_categories_m->get_all());
+        $this->data->type_array = $this->product_type->gen_dd_array();        
+        $this->data->cat_products_multiarray = $this->categories->gen_dd_multiarray();
+        $this->data->cat_products_array = $this->categories->gen_dd_array();        
     }
 
     /**
@@ -203,12 +205,13 @@ class Admin_Features extends Admin_Controller {
      * @access public
      */
     public function cat_feature_form() {
+        $this->_gen_dropdown_list();
         // set template
         $this->template
                 ->set_layout('modal', 'admin')
                 ->append_css('module::workless.css')
                 //->set('location', $location)
-                ->build('admin/modals/cat_features_form');
+                ->build('admin/modals/cat_features_form', $this->data);
     }
 
 }

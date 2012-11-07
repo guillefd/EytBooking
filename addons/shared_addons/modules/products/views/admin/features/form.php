@@ -27,7 +27,7 @@
                         <li class="even">
 				<label for="cat_product_id"><?php echo lang('features:cat_product'); ?> <span>*</span></label>
 				<div class="input">
-                                    <?php echo form_dropdown('cat_product_id',array(''=>'') + $cat_products_array,set_value('cat_product_id',$feature->cat_product_id),' data-placeholder="'.lang('features:select_cat').'"id="cat_product_id"') ?>
+                                    <?php echo form_dropdown('cat_product_id',array(''=>'') + $cat_products_multiarray,set_value('cat_product_id',$feature->cat_product_id),' data-placeholder="'.lang('features:select_cat').'"id="cat_product_id"') ?>
                                     <?php echo anchor('admin/products/features/cat_feature_form', lang('features:add_cat'), 'rel="modal-form-small" class="btn gray" target="_blank"'); ?>                                     
                                 </div>				
 			</li>                         

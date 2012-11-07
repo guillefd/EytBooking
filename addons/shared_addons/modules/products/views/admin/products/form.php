@@ -23,13 +23,7 @@
 	<!-- Info tab -->
 	<div class="form_inputs" id="products-setup-tab">		
 		<fieldset>	
-		<ul>                    
-                        <li class="even">
-				<label for="type_id"><?php echo lang('products_type_label'); ?> <span>*</span></label>
-				<div class="input">
-				<?php echo form_dropdown('type_id', array(''=>'') + $type_array, $post->type_id,' data-placeholder="'.lang('products_no_type_select_label').'"') ?>
-				</div>
-			</li>                     
+		<ul>                                       
                         <li class="even">
 				<label for="category_id"><?php echo lang('products_category_label'); ?> <span>*</span></label>
 				<div class="input">
@@ -37,18 +31,32 @@
 				</div>
 			</li>                    
 			<li class="even">
-				<label for="location_id"><?php echo lang('products_location_label'); ?> <span>*</span></label>
-				<div class="input"><?php echo form_input('location_id', htmlspecialchars_decode($post->location_id), 'id="location_id"'); ?></div>				
+				<label for="account_id"><?php echo lang('products_account_label'); ?> <span>*</span></label>
+				<div class="input">
+                                    <?php echo form_input('account', htmlspecialchars_decode($post->account), ' placeholder="'.lang('products_Ajax').'" id="accountAjax"'); ?>
+                                    <?php echo  form_hidden('account_id', $post->account_id , 'id="account_id" '); ?>  
+                                </div>				
+			</li>                         
+			<li class="even">
+				<label for="location_id"><?php echo lang('products_location_label'); ?> <span></span></label>
+				<div class="input">
+                                    <?php echo form_input('location', htmlspecialchars_decode($post->location), ' placeholder="'.lang('products_Ajax').'" id="locationAjax"'); ?>				
+                                    <?php echo  form_hidden('location_id', $post->location_id , 'id="location_id" '); ?>                                      
+			<li class="even">
+				<label for="space_id"><?php echo lang('products_space_label'); ?> <span></span></label>                                    
+                                <div class="input">                                    
+                                    <?php echo form_input('space', htmlspecialchars_decode($post->space), ' placeholder="'.lang('products_Ajax').'" id="spaceAjax"'); ?>
+                                    <?php echo  form_hidden('space_id', $post->space_id , 'id="space_id" '); ?>
+                                </div>				                                
 			</li>                    			
 			<li class="even">
 				<label for="keywords"><?php echo lang('products_keywords_label'); ?></label>
 				<div class="input"><?php echo form_input('keywords', $post->keywords, 'id="keywords"') ?></div>
 			</li>                        
 			<li class="even">
-				<label for="comments_enabled"><?php echo lang('products_comments_enabled_label');?></label>
-				<div class="input"><?php echo form_checkbox('comments_enabled', 1, ($this->method == 'create' && ! $_POST) or $post->comments_enabled == 1, 'id="comments_enabled"'); ?></div>
+				<label for="status"><?php echo lang('products_status_label');?></label>
+                                    <div class="checker"><span class><?php echo form_checkbox('status', 1, $post->status == 1, ' id="product_status" '); ?></span><?php echo lang('products_active'); ?></div>
 			</li>                          
-
 		</ul>		
 		</fieldset>		
 	</div>

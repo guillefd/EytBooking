@@ -12,15 +12,19 @@
 <div class="form_inputs">
 
 	<ul>
-		<li class="even">
-		<label for="title"><?php echo lang('cat_title_label');?> <span>*</span></label>
-		<div class="input"><?php echo  form_input('title', $category->title); ?></div>
-		</li>
-                <li>
+            <li class="even">
+                <label for="type"><?php echo lang('cat_type_label'); ?><span> *</span></label>
+                <div class="input"><?php echo form_dropdown('type_id',array(''=>'') + $type_array, set_value('type_id',$category->type_id),' data-placeholder="'.lang('cat_select_label').'"id="type_id" class="med" ') ?></div>
+            </li>            
+            <li class="even">
+                <label for="title"><?php echo lang('cat_title_label');?> <span>*</span></label>
+                <div class="input"><?php echo  form_input('title', $category->title); ?></div>
+            </li>
+            <li>
                 <label for="description"><?php echo lang('cat_description_label'); ?> <span>*</span></label>
                 <br style="clear: both;" />
                 <?php echo form_textarea(array('id' => 'description', 'name' => 'description', 'value' => $category->description, 'rows' => 3, 'class' => 'wysiwyg-simple')); ?>
-                </li>                
+            </li>                
 	</ul>
 	
 </div>

@@ -63,6 +63,7 @@ class Product_type
         }
         return $vec;
     }
+      
 
     /**
      * Devuelve array de nombres por idiomas

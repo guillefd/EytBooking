@@ -22,9 +22,14 @@ class Admin_Categories extends Admin_Controller {
 	 */
 	protected $validation_rules = array(
 		array(
+			'field' => 'type_id',
+			'label' => 'lang:cat_type_label',
+			'rules' => 'trim|required'
+		),            
+		array(
 			'field' => 'title',
 			'label' => 'lang:cat_title_label',
-			'rules' => 'trim|required|max_length[50]|callback__check_title'
+			'rules' => 'trim|required|callback__check_title'
 		),
 		array(
 			'field' => 'description',
@@ -43,13 +48,19 @@ class Admin_Categories extends Admin_Controller {
 		parent::__construct();
 		
 		$this->load->model('products_categories_m');
+                $this->load->helper(array('strings'));
 		$this->lang->load(array('products','categories','locations','features','spaces'));
 		
 		// Load the validation library along with the rules
-		$this->load->library('form_validation');
+		$this->load->library(array('form_validation','product_type'));
 		$this->form_validation->set_rules($this->validation_rules);
                 $this->template->append_css('module::products.css');                 
 	}
+        
+        public function _gen_dropdown_list()
+        {
+            $this->data->type_array = $this->product_type->gen_dd_array();
+        }
 	
 	/**
 	 * Index method, lists all categories
@@ -59,13 +70,14 @@ class Admin_Categories extends Admin_Controller {
 	public function index()
 	{
 		$this->pyrocache->delete_all('modules_m');
-		
+		$this->_gen_dropdown_list();
 		// Create pagination links
 		$total_rows = $this->products_categories_m->count_all();
 		$pagination = create_pagination('admin/products/categories/index', $total_rows, NULL, 5);
 			
 		// Using this data, get the relevant results
-		$categories = $this->products_categories_m->order_by('title')->limit($pagination['limit'])->get_all();
+		$result = $this->products_categories_m->order_by('title')->limit($pagination['limit'])->get_all();
+                $categories = translate_current_language($result);
 
 		$this->template
 			->title($this->module_details['name'], lang('cat_list_title'))
@@ -96,11 +108,11 @@ class Admin_Categories extends Admin_Controller {
 		{
 			$category->{$rule['field']} = set_value($rule['field']);
 		}
-		
+		$this->_gen_dropdown_list();
 		$this->template
 			->title($this->module_details['name'], lang('cat_create_title'))
 			->set('category', $category)
-			->build('admin/categories/form');	
+			->build('admin/categories/form',$this->data);	
 	}
 	
 	/**
@@ -135,11 +147,11 @@ class Admin_Categories extends Admin_Controller {
 				$category->{$rule['field']} = $this->input->post($rule['field']);
 			}
 		}
-
+                $this->_gen_dropdown_list();
 		$this->template
 			->title($this->module_details['name'], sprintf(lang('cat_edit_title'), $category->title))
 			->set('category', $category)
-			->build('admin/categories/form');
+			->build('admin/categories/form',$this->data);
 	}	
 
 	/**

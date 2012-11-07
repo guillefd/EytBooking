@@ -2,8 +2,10 @@
 
 # labels
 $lang['cat_title_label'] 		= 'Título';
+$lang['cat_type_label'] 		= 'Tipo';
 $lang['cat_category_label'] 		= 'Categoría';
 $lang['cat_description_label']          = 'Descripcion';
+$lang['cat_select_label'] 		= 'Seleccione';
 
 # titles
 $lang['cat_create_title'] 			= 'Crear una categoría';

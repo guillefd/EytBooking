@@ -12,7 +12,8 @@
 			<thead>
 			<tr>
 				<th width="20"><?php echo form_checkbox(array('name' => 'action_to_all', 'class' => 'check-all')); ?></th>
-				<th><?php echo lang('cat_category_label'); ?></th>
+				<th><?php echo lang('cat_type_label'); ?></th>
+                                <th><?php echo lang('cat_category_label'); ?></th>
 				<th><?php echo lang('cat_description_label'); ?></th>                                
 				<th width="150"></th>
 			</tr>
@@ -28,7 +29,8 @@
 				<?php foreach ($categories as $category): ?>
 				<tr>
 					<td><?php echo form_checkbox('action_to[]', $category->id); ?></td>
-					<td><?php echo $category->title; ?></td>
+					<td><?php echo $type_array[$category->type_id]; ?></td>
+                                        <td><?php echo $category->title; ?></td>
 					<td><?php echo $category->description; ?></td>                                        
 					<td class="align-center buttons buttons-small">
 						<?php echo anchor('admin/products/categories/edit/' . $category->id, lang('global:edit'), 'class="button edit"'); ?>

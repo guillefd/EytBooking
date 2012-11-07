@@ -11,6 +11,10 @@ select
     min-width: 50px;
 }
 
+select.med{
+    width: 20em;
+}
+
 .input input.tiny{
     min-width: 10px!important;
     width: 40px;

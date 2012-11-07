@@ -19,6 +19,7 @@ class Products_categories_m extends MY_Model
 	{
 		$this->load->helper('text');
 		parent::insert(array(
+                        'type_id'=>$input['type_id'],
 			'title'=>$input['title'],
 			'description'=>$input['description'],                    
 			'slug'=>url_title(strtolower(convert_accented_characters($input['title'])))
@@ -37,6 +38,7 @@ class Products_categories_m extends MY_Model
 	public function update($id, $input)
 	{
 		return parent::update($id, array(
+                        'type_id'=>$input['type_id'],
 			'title'	=> $input['title'],
 			'description'=>$input['description'],                      
 		        'slug'	=> url_title(strtolower(convert_accented_characters($input['title'])))
@@ -64,6 +66,7 @@ class Products_categories_m extends MY_Model
 	{
 		$this->load->helper('text');
 		return parent::insert(array(
+                        'type_id'=>$input['type_id'],
 			'title'=>$input['title'],
 			'description'=>$input['description'],                      
 			//is something wrong with convert_accented_characters?

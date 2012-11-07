@@ -24,7 +24,42 @@ class Admin extends Admin_Controller
 			'field' => 'type_id',
 			'label' => 'lang:products_type_label',
 			'rules' => 'trim|numeric'
+		),           
+		array(
+			'field' => 'category_id',
+			'label' => 'lang:products_category_label',
+			'rules' => 'trim|numeric'
 		),
+		array(
+			'field' => 'account',
+			'label' => 'lang:products_account_label',
+			'rules' => 'trim|numeric'
+		),             
+		array(
+			'field' => 'account_id',
+			'label' => 'lang:products_account_label',
+			'rules' => 'trim|numeric'
+		), 
+		array(
+			'field' => 'location',
+			'label' => 'lang:products_location_label',
+			'rules' => 'trim|numeric'
+		),            
+		array(
+			'field' => 'location_id',
+			'label' => 'lang:products_location_label',
+			'rules' => 'trim|numeric'
+		),             
+		array(
+			'field' => 'space',
+			'label' => 'lang:products_location_label',
+			'rules' => 'trim|numeric'
+		),              
+		array(
+			'field' => 'space_id',
+			'label' => 'lang:products_location_label',
+			'rules' => 'trim|numeric'
+		),               
                 array(
 			'field' => 'name',
 			'label' => 'lang:products_title_label',
@@ -34,16 +69,6 @@ class Admin extends Admin_Controller
 			'field' => 'slug',
 			'label' => 'lang:products_slug_label',
 			'rules' => 'trim|required|alpha_dot_dash|max_length[100]|callback__check_slug'
-		),
-		array(
-			'field' => 'location_id',
-			'label' => 'lang:products_location_label',
-			'rules' => 'trim|numeric'
-		),            
-		array(
-			'field' => 'category_id',
-			'label' => 'lang:products_category_label',
-			'rules' => 'trim|numeric'
 		),
 		array(
 			'field' => 'keywords',
@@ -69,26 +94,6 @@ class Admin extends Admin_Controller
 			'label' => 'lang:products_status_label',
 			'rules' => 'trim|alpha'
 		),
-		array(
-			'field' => 'created_on',
-			'label' => 'lang:products_date_label',
-			'rules' => 'trim|required'
-		),
-		array(
-			'field' => 'created_on_hour',
-			'label' => 'lang:products_created_hour',
-			'rules' => 'trim|numeric|required'
-		),
-		array(
-			'field' => 'created_on_minute',
-			'label' => 'lang:products_created_minute',
-			'rules' => 'trim|numeric|required'
-		),
-                array(
-			'field' => 'comments_enabled',
-			'label'	=> 'lang:products_comments_enabled_label',
-			'rules'	=> 'trim|numeric'
-		)
 	);
 
 	/**
@@ -103,18 +108,19 @@ class Admin extends Admin_Controller
 		// Fire an event, we're posting a new products!
 		//Events::trigger('products_article_published');
 		
-		$this->load->model(array('products_m', 'products_categories_m'));
-                $this->load->helper(array('products_dropdown', 'date'));                
+		$this->load->model(array('products_m'));
+                $this->load->helper(array('string', 'date'));                
 		$this->lang->load(array('products', 'categories', 'locations','features','spaces'));
 		
                 //Load Libraries
-		$this->load->library(array('keywords/keywords', 'form_validation','features_categories', 'usageunit', 'product_type'));            
+		$this->load->library(array('keywords/keywords', 'form_validation','features_categories', 'usageunit', 'product_type','categories'));            
 
 		// Date ranges for select boxes
 		$this->data->hours = array_combine($hours = range(0, 23), $hours);
 		$this->data->minutes = array_combine($minutes = range(0, 59), $minutes);
 
-                $this->template->append_css('module::products.css');                 
+                $this->template->append_css('module::products.css')
+                               ->prepend_metadata('<script>var IMG_PATH = "'.BASE_URL.SHARED_ADDONPATH.'modules/'.$this->module.'/img/"; </script>');                
 	}
         
         /**
@@ -125,7 +131,7 @@ class Admin extends Admin_Controller
             $this->data->cat_features_array = $this->features_categories->gen_dd_array();
             $this->data->usageunit_array = $this->usageunit->gen_dd_array();
             $this->data->type_array = $this->product_type->gen_dd_array();
-            $this->data->cat_products_array = gen_dd_cat_products($this->products_categories_m->get_all());
+            $this->data->cat_products_array = $this->categories->gen_dd_multiarray();
         }        
 
 	/**
@@ -161,7 +167,7 @@ class Admin extends Admin_Controller
 			->set('pagination', $pagination)
 			->set('products', $products);
 
-		$this->input->is_ajax_request() ? $this->template->build('admin/tables/posts', $this->data) : $this->template->build('admin/index', $this->data);
+		$this->input->is_ajax_request() ? $this->template->build('admin/products/tables/posts', $this->data) : $this->template->build('admin/products/index', $this->data);
 
 	}
 
@@ -236,8 +242,9 @@ class Admin extends Admin_Controller
 			->append_js('module::jquery/jquery.tagsinput.js')
 			->append_js('module::products_form.js')
 			->append_css('module::jquery/jquery.tagsinput.css')
+                        ->append_css('module::jquery/jquery.autocomplete.css')                         
 			->set('post', $post)
-			->build('admin/form',$this->data);
+			->build('admin/products/form',$this->data);
 	}
 
 	/**
