@@ -423,6 +423,39 @@ class Admin_Spaces extends Admin_Controller {
             $txt.='</table>';
             return $txt;
         }
+
+// AJAX CALLS
+        
+                /**
+         * Returns json response with spaces list, given "keyword" search
+         */
+        public function spaces_autocomplete_ajax()
+        {
+            $respond->spaces = array();
+            $respond->count = 0;
+            if($this->input->get('term'))
+            {             
+		$post_data['keywords'] = $this->input->get('term');
+                $post_data['pagination']['limit'] = $this->input->get('limit');
+                $post_data['location_id'] = $this->input->get('location_id');
+                $post_data['active'] = 1;
+                if ($result = $this->products_spaces_m->search('results',$post_data))
+		{
+			foreach ($result as $space)
+			{
+                            // Loop through each rule
+                            $this->_gen_dropdown_list();
+                            //CONVERT ID TO TEXT
+                            $this->_convertIDtoText($space); 
+                            $respond->spaces[] = $space;
+                            $respond->count++;
+			}
+		}                                   
+            }
+            
+            echo json_encode($respond);    
+        }
+        
         
 // CHECK ID ::::::::::::::::::::::::::::::::::::::::::::::::::
         	/**

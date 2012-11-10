@@ -78,7 +78,7 @@ class Products_spaces_m extends MY_Model
             }
             if (array_key_exists('location_id', $data) && $data['location_id']!=0)
             {
-                $query.= ' AND `account_id` = '.$data['account_id'];
+                $query.= ' AND `location_id` = '.$data['location_id'];
             }
             if (array_key_exists('CityID', $data) && $data['CityID']!=0)
             {

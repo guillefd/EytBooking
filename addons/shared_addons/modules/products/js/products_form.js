@@ -97,14 +97,17 @@ var img_loader_2 = '<img src="' + IMG_PATH + 'indicator.gif" style="float:right;
                                             location: $('input[name="location_id"]').val()
                                     },
                                     success: function( data ) {
-                                            response( $.map( data.locations, function( item ) {
+                                            response( $.map( data.spaces, function( item ) {
                                                     return {
-                                                            label: item.name + " [ " + item.account + " | " + item.City + " ]",
-                                                            value: item.name + " [ " + item.account + " | " + item.City + " ]",
-                                                            locationid: item.id                                                              
+                                                            label: item.name + " [ " + item.account + " | " + item.location + " ]",
+                                                            value: item.name + " [ " + item.account + " | " + item.location + " ]",
+                                                            spaceid: item.space_id                                                              
                                                     }
                                             }));
                                             $('#loader').remove(); 
+                                    },
+                                    error: function() {
+                                        $('#loader').remove();                                         
                                     }
                             });
                         },
@@ -114,7 +117,7 @@ var img_loader_2 = '<img src="' + IMG_PATH + 'indicator.gif" style="float:right;
                         },                        
                         minLength: 3,
                         select: function( event, ui ) {                                
-                                $('input[name="space_id"]').val(ui.item.locationid);  
+                                $('input[name="space_id"]').val(ui.item.spaceid);  
                         },
                         open: function() {
                                 $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );

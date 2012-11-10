@@ -143,12 +143,9 @@ class Admin extends Admin_Controller
 	{
 		//set the base/default where clause
 		$base_where = array('show_future' => TRUE, 'status' => 'all');
-
-		//add post values to base_where if f_module is posted
+        	//add post values to base_where if f_module is posted
 		$base_where = $this->input->post('f_category') ? $base_where + array('category' => $this->input->post('f_category')) : $base_where;
-
 		$base_where['status'] = $this->input->post('f_status') ? $this->input->post('f_status') : $base_where['status'];
-
 		$base_where = $this->input->post('f_keywords') ? $base_where + array('keywords' => $this->input->post('f_keywords')) : $base_where;
 
 		// Create pagination links
