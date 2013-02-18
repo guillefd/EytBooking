@@ -72,18 +72,28 @@ class Products_features_m extends MY_Model
 	 */
 	function search($mode,$data = array())
 	{
-	    $query = "SELECT * FROM (`default_".$this->_table."`)";
-            if (array_key_exists('account_id', $data) && $data['account_id']!=0)
+	    $conditions = array();
+            $query = "SELECT * FROM (`default_".$this->_table."`)"; 
+            if (array_key_exists('cat_product_id', $data) && $data['cat_product_id']!=0)
             {
-                $query.= ' AND `account_id` = '.$data['account_id'];
+                $conditions [] = ' `cat_product_id` = '.$data['cat_product_id'];
             }
-            if (array_key_exists('CityID', $data) && $data['CityID']!=0)
+            if (array_key_exists('cat_feature_id', $data) && $data['cat_feature_id']!=0)
             {
-                $query.= ' AND `CityID` = '.$data['CityID'];
+                $conditions [] = ' `cat_feature_id` = '.$data['cat_feature_id'];
             }            
             if (array_key_exists('keywords', $data))
             {
-                $query.= " AND (`name` LIKE '%".$data['keywords']."%')";
+                $conditions [] = " AND (`name` LIKE '%".$data['keywords']."%')";
+            }
+            //checks conditions and assembles query
+            if(!empty($conditions ))
+            {
+                $query.= ' WHERE '.array_shift($conditions); 
+                foreach($conditions  as $cond)
+                {
+                    $query.= ' AND '.$cond;
+                }
             }
             //Ordenar alfabeticamente
             $query.= " ORDER BY `name` ASC";            

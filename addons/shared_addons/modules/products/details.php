@@ -377,10 +377,8 @@ class Module_Products extends Module {
 			CREATE TABLE " . $this->db->dbprefix('products_features') . " (
 			  `id` int(11) NOT NULL auto_increment,
 			  `product_id` int(11) NOT NULL,                           
-			  `cat_feature_id` int(11) NOT NULL,                           
-			  `name` varchar(100) collate utf8_unicode_ci NOT NULL default '',
-			  `description` text collate utf8_unicode_ci NOT NULL,
-                          `usageunit_id` int(11) NOT NULL,                            
+			  `default_feature_id` int(11) NOT NULL,                           
+			  `description` text collate utf8_unicode_ci NOT NULL,                 
                           `value` decimal(20,2) NOT NULL default '0.00',                            
                           `group` varchar(100) collate utf8_unicode_ci NOT NULL default '',                                                    
 			  PRIMARY KEY  (`id`),

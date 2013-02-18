@@ -94,6 +94,11 @@ class Admin extends Admin_Controller
 			'label' => 'lang:products_status_label',
 			'rules' => 'trim|alpha'
 		),
+		array(
+			'field' => 'features',
+			'label' => 'lang:products_features_label',
+			'rules' => 'trim'
+		),            
 	);
 
 	/**
@@ -132,6 +137,7 @@ class Admin extends Admin_Controller
             $this->data->usageunit_array = $this->usageunit->gen_dd_array();
             $this->data->type_array = $this->product_type->gen_dd_array();
             $this->data->cat_products_array = $this->categories->gen_dd_multiarray();
+            $this->data->features_array = array();
         }        
 
 	/**
@@ -237,7 +243,9 @@ class Admin extends Admin_Controller
 			->title($this->module_details['name'], lang('products_create_title'))
 			->append_metadata($this->load->view('fragments/wysiwyg', $this->data, TRUE))
 			->append_js('module::jquery/jquery.tagsinput.js')
+                        ->append_js('module::jquery/jquery.mask.min.js')                        
 			->append_js('module::products_form.js')
+                        ->append_js('module::products_form_features.js')
 			->append_css('module::jquery/jquery.tagsinput.css')
                         ->append_css('module::jquery/jquery.autocomplete.css')                         
 			->set('post', $post)

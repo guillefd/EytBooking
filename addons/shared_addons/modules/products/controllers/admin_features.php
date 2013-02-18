@@ -204,7 +204,8 @@ class Admin_Features extends Admin_Controller {
      * Features category form
      * @access public
      */
-    public function cat_feature_form() {
+    public function cat_feature_form() 
+    {
         $this->_gen_dropdown_list();
         // set template
         $this->template
@@ -213,5 +214,42 @@ class Admin_Features extends Admin_Controller {
                 //->set('location', $location)
                 ->build('admin/modals/cat_features_form', $this->data);
     }
+    
+// ::::::::::: AJAX :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::     
+    
+        /**
+         * Returns json response with features list, given category ID
+         */
+        public function get_features_ajax()
+        {
+            $respond->count = 0;
+            $respond->items = array();
+            if($this->input->post('cat_id'))
+            {             
+		//flag
+                $respond->status = 'OK';
+                $post_data['cat_product_id'] = $this->input->post('cat_id');
+                if ($result = $this->products_features_m->search('results',$post_data))
+		{                    
+                    
+                    foreach ($result as $feature)
+                    {
+                        //load stuff
+                        $this->load->library(array('features_categories', 'usageunit'));
+                        $this->data->cat_features_array = $this->features_categories->gen_dd_array();
+                        $this->data->usageunit_array = $this->usageunit->gen_dd_array();
+                        //add fields
+                        $feature->usageunit = $this->data->usageunit_array[$feature->usageunit_id];
+                        $feature->cat_feature = $this->data->cat_features_array[$feature->cat_feature_id]; 
+                        //add item to array
+                        $respond->items[] = $feature;
+                        $respond->count++;
+                        
+                        
+                    }
+		}                                   
+            }            
+            echo json_encode($respond);    
+        }     
 
 }

@@ -42,6 +42,12 @@ textarea.med{
     height: 40px;
 }
 
+textarea.tiny{
+    min-height: 20px;    
+    width: 24em;
+    height: 30px;
+}
+
 /** SOCIAL DIV**/
 
 .itemBox{
@@ -61,6 +67,57 @@ textarea.med{
     margin:5px 0 5px 0;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;    
+}
+
+.f_itemBox{
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #D9D9D9;
+}
+
+.f_itemBlock
+{
+    /*background: #F1F1F1; */
+    padding: 0;
+    /*border: 1px solid #D9D9D9;*/
+    border-radius: 5px;
+    margin: 0;
+    -moz-border-radius: 1px;
+    -webkit-border-radius: 1px;    
+}
+
+.f_delTag {
+bottom: 0;
+right: 0;
+background: url(../img/glyphicons/glyphicons-halflings.png) -305px 1px no-repeat;
+width: 20px;
+height: 20px;
+text-indent: -9999px;
+margin-top: 15px;
+}
+
+textarea.f_tiny{
+    min-height: 20px;    
+    width: 19em;
+    height: 30px;
+}
+
+input.f_name{
+    background: #FCFCC6;
+    width: 18em;
+}
+
+.input input.f_small{
+    min-width: 10px!important;
+    width: 91px;
+}
+
+table.f_table {
+border-collapse: inherit;
+}
+
+table.f_table th, table.f_table td{
+    padding: 0;
 }
 
 

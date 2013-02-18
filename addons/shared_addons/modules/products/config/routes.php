@@ -31,5 +31,6 @@ $route['products/admin/locations(/:any)?']	= 'admin_locations$1';
 $route['products/admin/features(/:any)?']	= 'admin_features$1';
 $route['products/admin/spaces(/:any)?']	        = 'admin_spaces$1';
 //AJAX
-$route['products/admin/locations_autocomplete_ajax']       = 'admin_locations/locations_autocomplete_ajax';
+$route['products/admin/locations_autocomplete_ajax']    = 'admin_locations/locations_autocomplete_ajax';
 $route['products/admin/spaces_autocomplete_ajax']       = 'admin_spaces/spaces_autocomplete_ajax';
+$route['products/admin/get_features_ajax']              = 'admin_features/get_features_ajax';
