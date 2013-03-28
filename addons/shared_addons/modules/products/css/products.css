@@ -11,6 +11,12 @@ select
     min-width: 50px;
 }
 
+select.small
+{
+    min-width: 150px;
+}
+
+
 select.med{
     width: 20em;
 }

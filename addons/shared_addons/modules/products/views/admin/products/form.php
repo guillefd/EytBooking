@@ -12,23 +12,19 @@
 <!-- END JAVASCRIPT GLOBAL VARS -->
 
 <section class="title">
-<?php if ($this->method == 'create'): ?>
+	<?php if ($this->method == 'create'): ?>
 	<h4><?php echo lang('products_create_title'); ?></h4>
-<?php else: ?>
+	<?php else: ?>
 	<h4><?php echo sprintf(lang('products_edit_title'), $post->name); ?></h4>
-<?php endif; ?>
+	<?php endif; ?>
 </section>
-
 <section class="item">
-	
 <?php echo form_open(uri_string(), 'class="crud"'); ?>
 
 <div class="tabs">
-
 	<ul class="tab-menu">
 		<li><a href="#products-setup-tab"><span><?php echo lang('products_setup_label'); ?></span></a></li>
 		<li><a href="#products-info-tab"><span><?php echo lang('products_info_label'); ?></span></a></li>                
-		<li><a href="#products-features-tab"><span><?php echo lang('products_features_label'); ?></span></a></li>
 		<li><a href="#products-images-tab"><span><?php echo lang('products_images_label'); ?></span></a></li>
 		<li><a href="#products-prices-tab"><span><?php echo lang('products_prices_label'); ?></span></a></li>                
 	</ul>
@@ -36,7 +32,21 @@
 	<!-- Info tab -->
 	<div class="form_inputs" id="products-setup-tab">		
 		<fieldset>	
-		<ul>                                                          
+		<ul> 
+            <li class="even">
+				<label for="category_id"><?php echo lang('products_category_label'); ?> <span>*</span></label>
+				<div class="input">
+                 <?php echo form_dropdown('category_id', array(''=>'') + $cat_products_array, $post->category_id,' data-placeholder="'.lang('products_no_category_select_label').'" id="category_id" ') ?>					
+				</div>
+			</li>
+			<li class="even">
+				<label for="name"><?php echo lang('products_name_label'); ?> <span>*</span></label>
+				<div class="input"><?php echo form_input('name', htmlspecialchars_decode($post->name), 'maxlength="100" id="name"'); ?></div>				
+			</li>
+			<li>
+				<label for="slug"><?php echo lang('products_slug_label'); ?> <span>*</span></label>
+				<div class="input"><?php echo form_input('slug', $post->slug, 'maxlength="100" class="width-20"'); ?></div>
+			</li> 			                                                                                  
 			<li class="even">
 				<label for="account_id"><?php echo lang('products_account_label'); ?> <span>*</span></label>
 				<div class="input">
@@ -71,73 +81,47 @@
 	<!-- Infos tab -->
 	<div class="form_inputs" id="products-info-tab">
             <fieldset>	
-            <ul>            
-			<li class="even">
-				<label for="name"><?php echo lang('products_name_label'); ?> <span>*</span></label>
-				<div class="input"><?php echo form_input('name', htmlspecialchars_decode($post->name), 'maxlength="100" id="name"'); ?></div>				
-			</li>
-			<li>
-				<label for="slug"><?php echo lang('products_slug_label'); ?> <span>*</span></label>
-				<div class="input"><?php echo form_input('slug', $post->slug, 'maxlength="100" class="width-20"'); ?></div>
-			</li> 
+            <ul>
+            <li class="even">
+				<label for="features"><?php echo lang('products_features_label'); ?> <span>*</span></label>
+				<div class="input">
+                    <table class="f_table"><tr>
+                    <td>
+	                    <?php echo form_dropdown('dd_features', array(''=>'') + $features_array,'','class="med" data-placeholder="'.lang('products_no_features_select_label').'"') ?>					
+	                    <?php echo form_hidden('f_id','',' id = "f_id"'); ?>  
+	                    <?php echo form_input('usageunit','',' placeholder="'.lang('products_usageunit').'" class="f_small" id="usageunit" disabled'); ?>    
+	                    <?php echo form_input('f_qty','',' placeholder="'.lang('products_qty').'" class="tiny" id="f_qty"'); ?>                      
+                    </td>
+                    <td>
+                    	<?php echo form_textarea(array('id' => 'f_description', 'name' => 'f_description', 'class' => 'f_tiny', 'placeholder' =>lang('products_f_description') )); ?>	
+                    </td>    
+                    <td>
+                    	<?php echo anchor('', lang('products_add'),'id="f_add" class="btn gray"'); ?> 
+                    </td></tr></table>
+                    <span><?php echo lang('products_features_list'); ?></span>
+                    <!--<div id="f_itemBox" class="f_itemBox"></div>-->
+                    <table class="f_table"><tr><th></th><th></th><th></th><th></th></tr><tbody id="f_itemBox"></tbody></table>   
+                    <?php echo form_hidden('features',$post->features,' id="features"'); ?> 
+                </div>
+			</li>                         
 			<li>
 				<label for="intro"><?php echo lang('products_intro_label'); ?></label>
-				<br style="clear: both;" />
-				<?php echo form_textarea(array('id' => 'intro', 'name' => 'intro', 'value' => $post->intro, 'rows' => 5, 'class' => 'wysiwyg-simple')); ?>
+				<div class="input">
+					<br style="clear: both;" />
+					<?php echo form_textarea(array('id' => 'intro', 'name' => 'intro', 'value' => $post->intro, 'rows' => 3, 'class'=>'med')); ?>
+				</div>
 			</li>			
 			<li class="even editor">
 				<label for="body"><?php echo lang('products_content_label'); ?></label>				
 				<div class="input">
-					<?php echo form_dropdown('type', array(
-						'html' => 'html',
-						'markdown' => 'markdown',
-						'wysiwyg-simple' => 'wysiwyg-simple',
-						'wysiwyg-advanced' => 'wysiwyg-advanced',
-					), $post->type); ?>
-				</div>				
-				<br style="clear:both"/>				
-				<?php echo form_textarea(array('id' => 'body', 'name' => 'body', 'value' => $post->body, 'rows' => 30, 'class' => $post->type)); ?>				
+					<br style="clear: both;" />
+					<?php echo form_textarea(array('id' => 'body', 'name' => 'body', 'value' => $post->body, 'rows' => 6)); ?>    
+				</div>
 			</li>                                              
 		</ul>		
 		</fieldset>	                        
-        </div>        
-        
-	<!-- Features tab -->
-	<div class="form_inputs" id="products-features-tab">	
-		<fieldset>		
-		<ul>
-                        <li class="even">
-				<label for="category_id"><?php echo lang('products_category_label'); ?> <span>*</span></label>
-				<div class="input">
-                                    <?php echo form_dropdown('category_id', array(''=>'') + $cat_products_array, $post->category_id,' data-placeholder="'.lang('products_no_category_select_label').'" id="category_id" ') ?>					
-				</div>
-			</li>                         
-                        <li class="even">
-				<label for="features"><?php echo lang('products_features_label'); ?> <span>*</span></label>
-				<div class="input">
-                                    <table class="f_table"><tr>
-                                    <td>
-                                    <?php echo form_dropdown('dd_features', array(''=>'') + $features_array,'',' data-placeholder="'.lang('products_no_features_select_label').'"') ?>					
-                                    <?php echo form_hidden('f_id','',' id = "f_id"'); ?>  
-                                    <?php echo form_input('usageunit','',' placeholder="'.lang('products_usageunit').'" class="f_small" id="usageunit" disabled'); ?>    
-                                    <?php echo form_input('f_qty','',' placeholder="'.lang('products_qty').'" class="tiny" id="f_qty"'); ?>                      
-                                    </td>
-                                    <td>
-                                    <?php echo form_textarea(array('id' => 'f_description', 'name' => 'f_description', 'class' => 'f_tiny', 'placeholder' =>lang('products_f_description') )); ?>	
-                                    </td>    
-                                    <td>
-                                    <?php echo anchor('', lang('products_add'),'id="f_add" class="btn gray"'); ?> 
-                                    </td></tr></table>
-                                    <span><?php echo lang('products_features_list'); ?></span>
-                                    <div id="f_itemBox" class="f_itemBox"></div>   
-                                    <?php echo form_hidden('features',$post->features,' id="features"'); ?> 
-                                </div>
-			</li> 
-		</ul>		
-		</fieldset>
-		
-	</div>
-        
+        </div>        |
+             
 	<!-- Info images -->
         <div class="form_inputs" id="products-images-tab">
             <fieldset>	    	            

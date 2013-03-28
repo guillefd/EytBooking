@@ -69,13 +69,10 @@ function checkData(data)
 
 function insertBlock(data)
 {
-    var htmlblock = '<div name="fItem'+ data.n +'" id="f_itemBlock" class="f_itemBlock">';
-        htmlblock+= '<table class="f_table"><tr><td><input type="text" value="'+ data.name +'" class="f_name" disabled>';
-        htmlblock+= '<input type="text" value="'+ data.usageunit +'" class="f_small" disabled>';
-        htmlblock+= '<input type="text" value="'+ data.value +'" class="tiny" disabled></td>';
-        htmlblock+= '<td><textarea class="f_tiny" disabled>' + data.description + '</textarea></td>'
+    var htmlblock = '<tr name="fItem'+ data.n +'" id="f_itemBlock" class="f_itemBlock">';
+        htmlblock+= '<td>' + data.name + '</td><td>' + data.usageunit + '</td><td>' + data.value + '</td><td>' + data.description + '</td>';
         htmlblock+= '<td><span><a name="btn_del" id="'+ data.n +'" class="btn red" href="'+ data.n +'">' + LABEL_DELETE + '</a>';
-        htmlblock+= '<!--<p><a name="btn_edit" id="'+ data.n +'" class="btn gray " href="'+ data.n +'">' + LABEL_EDIT + '</a></p>--></span></td></tr></table></div>';   
+        htmlblock+= '</tr>';   
     $("#f_itemBox").append(htmlblock);
 }
 

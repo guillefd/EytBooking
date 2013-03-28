@@ -19,12 +19,7 @@ class Admin extends Admin_Controller
 	 * @access protected
 	 * @var array
 	 */
-	protected $validation_rules = array(
-		array(
-			'field' => 'type_id',
-			'label' => 'lang:products_type_label',
-			'rules' => 'trim|numeric'
-		),           
+	protected $validation_rules = array(       
 		array(
 			'field' => 'category_id',
 			'label' => 'lang:products_category_label',
@@ -86,10 +81,6 @@ class Admin extends Admin_Controller
 			'rules' => 'trim|required'
 		),
 		array(
-			'field' => 'type',
-			'rules' => 'trim|required'
-		),
-		array(
 			'field' => 'status',
 			'label' => 'lang:products_status_label',
 			'rules' => 'trim|alpha'
@@ -109,23 +100,18 @@ class Admin extends Admin_Controller
 	public function __construct()
 	{
 		parent::__construct();
-
 		// Fire an event, we're posting a new products!
 		//Events::trigger('products_article_published');
-		
 		$this->load->model(array('products_m'));
-                $this->load->helper(array('string', 'date'));                
+        $this->load->helper(array('string', 'date'));                
 		$this->lang->load(array('products', 'categories', 'locations','features','spaces'));
-		
-                //Load Libraries
+        //Load Libraries
 		$this->load->library(array('keywords/keywords', 'form_validation','features_categories', 'usageunit', 'product_type','categories'));            
-
 		// Date ranges for select boxes
 		$this->data->hours = array_combine($hours = range(0, 23), $hours);
 		$this->data->minutes = array_combine($minutes = range(0, 59), $minutes);
-
-                $this->template->append_css('module::products.css')
-                               ->prepend_metadata('<script>var IMG_PATH = "'.BASE_URL.SHARED_ADDONPATH.'modules/'.$this->module.'/img/"; </script>');                
+        $this->template->append_css('module::products.css')
+                       ->prepend_metadata('<script>var IMG_PATH = "'.BASE_URL.SHARED_ADDONPATH.'modules/'.$this->module.'/img/"; </script>');                
 	}
         
         /**
@@ -149,29 +135,23 @@ class Admin extends Admin_Controller
 	{
 		//set the base/default where clause
 		$base_where = array('show_future' => TRUE, 'status' => 'all');
-        	//add post values to base_where if f_module is posted
+        //add post values to base_where if f_module is posted
 		$base_where = $this->input->post('f_category') ? $base_where + array('category' => $this->input->post('f_category')) : $base_where;
 		$base_where['status'] = $this->input->post('f_status') ? $this->input->post('f_status') : $base_where['status'];
 		$base_where = $this->input->post('f_keywords') ? $base_where + array('keywords' => $this->input->post('f_keywords')) : $base_where;
-
 		// Create pagination links
 		$total_rows = $this->products_m->count_by($base_where);
 		$pagination = create_pagination('admin/products/index', $total_rows);
-
 		// Using this data, get the relevant results
 		$products = $this->products_m->limit($pagination['limit'])->get_many_by($base_where);
-
 		//do we need to unset the layout because the request is ajax?
 		$this->input->is_ajax_request() ? $this->template->set_layout(FALSE) : '';
-
 		$this->template
-			->title($this->module_details['name'])
-			->append_js('admin/filter.js')
-			->set('pagination', $pagination)
-			->set('products', $products);
-
+			 ->title($this->module_details['name'])
+			 ->append_js('admin/filter.js')
+			 ->set('pagination', $pagination)
+			 ->set('products', $products);
 		$this->input->is_ajax_request() ? $this->template->build('admin/products/tables/posts', $this->data) : $this->template->build('admin/products/index', $this->data);
-
 	}
 
 	/**
@@ -182,7 +162,6 @@ class Admin extends Admin_Controller
 	public function create()
 	{
 		$this->form_validation->set_rules($this->validation_rules);
-
 		if ($this->form_validation->run())
 		{
 			// They are trying to put this live
@@ -190,28 +169,24 @@ class Admin extends Admin_Controller
 			{
 				role_or_die('products', 'put_live');
 			}
-
 			$id = $this->products_m->insert(array(
+				'category_id'       => $this->input->post('category_id'),
 				'title'				=> $this->input->post('title'),
 				'slug'				=> $this->input->post('slug'),
-				'category_id'                   => $this->input->post('category_id'),
 				'keywords'			=> Keywords::process($this->input->post('keywords')),
 				'intro'				=> $this->input->post('intro'),
 				'body'				=> $this->input->post('body'),
 				'status'			=> $this->input->post('status'),
-				'created_on'                    => $created_on,
-				'comments_enabled'              => $this->input->post('comments_enabled'),
+				'created_on'        => $created_on,
+				'comments_enabled'  => $this->input->post('comments_enabled'),
 				'author_id'			=> $this->current_user->id,
-				'type'				=> $this->input->post('type'),
-				'parsed'			=> ($this->input->post('type') == 'markdown') ? parse_markdown($this->input->post('body')) : ''
+				'type'				=> $this->input->post('type')
 			));
-
 			if ($id)
 			{
 				$this->pyrocache->delete_all('products_m');
 				$this->session->set_flashdata('success', sprintf($this->lang->line('products_post_add_success'), $this->input->post('title')));
-				
-				// They are trying to put this live
+    			// They are trying to put this live
 				if ($this->input->post('status') == 'live')
 				{
 					// Fire an event, we're posting a new products!
@@ -222,7 +197,6 @@ class Admin extends Admin_Controller
 			{
 				$this->session->set_flashdata('error', $this->lang->line('products_post_add_error'));
 			}
-
 			// Redirect back to the form or main page
 			$this->input->post('btnAction') == 'save_exit' ? redirect('admin/products') : redirect('admin/products/edit/' . $id);
 		}
@@ -233,21 +207,17 @@ class Admin extends Admin_Controller
 			{
 				$post->$field['field'] = set_value($field['field']);
 			}
-			// if it's a fresh new article lets show them the advanced editor
-			if ($post->type == '') $post->type = 'wysiwyg-advanced';
-		}
-                
-                $this->_gen_dropdown_list();
-                
+		}               
+        $this->_gen_dropdown_list();               
 		$this->template
 			->title($this->module_details['name'], lang('products_create_title'))
 			->append_metadata($this->load->view('fragments/wysiwyg', $this->data, TRUE))
 			->append_js('module::jquery/jquery.tagsinput.js')
-                        ->append_js('module::jquery/jquery.mask.min.js')                        
+            ->append_js('module::jquery/jquery.mask.min.js')                        
 			->append_js('module::products_form.js')
-                        ->append_js('module::products_form_features.js')
+            ->append_js('module::products_form_features.js')
 			->append_css('module::jquery/jquery.tagsinput.css')
-                        ->append_css('module::jquery/jquery.autocomplete.css')                         
+            ->append_css('module::jquery/jquery.autocomplete.css')                         
 			->set('post', $post)
 			->build('admin/products/form',$this->data);
 	}
@@ -288,8 +258,7 @@ class Admin extends Admin_Controller
 				'label' => 'lang:products_slug_label',
 				'rules' => 'trim|required|alpha_dot_dash|max_length[100]|callback__check_slug['.$id.']'
 			),
-		)));
-		
+		)));		
 		if ($this->form_validation->run())
 		{
 			// They are trying to put this live
@@ -299,7 +268,6 @@ class Admin extends Admin_Controller
 			}
 
 			$author_id = empty($post->display_name) ? $this->current_user->id : $post->author_id;
-
 			$result = $this->products_m->update($id, array(
 				'title'				=> $this->input->post('title'),
 				'slug'				=> $this->input->post('slug'),
@@ -313,8 +281,7 @@ class Admin extends Admin_Controller
 				'author_id'			=> $author_id,
 				'type'				=> $this->input->post('type'),
 				'parsed'			=> ($this->input->post('type') == 'markdown') ? parse_markdown($this->input->post('body')) : ''
-			));
-			
+			));			
 			if ($result)
 			{
 				$this->session->set_flashdata(array('success' => sprintf(lang('products_edit_success'), $this->input->post('title'))));
@@ -325,8 +292,7 @@ class Admin extends Admin_Controller
 					// Fire an event, we're posting a new products!
 					Events::trigger('products_article_published');
 				}
-			}
-			
+			}			
 			else
 			{
 				$this->session->set_flashdata('error', $this->lang->line('products_edit_error'));
@@ -344,9 +310,7 @@ class Admin extends Admin_Controller
 				$post->$field['field'] = set_value($field['field']);
 			}
 		}
-
-		$post->created_on = $created_on;
-		
+		$post->created_on = $created_on;		
 		$this->template
 			->title($this->module_details['name'], sprintf(lang('products_edit_title'), $post->title))
 			->append_metadata($this->load->view('fragments/wysiwyg', $this->data, TRUE))
@@ -366,7 +330,6 @@ class Admin extends Admin_Controller
 	public function preview($id = 0)
 	{
 		$post = $this->products_m->get($id);
-
 		$this->template
 				->set_layout('modal', 'admin')
 				->set('post', $post)
