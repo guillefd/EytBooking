@@ -95,29 +95,7 @@ class Products_m extends MY_Model {
 		return $this->get_all();
 	}
 	
-	public function count_tagged_by($tag, $params)
-	{
-		return $this->select('*')
-			->from('products')
-			->join('keywords_applied', 'keywords_applied.hash = products.keywords')
-			->join('keywords', 'keywords.id = keywords_applied.keyword_id')
-			->where('keywords.name', str_replace('-', ' ', $tag))
-			->where($params)
-			->count_all_results();
-	}
-	
-	public function get_tagged_by($tag, $params)
-	{
-		return $this->db->select('products.*, products.title title, products.slug slug, products_categories.title category_title, products_categories.slug category_slug')
-			->from('products')
-			->join('keywords_applied', 'keywords_applied.hash = products.keywords')
-			->join('keywords', 'keywords.id = keywords_applied.keyword_id')
-			->join('products_categories', 'products_categories.id = products.category_id', 'left')
-			->where('keywords.name', str_replace('-', ' ', $tag))
-			->where($params)
-			->get()
-			->result();
-	}
+
 
 	function count_by($params = array())
 	{
@@ -173,128 +151,21 @@ class Products_m extends MY_Model {
 		return parent::update($id, array('status' => 'live'));
 	}
 
-	// -- Archive ---------------------------------------------
 
-	function get_archive_months()
+	function check_product_exists($field, $value = '', $id = 0)
 	{
-		$this->db->select('UNIX_TIMESTAMP(DATE_FORMAT(FROM_UNIXTIME(t1.created_on), "%Y-%m-02")) AS `date`', FALSE);
-		$this->db->from('products t1');
-		$this->db->distinct();
-		$this->db->select('(SELECT count(id) FROM ' . $this->db->dbprefix('products') . ' t2
-							WHERE MONTH(FROM_UNIXTIME(t1.created_on)) = MONTH(FROM_UNIXTIME(t2.created_on))
-								AND YEAR(FROM_UNIXTIME(t1.created_on)) = YEAR(FROM_UNIXTIME(t2.created_on))
-								AND status = "live"
-								AND created_on <= ' . now() . '
-						   ) as post_count');
-
-		$this->db->where('status', 'live');
-		$this->db->where('created_on <=', now());
-		$this->db->having('post_count >', 0);
-		$this->db->order_by('t1.created_on DESC');
-		$query = $this->db->get();
-
-		return $query->result();
-	}
-
-	// DIRTY frontend functions. Move to views
-	function get_products_fragment($params = array())
-	{
-		$this->load->helper('date');
-
-		$this->db->where('status', 'live');
-		$this->db->where('created_on <=', now());
-
-		$string = '';
-		$this->db->order_by('created_on', 'DESC');
-		$this->db->limit(5);
-		$query = $this->db->get('products');
-		if ($query->num_rows() > 0)
+		$this->db->where(array($field => $value, 'product_id <>' =>$id));
+		$q = $this->db->get('products');	
+		if($q->num_rows()>0)
 		{
-			$this->load->helper('text');
-			foreach ($query->result() as $products)
-			{
-				$string .= '<p>' . anchor('products/' . date('Y/m') . '/' . $products->slug, $products->title) . '<br />' . strip_tags($products->intro) . '</p>';
-			}
-		}
-		return $string;
-	}
-
-	function check_exists($field, $value = '', $id = 0)
-	{
-		if (is_array($field))
-		{
-			$params = $field;
-			$id = $value;
+			return false;
 		}
 		else
-		{
-			$params[$field] = $value;
-		}
-		$params['id !='] = (int) $id;
-
-		return parent::count_by($params) == 0;
+			{
+				return true;
+			}
 	}
 
-	/**
-	 * Searches products posts based on supplied data array
-	 * @param $data array
-	 * @return array
-	 */
-	public function search($data = array())
-	{
-		if (array_key_exists('category_id', $data))
-		{
-			$this->db->where('category_id', $data['category_id']);
-		}
 
-		if (array_key_exists('status', $data))
-		{
-			$this->db->where('status', $data['status']);
-		}
-
-		if (array_key_exists('keywords', $data))
-		{
-			$matches = array();
-			if (strstr($data['keywords'], '%'))
-			{
-				preg_match_all('/%.*?%/i', $data['keywords'], $matches);
-			}
-
-			if (!empty($matches[0]))
-			{
-				foreach ($matches[0] as $match)
-				{
-					$phrases[] = str_replace('%', '', $match);
-				}
-			}
-			else
-			{
-				$temp_phrases = explode(' ', $data['keywords']);
-				foreach ($temp_phrases as $phrase)
-				{
-					$phrases[] = str_replace('%', '', $phrase);
-				}
-			}
-
-			$counter = 0;
-			foreach ($phrases as $phrase)
-			{
-				if ($counter == 0)
-				{
-					$this->db->like('products.title', $phrase);
-				}
-				else
-				{
-					$this->db->or_like('products.title', $phrase);
-				}
-
-				$this->db->or_like('products.body', $phrase);
-				$this->db->or_like('products.intro', $phrase);
-				$this->db->or_like('profiles.display_name', $phrase);
-				$counter++;
-			}
-		}
-		return $this->get_all();
-	}
 
 }

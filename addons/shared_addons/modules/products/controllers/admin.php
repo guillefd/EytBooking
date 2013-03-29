@@ -23,22 +23,22 @@ class Admin extends Admin_Controller
 		array(
 			'field' => 'category_id',
 			'label' => 'lang:products_category_label',
-			'rules' => 'trim|numeric'
+			'rules' => 'trim|numeric|required'
 		),
 		array(
 			'field' => 'account',
 			'label' => 'lang:products_account_label',
-			'rules' => 'trim|numeric'
+			'rules' => 'trim'
 		),             
 		array(
 			'field' => 'account_id',
 			'label' => 'lang:products_account_label',
-			'rules' => 'trim|numeric'
+			'rules' => 'trim|numeric|required'
 		), 
 		array(
 			'field' => 'location',
 			'label' => 'lang:products_location_label',
-			'rules' => 'trim|numeric'
+			'rules' => 'trim'
 		),            
 		array(
 			'field' => 'location_id',
@@ -48,7 +48,7 @@ class Admin extends Admin_Controller
 		array(
 			'field' => 'space',
 			'label' => 'lang:products_location_label',
-			'rules' => 'trim|numeric'
+			'rules' => 'trim'
 		),              
 		array(
 			'field' => 'space_id',
@@ -58,12 +58,12 @@ class Admin extends Admin_Controller
                 array(
 			'field' => 'name',
 			'label' => 'lang:products_title_label',
-			'rules' => 'trim|htmlspecialchars|required|max_length[100]|callback__check_title'
+			'rules' => 'trim|htmlspecialchars|required|max_length[100]'
 		),
 		array(
 			'field' => 'slug',
 			'label' => 'lang:products_slug_label',
-			'rules' => 'trim|required|alpha_dot_dash|max_length[100]|callback__check_slug'
+			'rules' => 'trim|required|alpha_dot_dash|max_length[100]'
 		),
 		array(
 			'field' => 'keywords',
@@ -88,7 +88,7 @@ class Admin extends Admin_Controller
 		array(
 			'field' => 'features',
 			'label' => 'lang:products_features_label',
-			'rules' => 'trim'
+			'rules' => 'trim|required|callback__check_features'
 		),            
 	);
 
@@ -103,7 +103,7 @@ class Admin extends Admin_Controller
 		// Fire an event, we're posting a new products!
 		//Events::trigger('products_article_published');
 		$this->load->model(array('products_m'));
-        $this->load->helper(array('string', 'date'));                
+        $this->load->helper(array('string', 'date','records_by_id'));                
 		$this->lang->load(array('products', 'categories', 'locations','features','spaces'));
         //Load Libraries
 		$this->load->library(array('keywords/keywords', 'form_validation','features_categories', 'usageunit', 'product_type','categories'));            
@@ -151,7 +151,7 @@ class Admin extends Admin_Controller
 			 ->append_js('admin/filter.js')
 			 ->set('pagination', $pagination)
 			 ->set('products', $products);
-		$this->input->is_ajax_request() ? $this->template->build('admin/products/tables/posts', $this->data) : $this->template->build('admin/products/index', $this->data);
+		$this->input->is_ajax_request() ? $this->template->build('admin/products/tables/products', $this->data) : $this->template->build('admin/products/index', $this->data);
 	}
 
 	/**
@@ -164,23 +164,17 @@ class Admin extends Admin_Controller
 		$this->form_validation->set_rules($this->validation_rules);
 		if ($this->form_validation->run())
 		{
-			// They are trying to put this live
-			if ($this->input->post('status') == 'live')
-			{
-				role_or_die('products', 'put_live');
-			}
 			$id = $this->products_m->insert(array(
 				'category_id'       => $this->input->post('category_id'),
-				'title'				=> $this->input->post('title'),
+				'space_id'          => $this->input->post('space_id'),
+				'name'				=> $this->input->post('name'),
 				'slug'				=> $this->input->post('slug'),
 				'keywords'			=> Keywords::process($this->input->post('keywords')),
 				'intro'				=> $this->input->post('intro'),
 				'body'				=> $this->input->post('body'),
-				'status'			=> $this->input->post('status'),
-				'created_on'        => $created_on,
-				'comments_enabled'  => $this->input->post('comments_enabled'),
-				'author_id'			=> $this->current_user->id,
-				'type'				=> $this->input->post('type')
+				'active'			=> $this->input->post('status'),
+				'created_on'        => now(),
+				'author_id'			=> $this->current_user->id
 			));
 			if ($id)
 			{
@@ -205,7 +199,7 @@ class Admin extends Admin_Controller
 			// Go through all the known fields and get the post values
 			foreach ($this->validation_rules as $key => $field)
 			{
-				$post->$field['field'] = set_value($field['field']);
+				$product->$field['field'] = set_value($field['field']);
 			}
 		}               
         $this->_gen_dropdown_list();               
@@ -218,7 +212,7 @@ class Admin extends Admin_Controller
             ->append_js('module::products_form_features.js')
 			->append_css('module::jquery/jquery.tagsinput.css')
             ->append_css('module::jquery/jquery.autocomplete.css')                         
-			->set('post', $post)
+			->set('product', $product)
 			->build('admin/products/form',$this->data);
 	}
 
@@ -467,16 +461,18 @@ class Admin extends Admin_Controller
 		redirect('admin/products');
 	}
 
+// ::::::::::::::: AUX :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::	
+
 	/**
-	 * Callback method that checks the title of an post
+	 * Callback method that checks if name existe in other account product
 	 * @access public
 	 * @param string title The Title to check
 	 * @return bool
 	 */
-	public function _check_title($title, $id = null)
+	public function _check_name($name, $id = null)
 	{
 		$this->form_validation->set_message('_check_title', sprintf(lang('products_already_exist_error'), lang('products_title_label')));
-		return $this->products_m->check_exists('title', $title, $id);			
+		return $this->products_m->check_product_exists('name', $name, $id);			
 	}
 	
 	/**
@@ -488,8 +484,37 @@ class Admin extends Admin_Controller
 	public function _check_slug($slug, $id = null)
 	{
 		$this->form_validation->set_message('_check_slug', sprintf(lang('products_already_exist_error'), lang('products_slug_label')));
-		return $this->products_m->check_exists('slug', $slug, $id);
+		return $this->products_m->check_product_exists('slug', $slug, $id);
 	}
+
+	public function _check_features($features)
+	{
+		$vecF = array();
+		$vecF_result = array();
+		$vecF = json_decode($features);
+		if(is_array($vecF))
+		{
+			foreach($vecF as $vec)
+			{
+				if(!empty($vec))
+				{
+					array_push($vecF_result,$vec);
+				}
+			}
+		}
+		if(empty($vecF_result))
+		{
+			$this->form_validation->set_message('_check_features', sprintf(lang('products_features_submit_error'), lang('products_features_label')));
+			return false;
+
+		}
+		else
+			{
+				return true;
+			}	
+	}
+
+//:::::::::: AJAX ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 	/**
 	 * method to fetch filtered results for products list

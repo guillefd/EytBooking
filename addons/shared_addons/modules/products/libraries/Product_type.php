@@ -52,7 +52,7 @@ class Product_type
      */
     public function gen_dd_array()
     {
-        $vec = array();
+        $vec = array(''=>'');
         if($result = $this->get() )
         {
             foreach($result as $reg)

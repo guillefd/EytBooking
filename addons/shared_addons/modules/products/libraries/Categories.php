@@ -29,6 +29,19 @@ class Categories
 
     /**
      * get
+     * Get category
+     * return array
+     */
+    public function get_by_id($id)
+    {
+        return ci()->db->select('*')
+                    ->where(array('id' => $id))
+                    ->get($this->_cat_table)
+                    ->row();
+    }
+
+    /**
+     * get
      * Get list of categories
      * return array
      */
@@ -104,13 +117,17 @@ class Categories
             foreach($result as $reg)
             {              
                 $vec_name = $this->explode_string_to_array($reg->title);
-                $vec[$reg->id] =  array_key_exists(CURRENT_LANGUAGE,$vec_name) ? $vec_name[CURRENT_LANGUAGE] : $vec_name['en'];
+                $vec[$reg->id] = extract_value_by_language($vec_name);
             }
         }
         return $vec;
     }    
     
     
+    public function extract_value_by_language($array)
+    {
+        return array_key_exists(CURRENT_LANGUAGE,$array) ? $array[CURRENT_LANGUAGE] : $array['en'];
+    }
     
     /**
      * Devuelve array

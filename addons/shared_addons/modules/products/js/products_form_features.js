@@ -17,8 +17,38 @@ function Fdatos()
     this.description = "";
     this.usageunit = "";
     this.value = "";
+    this.isOptional = "";
     this.vecFid = "";
     this.n = "";
+}
+
+/**
+ *  Inicializa valores del input en html
+ */
+function init_hidden_input()
+{
+        var input = $('input[name="features"]').val();
+        if(input!="" && input!=0)
+        {
+            request_features();   
+            vec_prodF = jQuery.parseJSON(input);
+            for (var i in vec_prodF)
+            {
+                if(vec_prodF[i]!="") // sin ';' xq es eliminado por split()
+                {
+                    var item = new Fdatos();
+                    item.default_f_id = vec_prodF[i].default_f_id;
+                    item.name = vec_prodF[i].name;
+                    item.description = vec_prodF[i].description;
+                    item.usageunit = vec_prodF[i].usageunit;
+                    item.value = vec_prodF[i].value;
+                    item.isOptional = vec_prodF[i].isOptional;
+                    item.vecFid = vec_prodF[i].vecFid;
+                    item.n = vec_prodF[i].n;
+                    insertBlock(item);
+                }
+            }
+        }        
 }
 
 function reset_Fbox_state()
@@ -32,7 +62,11 @@ function reset_Fbox_state()
     //reset dd features
     var options = $('select[name="dd_features"]').html();
     $('select[name="dd_features"]').html(options);
-    $('select[name="dd_features"]').trigger("liszt:updated");  
+    $('select[name="dd_features"]').trigger("liszt:updated");
+    //reset dd isOptional
+    var options = $('select[name="dd_isOptional"]').html();
+    $('select[name="dd_isOptional"]').html(options);
+    $('select[name="dd_isOptional"]').trigger("liszt:updated");        
 }
 
 function reset_itemBox()
@@ -57,7 +91,7 @@ function load_values_from_Fvec(id)
 
 function checkData(data)
 {
-    if( data.default_f_id == "" || data.value == "" || data.description == "" )
+    if( data.default_f_id == "" || data.value == "" || data.description == "" || data.isOptional =="" )
     {
         alert(MSG_ADD_ITEM_ERROR);
         return false;
@@ -67,10 +101,22 @@ function checkData(data)
         }
 }
 
+function isOptional_to_text(value)
+{
+    if(value==0)
+    {
+        return 'No';
+    }
+    if(value==1)    
+    {
+        return 'Si';
+    }
+}
+
 function insertBlock(data)
 {
-    var htmlblock = '<tr name="fItem'+ data.n +'" id="f_itemBlock" class="f_itemBlock">';
-        htmlblock+= '<td>' + data.name + '</td><td>' + data.usageunit + '</td><td>' + data.value + '</td><td>' + data.description + '</td>';
+    var htmlblock = '<tr name="fItem'+ data.n +'" id="f_itemBlock" class="trBlock">';
+        htmlblock+= '<td>' + data.name + '</td><td>' + data.usageunit + '</td><td>' + data.value + '</td><td>' + data.description + '</td>' + '<td>' + isOptional_to_text(data.isOptional) + '</td>';
         htmlblock+= '<td><span><a name="btn_del" id="'+ data.n +'" class="btn red" href="'+ data.n +'">' + LABEL_DELETE + '</a>';
         htmlblock+= '</tr>';   
     $("#f_itemBox").append(htmlblock);
@@ -80,8 +126,8 @@ function deleteFitem(index)
 {
     vec_prodF[index] = "";
     var name = "fItem" + index;
-    $('div[name=' + name + ']').slideUp(500,function(){ 
-        $('div[name=' + name + ']').remove();
+    $('tr[name=' + name + ']').slideUp(500,function(){ 
+        $('tr[name=' + name + ']').remove();
     });
     copy_to_features_input();  
 }
@@ -100,6 +146,7 @@ function F_processData()
     fdata.description = $('#f_description').val();
     fdata.value = $('#f_qty').val();
     fdata.usageunit = $('#usageunit').val();
+    fdata.isOptional = $('select[name="dd_isOptional"]').val();
     fdata.vecFid = vecFid;
     if(checkData(fdata))
     {
@@ -112,8 +159,10 @@ function F_processData()
     }
 }
 
-function request_features()
+function request_features(updateSelect)
 {
+    //default value is true
+    updateSelect = (typeof updateSelect === "undefined") ? true : updateSelect;
     //img loader
     $('select[name="category_id"]').after(img_loader_2);                        
         var form_data = {
@@ -131,17 +180,20 @@ function request_features()
                 {
                     var options;
                     vecF = result;
-                    // valor vacio a proposito - para js-chosen
-                    if(result.count < 1)
-                    {
-                        options = '<option>' + MSG_QUERY_EMPTY + '</option>';
-                    }
-                    if(result.count > 0)
-                    {
-                        options = '<option>' + MSG_SELECT + '</option>';
-                        for (var i = 0; i < vecF.items.length; i++) 
+                    if(updateSelect)
+                    {    
+                        // valor vacio a proposito - para js-chosen
+                        if(result.count < 1)
                         {
-                            options += '<option value="' + i + '">' + vecF.items[i].name + '</option>';
+                            options = '<option>' + MSG_QUERY_EMPTY + '</option>';
+                        }
+                        if(result.count > 0)
+                        {
+                            options = '<option>' + MSG_SELECT + '</option>';
+                            for (var i = 0; i < vecF.items.length; i++) 
+                            {
+                                options += '<option value="' + i + '">' + vecF.items[i].name + '</option>';
+                            }
                         }
                     }
                 } 
@@ -161,10 +213,14 @@ function request_features()
     });     
 }
 
+
 // END FUNCTIONS ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 $(document).ready(function(){
         
+    //inicializa campo hidden 'features', si tiene valor los agrega al html
+    init_hidden_input();  
+
    //Input Mask
    $('#f_qty').mask('000.0', {reverse: true});
 

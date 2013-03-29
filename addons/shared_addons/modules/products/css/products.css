@@ -13,7 +13,7 @@ select
 
 select.small
 {
-    min-width: 150px;
+    width: 150px;
 }
 
 
@@ -104,7 +104,7 @@ margin-top: 15px;
 
 textarea.f_tiny{
     min-height: 20px;    
-    width: 19em;
+    width: 25em;
     height: 30px;
 }
 
@@ -135,6 +135,10 @@ table.f_table th, table.f_table td{
     width: 250px;
 }
 
+.tableBox.max{
+    width: 100%;
+}
+
 .trBlock
 {
     background: #F1F1F1;
@@ -148,7 +152,6 @@ table.f_table th, table.f_table td{
 
 .trBlock td {
 padding: 5px 10px 5px;
-line-height: 10px;
 text-align: left;
 vertical-align: middle;
 }

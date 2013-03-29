@@ -29,7 +29,7 @@ class Spaces_denominations
 
     /**
      * get
-     * Get list of items
+     * Get item
      * return array
      */
     public function get()
