@@ -6,15 +6,36 @@
 
 function get_location_name_by_id($id=0)
 {
-	$loc = '';
+	$loc->name = '';
 	if($id!=0)
 	{
-		ci()->load->library('locations');
-		$loc = ci()->locations->get_by_id($id);		
+		ci()->load->library('products');
+		$loc = ci()->products->get_location($id);		
 	}
 	return $loc->name;
 }
 
+function get_space_name_by_id($id=0)
+{
+	$loc->name = '';
+	if($id!=0)
+	{
+		ci()->load->library('products');
+		$loc = ci()->products->get_space_by_id($id);		
+	}
+	return $loc->name;
+}
+
+function get_account_by_id($id=0, $field = '', $active = 1)
+{
+	$acc = '';
+	if($id!=0 && $field!='')
+	{
+		ci()->load->library('products');
+		$acc = ci()->products->get_account($id, $active);		
+	}
+	return $acc->{$field};
+}
 
 function get_category_name_byid($id=0)
 {
@@ -36,8 +57,8 @@ function get_locationID_by_spaceID($id=0)
 	$sp = '';
 	if($id!=0)
 	{
-		ci()->load->library('spaces');
-		$sp = ci()->spaces->get_by_id($id);		
+		ci()->load->library('products');
+		$sp = ci()->products->get_space_by_id($id);		
 	}
 	return $sp->location_id;
 }
@@ -48,8 +69,8 @@ function get_account_by_spaceID($id=0, $field = '')
 	$acc = '';
 	if($id!=0 && $field!='')
 	{
-		ci()->load->library('spaces');
-		$acc = ci()->spaces->get_account_by_spaceid($id);		
+		ci()->load->library('products');
+		$acc = ci()->products->get_account_by_spaceid($id);		
 	}
 	return $acc->{$field};
 }
@@ -72,4 +93,25 @@ function get_statusText_by_status_id($id='')
 		}
 	}
 	return $stat;
+}
+
+
+
+function get_enableText_by_id($id='')
+{
+	$text = '';
+	if($id!='')
+	{
+		switch($id)
+		{
+			case 0: 
+					return lang('products_disabled_label');
+					break;
+			case 1: 
+					return lang('products_enabled_label');
+					break;
+			default: return $id;					
+		}
+	}
+	return $text;
 }

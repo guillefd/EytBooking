@@ -103,19 +103,19 @@ class Module_Products extends Module {
 	public function install()
 	{
 		$this->dbforge->drop_table('products');
-                $this->dbforge->drop_table('products_type');                
-                $this->dbforge->drop_table('products_categories');
+        $this->dbforge->drop_table('products_type');                
+        $this->dbforge->drop_table('products_categories');
 		$this->dbforge->drop_table('products_locations');                
 		$this->dbforge->drop_table('products_spaces');                 
 		$this->dbforge->drop_table('products_files');
-                $this->dbforge->drop_table('products_files_folders');               
+        $this->dbforge->drop_table('products_files_folders');               
 		$this->dbforge->drop_table('products_listprice');                
 		$this->dbforge->drop_table('products_currency');                
 		$this->dbforge->drop_table('products_usageunit');                
 		$this->dbforge->drop_table('products_taxtype');                
-                $this->dbforge->drop_table('products_spaces_shapes');                  
-                $this->dbforge->drop_table('products_spaces_layouts');                  
-                $this->dbforge->drop_table('products_spaces_facilities');                                  
+        $this->dbforge->drop_table('products_spaces_shapes');                  
+        $this->dbforge->drop_table('products_spaces_layouts');                  
+        $this->dbforge->drop_table('products_spaces_facilities');                                  
 		$this->dbforge->drop_table('products_spaces_denominations');                
 		$this->dbforge->drop_table('products_features_category');                
 		$this->dbforge->drop_table('products_features_defaults');                
@@ -147,24 +147,25 @@ class Module_Products extends Module {
 
 		$products = "
 			CREATE TABLE " . $this->db->dbprefix('products') . " (
-			  `product_id` int(11) NOT NULL auto_increment,
+			  `product_id` int(11) NOT NULL AUTO_INCREMENT,
 			  `category_id` int(11) NOT NULL,
-                          `location_id` int(11) NOT NULL default '0',                           
-			  `space_id` int(11) NOT NULL default '0',                           
-			  `name` varchar(100) collate utf8_unicode_ci NOT NULL default '',
-			  `slug` varchar(100) collate utf8_unicode_ci NOT NULL default '',                                             
-			  `intro` text collate utf8_unicode_ci NOT NULL,
-			  `body` text collate utf8_unicode_ci NOT NULL,
-			  `images` varchar(255) collate utf8_unicode_ci NOT NULL default '',                            
-			  `keywords` varchar(32) NOT NULL default '',                       
-			  `author_id` int(11) NOT NULL default '0',
+			  `account_id` int(11) NOT NULL,
+			  `location_id` int(11) NOT NULL DEFAULT '0',
+			  `space_id` int(11) NOT NULL DEFAULT '0',
+			  `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+			  `slug` varchar(100) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+			  `intro` text COLLATE utf8_unicode_ci NOT NULL,
+			  `body` text COLLATE utf8_unicode_ci NOT NULL,
+			  `images` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+			  `keywords` varchar(32) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+			  `author_id` int(11) NOT NULL DEFAULT '0',
 			  `created_on` int(11) NOT NULL,
-			  `updated_on` int(11) NOT NULL default 0,
-			  `active` tinyint NOT NULL default '1',  
-			  PRIMARY KEY  (`product_id`),
+			  `updated_on` int(11) NOT NULL DEFAULT '0',
+			  `active` tinyint(4) NOT NULL DEFAULT '1',
+			  PRIMARY KEY (`product_id`),
 			  KEY `category_id - normal` (`category_id`),
-			  KEY `space_id - normal` (`space_id`)                          
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Products';
+			  KEY `space_id - normal` (`space_id`)                        
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Products' AUTO_INCREMENT=100;
 		";
 
 		$products_locations = "
@@ -173,7 +174,7 @@ class Module_Products extends Module {
 			  `account_id` int(11) NOT NULL default '0',   
 			  `name` varchar(100) collate utf8_unicode_ci NOT NULL default '',
 			  `slug` varchar(100) collate utf8_unicode_ci NOT NULL default '',
-                          `intro` text collate utf8_unicode_ci NOT NULL,
+              `intro` text collate utf8_unicode_ci NOT NULL,
 			  `description` text collate utf8_unicode_ci NOT NULL,               
 			  `address_l1` varchar(150) collate utf8_unicode_ci NOT NULL default '',
 			  `address_l2` varchar(150) collate utf8_unicode_ci NOT NULL default '',                          
@@ -244,7 +245,7 @@ class Module_Products extends Module {
 			  `sort` int(11) NOT NULL DEFAULT 0,
 			  PRIMARY KEY (`id`),
 			  KEY `product_id - normal` (`product_id`)                            
-			) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 		";
 
 		$products_files_folders = "
@@ -256,7 +257,7 @@ class Module_Products extends Module {
 			  `date_added` int(11) NOT NULL,
 			  `sort` int(11) NOT NULL DEFAULT 0,
 			  PRIMARY KEY (`id`)
-			) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 		"; 
 
 		$products_listprice = "
@@ -289,7 +290,7 @@ class Module_Products extends Module {
 			  `conversion_rate` decimal(25,2) NOT NULL default '0.00',                          
 			  `status` enum('active','inactive') collate utf8_unicode_ci NOT NULL default 'active',
 			  PRIMARY KEY (`id`)
-			) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 		";                 
 
 		$products_usageunit = "
@@ -298,7 +299,7 @@ class Module_Products extends Module {
 			  `name` varchar(50) NOT NULL,                      
 			  `symbol` varchar(5) NOT NULL,                          
 			  PRIMARY KEY (`id`)
-			) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 		";
 
 		$products_taxtype = "
@@ -308,7 +309,7 @@ class Module_Products extends Module {
 			  `symbol` varchar(10) NOT NULL,  
 			  `tax` double NOT NULL default '0.00',                      
 			  PRIMARY KEY (`id`)
-			) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 		";                   
 
 		$products_features_categories = "
@@ -365,9 +366,9 @@ class Module_Products extends Module {
 			  `cat_product_id` int(11) NOT NULL,                                                     
 			  `name` varchar(100) collate utf8_unicode_ci NOT NULL default '',
 			  `description` text collate utf8_unicode_ci NOT NULL,
-                          `usageunit_id` int(11) NOT NULL,                                                     
-                          `value` decimal(20,2) NOT NULL default '0.00',                                                      
-                          `group` varchar(100) collate utf8_unicode_ci NOT NULL default '',                          
+              `usageunit_id` int(11) NOT NULL,                                                     
+              `value` decimal(20,2) NOT NULL default '0.00',                                                      
+              `group` varchar(100) collate utf8_unicode_ci NOT NULL default '',                          
 			  PRIMARY KEY  (`id`),
 			  KEY `group - normal` (`group`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Products Features Defaults.';
@@ -379,8 +380,9 @@ class Module_Products extends Module {
 			  `product_id` int(11) NOT NULL,                           
 			  `default_feature_id` int(11) NOT NULL,                           
 			  `description` text collate utf8_unicode_ci NOT NULL,                 
-                          `value` decimal(20,2) NOT NULL default '0.00',                            
-                          `group` varchar(100) collate utf8_unicode_ci NOT NULL default '',                                                    
+              `value` decimal(20,2) NOT NULL default '0.00',   
+              `is_optional` smallint(6) NULL,                         
+              `group` varchar(100) collate utf8_unicode_ci NOT NULL default '',                                                    
 			  PRIMARY KEY  (`id`),
 			  KEY `product_id - normal` (`product_id`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Products Features';

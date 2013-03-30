@@ -82,5 +82,10 @@ class Usageunit
         }      
         return $names;       
     }
+
+    public function extract_value_by_language($array)
+    {
+        return array_key_exists(CURRENT_LANGUAGE,$array) ? $array[CURRENT_LANGUAGE] : $array['en'];
+    }    
     
 } 

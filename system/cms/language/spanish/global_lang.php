@@ -15,6 +15,9 @@ $lang['global:action']		= 'Acción';
 $lang['global:slug'] 					= 'Slug'; #translate
 $lang['global:slug_instructions']		= 'Lowercase characters and underscores only.'; #translate
 
+$lang['global:dialog:delete_message'] 	= 'Esta seguro?';
+$lang['global:dialog:confirm'] 			= 'Confirmar';
+
 $lang['dialog.confirm']		= 'Confirmar';
 $lang['dialog.yes']		= 'Si';
 $lang['dialog.no']		= 'No';
@@ -24,10 +27,10 @@ $lang['global:select-all']		= '-- Todos --';
 $lang['global:select-any']		= '-- Cualquiera --';
 $lang['global:select-pick']		= '-- Seleccionar --';
 
-$lang['global:check-none'] 					= 'Ninguno';
-$lang['global:check-all']						= 'Todos';
+$lang['global:check-none'] 		= 'Ninguno';
+$lang['global:check-all']		= 'Todos';
 
-$lang['operators.equal']	= 'Igual a';
+$lang['operators.equal']		= 'Igual a';
 $lang['operators.not_equal']	= 'Distinto a';
 $lang['operators.less_than']	= 'Menor que';
 $lang['operators.greater_than']	= 'Mayor que';
@@ -86,3 +89,8 @@ $lang['global:delete']			= 'Eliminar';
 $lang['global:remove']			= 'Eliminar';
 
 $lang['global:keywords']		= 'Palabras claves'; 
+
+$lang['global:or']						= 'ó';
+$lang['global:and']						= 'y';
+$lang['global:at']						= 'en';
+$lang['global:filters']		= 'Filtros';

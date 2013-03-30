@@ -2,96 +2,84 @@
 
 class Products_m extends MY_Model {
 
-	protected $_table = 'products';
+// FEATURES :::::::::::::::::::::::::::::::::::::::::::
 
-	function get_all()
-	{
-		$this->db->select('products.*, products_categories.title AS category_title, products_categories.slug AS category_slug, profiles.display_name')
-			->join('products_categories', 'products.category_id = products_categories.id', 'left')
-			->join('profiles', 'profiles.user_id = products.author_id', 'left');
-
-		$this->db->order_by('created_on', 'DESC');
-
-		return $this->db->get('products')->result();
+	public function __construct()
+	{		
+		parent::__construct();
+		$this->t_products = 'products';
+		$this->t_products_f = 'products_features';
+		$this->t_products_f_defaults = 'products_features_defaults';
 	}
 
-	function get($id)
+	
+	function insert_features($array)
+	{
+		return $this->db->insert_batch($this->t_products_f, $array); 
+	}
+
+
+	function get_all_features_by_id($product_id)
+	{
+		$this->db->select('products_features.*, pfd.name, pfd.usageunit_id, ui.name as usageunit')
+		 		 ->join('products_features_defaults as pfd','products_features.default_feature_id = pfd.id')
+		 		 ->join('products_usageunit as ui','pfd.usageunit_id = ui.id');
+		$this->db->where('product_id', $product_id);
+		$this->db->order_by('is_optional', 'ASC');
+		return $this->db->get($this->t_products_f)->result();
+	}	
+
+
+	function delete_products_features($product_id)
+	{
+		return $this->db->delete('products_features', array('product_id' => $product_id)); 
+	}	
+
+
+// PRODUCT :::::::::::::::::::::::::::::::::::::::::::
+
+	function get($id, $deleted = 0)
 	{
 		return $this->db->select('products.*, profiles.display_name')
 					->join('profiles', 'profiles.user_id = products.author_id', 'left')
 					->where(array('products.product_id' => $id))
+					->where('deleted', $deleted)
 					->get('products')
 					->row();
 	}
-	
-	public function get_by($key, $value = '')
-	{
-		$this->db->select('products.*, profiles.display_name')
-			->join('profiles', 'profiles.user_id = products.author_id', 'left');
-			
-		if (is_array($key))
-		{
-			$this->db->where($key);
-		}
-		else
-		{
-			$this->db->where($key, $value);
-		}
 
-		return $this->db->get($this->_table)->row();
+
+	function update_product($id, $data)
+	{
+		$this->db->where('product_id', $id);
+		return $this->db->update('products', $data);		
+	}	
+
+
+	function delete_product($id)
+	{
+		$data = array('deleted'=>1);
+		$this->db->where('product_id', $id);
+		return $this->db->update('products', $data); 		
 	}
+
+	function undelete_product($id)
+	{
+		$data = array('deleted'=>0);
+		$this->db->where('product_id', $id);
+		return $this->db->update('products', $data); 		
+	}
+
 
 	function get_many_by($params = array())
 	{
-		$this->load->helper('date');
-
-		if (!empty($params['category']))
-		{
-			if (is_numeric($params['category']))
-				$this->db->where('products_categories.id', $params['category']);
-			else
-				$this->db->where('products_categories.slug', $params['category']);
-		}
-
-		if (!empty($params['month']))
-		{
-			$this->db->where('MONTH(FROM_UNIXTIME(created_on))', $params['month']);
-		}
-
-		if (!empty($params['year']))
-		{
-			$this->db->where('YEAR(FROM_UNIXTIME(created_on))', $params['year']);
-		}
-
-		// Is a status set?
-		if (!empty($params['status']))
-		{
-			// If it's all, then show whatever the status
-			if ($params['status'] != 'all')
-			{
-				// Otherwise, show only the specific status
-				$this->db->where('status', $params['status']);
-			}
-		}
-
-		// Nothing mentioned, show live only (general frontend stuff)
-		else
-		{
-			$this->db->where('status', 'live');
-		}
-
-		// By default, dont show future posts
-		if (!isset($params['show_future']) || (isset($params['show_future']) && $params['show_future'] == FALSE))
-		{
-			$this->db->where('created_on <=', now());
-		}
-
 		// Limit the results based on 1 number or 2 (2nd is offset)
 		if (isset($params['limit']) && is_array($params['limit']))
 			$this->db->limit($params['limit'][0], $params['limit'][1]);
 		elseif (isset($params['limit']))
 			$this->db->limit($params['limit']);
-
+		//only not deleted
+		$this->db->where('deleted', 0);
 		return $this->get_all();
 	}
 	
@@ -100,57 +88,72 @@ class Products_m extends MY_Model {
 	function count_by($params = array())
 	{
 		$this->db->join('products_categories', 'products.category_id = products_categories.id', 'left');
-
-		if (!empty($params['category']))
-		{
-			if (is_numeric($params['category']))
-				$this->db->where('products_categories.id', $params['category']);
-			else
-				$this->db->where('products_categories.slug', $params['category']);
-		}
-
-		if (!empty($params['month']))
-		{
-			$this->db->where('MONTH(FROM_UNIXTIME(created_on))', $params['month']);
-		}
-
-		if (!empty($params['year']))
-		{
-			$this->db->where('YEAR(FROM_UNIXTIME(created_on))', $params['year']);
-		}
-
-		// Is a status set?
-		if (!empty($params['status']))
-		{
-			// If it's all, then show whatever the status
-			if ($params['status'] != 'all')
-			{
-				// Otherwise, show only the specific status
-				$this->db->where('status', $params['status']);
-			}
-		}
-
-		// Nothing mentioned, show live only (general frontend stuff)
-		else
-		{
-			$this->db->where('status', 'live');
-		}
-
+		//only not deleted
+		$this->db->where('deleted', 0);
 		return $this->db->count_all_results('products');
 	}
 
-	function update($id, $input)
+
+		/**
+	 * Searches accounts posts based on supplied data array
+	 * @param $data array
+	 * @return array
+	 */
+	function search($mode,$data = array())
 	{
-		$input['updated_on'] = now();
+	    $query = "SELECT * FROM (`default_".$this->t_products."`)";
+            //deleted
+            if (array_key_exists('deleted', $data) && $data['deleted']==1) 
+            {
+                $query.= ' WHERE (`deleted` = 0 OR `deleted` = 1)';                
+            }
+            else
+            	{
+            		$query.= ' WHERE `deleted` = 0';   
+            	}	    
+            if (array_key_exists('keywords', $data))
+            {
+                $query.= " AND (`name` LIKE '%".$data['keywords']."%')";
+            }	    
+            // Solo cuentas activas
+            if (array_key_exists('active', $data) )
+            {
+                $query.= ' AND `active` = '.$data['active'];                
+            }
+            if (array_key_exists('account_id', $data) && $data['account_id']!=0)
+            {
+                $query.= ' AND `account_id` = '.$data['account_id'];
+            }         
+            if (array_key_exists('category_id', $data) && $data['category_id']!=0)
+            {
+                $query.= ' AND `category_id` = '.$data['category_id'];
+            } 
+            //Ordenar alfabeticamente
+            $query.= " ORDER BY `name` ASC";            
+            // Limit the results based on 1 number or 2 (2nd is offset)
+            if (isset($data['pagination']['limit']) && is_array($data['pagination']['limit']))
+            {
+                    $query.= " LIMIT ".$data['pagination']['limit'][1].", ".$data['pagination']['limit'][0];
+            }        
+            elseif (isset($data['pagination']['limit']))
+            {    
+                    $query.= " LIMIT ".$data['pagination']['limit'];
+            }        
+            //fire query
+            $q = $this->db->query($query);         
+            if($mode =='counts')
+            {                
+                return $q->num_rows;
+            }
+            else
+                {
+                    return $q->result();
+                }
+	} 
 
-		return parent::update($id, $input);
-	}
 
-	function publish($id = 0)
-	{
-		return parent::update($id, array('status' => 'live'));
-	}
 
+// AUX ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 	function check_product_exists($field, $value = '', $id = 0)
 	{

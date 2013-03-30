@@ -455,6 +455,34 @@ class Admin_Spaces extends Admin_Controller {
             
             echo json_encode($respond);    
         }
+
+
+        /**
+         * Returns json response with spaces list, of given locationid
+         */
+        public function spaces_by_locationid_ajax()
+        {
+            $respond->spaces = array();
+            $respond->count = 0;
+            if($this->input->post('location_id') && $this->input->post('limit'))
+            {             
+                $respond->status = 'OK';  
+                $post_data['location_id'] = $this->input->post('location_id');
+                $post_data['pagination']['limit'] = $this->input->post('limit');
+                $post_data['active'] = 1;
+                if ($result = $this->products_spaces_m->search('results',$post_data))
+                {
+                    $respond->status = 'OK';
+                    foreach ($result as $space)
+                    {
+                                    //$this->_convertIDtoText($space);
+                                    $respond->spaces[] = $space;
+                                    $respond->count++;
+                    }
+                }                                   
+            }            
+            echo json_encode($respond);    
+        }           
         
         
 // CHECK ID ::::::::::::::::::::::::::::::::::::::::::::::::::

@@ -167,22 +167,21 @@ class Admin_Locations extends Admin_Controller {
 		// Create pagination links
 		$total_rows = $this->products_locations_m->search('counts');
 		$pagination = create_pagination('admin/products/locations/index', $total_rows, 10, 5);
-                $post_data['pagination']  = $pagination;
-                $post_data['active'] = 1; //only active accounts - IMPROVE!!!                         			
+        $post_data['pagination']  = $pagination;
+        $post_data['active'] = 1; //only active accounts - IMPROVE!!!                         			
 		// Using this data, get the relevant results
 		$locations = $this->products_locations_m->search('results',$post_data);
-                //CONVERT ID TO TEXT
-                $this->_convertIDtoText($locations);
-                $this->_formatValuesForView($locations);
-
+        //CONVERT ID TO TEXT
+        $this->_convertIDtoText($locations);
+        $this->_formatValuesForView($locations);
 		$this->template
-			->title($this->module_details['name'], lang('location:list_title'))
-			->set('locations', $locations)
-			->set('pagination', $pagination)                        
-                        ->append_js('module::locations_index.js')
-                        ->append_js('module::model.js')                        
-                        ->append_css('module::jquery/jquery.autocomplete.css')
-			->build('admin/locations/index', $this->data);
+				->title($this->module_details['name'], lang('location:list_title'))
+				->set('locations', $locations)
+				->set('pagination', $pagination)                        
+	            ->append_js('module::locations_index.js')
+	            ->append_js('module::model.js')                        
+	            ->append_css('module::jquery/jquery.autocomplete.css')
+				->build('admin/locations/index', $this->data);
 	}
 	
 	/**
@@ -651,20 +650,46 @@ class Admin_Locations extends Admin_Controller {
             $respond->count = 0;
             if($this->input->get('term'))
             {             
-		$post_data['keywords'] = $this->input->get('term');
-                $post_data['pagination']['limit'] = $this->input->get('limit');
-                $post_data['active'] = 1;
-                if ($result = $this->products_locations_m->search('results',$post_data))
-		{
-			foreach ($result as $location)
-			{
-                            $this->_convertIDtoText($location);
-                            $respond->locations[] = $location;
-                            $respond->count++;
-			}
-		}                                   
-            }
-            
+				$post_data['keywords'] = $this->input->get('term');
+	            $post_data['pagination']['limit'] = $this->input->get('limit');
+	            $post_data['active'] = 1;
+	            if ($result = $this->products_locations_m->search('results',$post_data))
+				{
+					foreach ($result as $location)
+					{
+		                            $this->_convertIDtoText($location);
+		                            $respond->locations[] = $location;
+		                            $respond->count++;
+					}
+				}                                   
+            }            
             echo json_encode($respond);    
-        }        
+        }      
+
+        /**
+         * Returns json response with locations list, of given accountid
+         */
+        public function locations_by_accountid_ajax()
+        {
+            $respond->locations = array();
+            $respond->count = 0;
+            if($this->input->post('account_id') && $this->input->post('limit'))
+            {             
+				$respond->status = 'OK';            	
+				$post_data['account_id'] = $this->input->post('account_id');
+	            $post_data['pagination']['limit'] = $this->input->post('limit');
+	            $post_data['active'] = 1;
+	            if ($result = $this->products_locations_m->search('results',$post_data))
+				{
+					foreach ($result as $location)
+					{
+		                            $this->_convertIDtoText($location);
+		                            $respond->locations[] = $location;
+		                            $respond->count++;
+					}
+				}                                   
+            }            
+            echo json_encode($respond);    
+        }            
 }
+

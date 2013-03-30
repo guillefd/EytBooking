@@ -13,6 +13,7 @@
     background: white url('../../img/indicator.gif') right center no-repeat; 
 }
 .ui-autocomplete-input { width: 25em; }
+.ui-autocomplete-input.medium { width: 14em; }
 /* workarounds */
 * html .ui-autocomplete { width:1px; } /* without this, the menu expands to 100% in IE6 */
 

@@ -3,10 +3,10 @@
 //adicion de features en listado
 
 // global VAR
-var vecF = new Object();
-var vecFid;
-var vec_prodF = new Array();
-var Nitem = -1;
+var vecF = new Object(); //array de features default
+var vecFid; //id del array de features default
+var vec_prodF = new Array(); //array de features seleccionados
+var Nitem = -1; // numero de item
 
 // FUNCTIONS ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -48,6 +48,7 @@ function init_hidden_input()
                     insertBlock(item);
                 }
             }
+            Nitem = i;
         }        
 }
 
@@ -159,10 +160,8 @@ function F_processData()
     }
 }
 
-function request_features(updateSelect)
+function request_features()
 {
-    //default value is true
-    updateSelect = (typeof updateSelect === "undefined") ? true : updateSelect;
     //img loader
     $('select[name="category_id"]').after(img_loader_2);                        
         var form_data = {
@@ -180,20 +179,17 @@ function request_features(updateSelect)
                 {
                     var options;
                     vecF = result;
-                    if(updateSelect)
-                    {    
-                        // valor vacio a proposito - para js-chosen
-                        if(result.count < 1)
+                    // valor vacio a proposito - para js-chosen
+                    if(result.count < 1)
+                    {
+                        options = '<option>' + MSG_QUERY_EMPTY + '</option>';
+                    }
+                    if(result.count > 0)
+                    {
+                        options = '<option>' + MSG_SELECT + '</option>';
+                        for (var i = 0; i < vecF.items.length; i++) 
                         {
-                            options = '<option>' + MSG_QUERY_EMPTY + '</option>';
-                        }
-                        if(result.count > 0)
-                        {
-                            options = '<option>' + MSG_SELECT + '</option>';
-                            for (var i = 0; i < vecF.items.length; i++) 
-                            {
-                                options += '<option value="' + i + '">' + vecF.items[i].name + '</option>';
-                            }
+                            options += '<option value="' + i + '">' + vecF.items[i].name + '</option>';
                         }
                     }
                 } 

@@ -139,3 +139,22 @@ function doAjaxQuery(keyword_filter, account_filter, city_filter, link)
         }
     });         
 }
+
+
+
+
+$(document).ready(function(){ 
+   
+        var account_filter = $('input[name="f_account_id"]')
+        var city_filter = $('input[name="f_city_id"]')
+        var keyword_filter = $('input[name="f_keywords"]');
+        $('#btnCancel').attr('class','cancel');
+   
+        //input filter action - keypress
+        keyword_filter.keypress(function() {
+            $('#loader').remove();
+            keyword_filter.after(img_loader_2);  
+            doAjaxQuery(keyword_filter, account_filter, city_filter, target_filter);            
+        });
+        
+});         

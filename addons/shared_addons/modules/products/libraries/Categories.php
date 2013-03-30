@@ -117,7 +117,7 @@ class Categories
             foreach($result as $reg)
             {              
                 $vec_name = $this->explode_string_to_array($reg->title);
-                $vec[$reg->id] = extract_value_by_language($vec_name);
+                $vec[$reg->id] = $this->extract_value_by_language($vec_name);
             }
         }
         return $vec;

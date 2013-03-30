@@ -187,6 +187,16 @@ div.btn_right{
     float: right;
 }
 
+
+
+table tr.deleted{
+    background-color: #fdf1f2;
+    color: #e23545;
+} 
+
+
+
+
 /* HACK for ADMIN MENU ITEMS BAR*/
 /*.sections_bar ul li.current a, .sections_bar ul li a:hover {
     color: #151f3c;
