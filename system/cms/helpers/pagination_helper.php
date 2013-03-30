@@ -15,7 +15,7 @@ if (!function_exists('create_pagination'))
 	 * @param string $uri The current URI.
 	 * @param int $total_rows The total of the items to paginate.
 	 * @param int|null $limit How many to show at a time.
-	 * @param int $uri_segment Segment number which to read.
+	 * @param int $uri_segment The current page.
 	 * @param boolean $full_tag_wrap Option for the Pagination::create_links()
 	 * @return array The pagination array. 
 	 * @see Pagination::create_links()

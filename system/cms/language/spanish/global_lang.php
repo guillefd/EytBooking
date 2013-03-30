@@ -1,27 +1,23 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-// ADDED MANUALLY :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-$lang['global:filters']		= 'Filtro'; 
-$lang['global:dialog:delete_message'] 	= 'Esta seguro que desea proceder con la eliminación?';
-
-// ADDED MANUALLY :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
 $lang['global:control-panel']		= 'Panel de Control';
 $lang['global:profile']					= 'Perfil';
 
-$lang['title_label']		= 'Título';
+$lang['global:yes'] = 'Si';
+$lang['global:no'] = 'No';
+
+$lang['global:title']		= 'Título';
 $lang['name_label']		= 'Nombre';
 $lang['desc_label']		= 'Descripción';
 $lang['version_label']		= 'Versión';
 $lang['global:author']		= 'Autor';
 $lang['global:action']		= 'Acción';
-$lang['global:slug'] 					= 'Slug';
-$lang['global:user'] 					= 'Usuario';
+$lang['global:slug'] 					= 'Slug'; #translate
+$lang['global:slug_instructions']		= 'Lowercase characters and underscores only.'; #translate
 
-$lang['global:dialog:confirm'] 			= 'Confirmar';
-
-$lang['global:yes'] = 'Si';
-$lang['global:no'] = 'No';
+$lang['dialog.confirm']		= 'Confirmar';
+$lang['dialog.yes']		= 'Si';
+$lang['dialog.no']		= 'No';
 
 $lang['global:select-none']		= '-- Ninguno --';
 $lang['global:select-all']		= '-- Todos --';
@@ -31,10 +27,10 @@ $lang['global:select-pick']		= '-- Seleccionar --';
 $lang['global:check-none'] 					= 'Ninguno';
 $lang['global:check-all']						= 'Todos';
 
-$lang['global:operators.equal']	= 'Igual a';
-$lang['global:operators.not_equal']	= 'Distinto a';
-$lang['global:operators.less_than']	= 'Menor que';
-$lang['global:operators.greater_than']	= 'Mayor que';
+$lang['operators.equal']	= 'Igual a';
+$lang['operators.not_equal']	= 'Distinto a';
+$lang['operators.less_than']	= 'Menor que';
+$lang['operators.greater_than']	= 'Mayor que';
 
 $lang['navigation_headline']	= 'Navegación';
 $lang['breadcrumb_base_label']	= 'Inicio';
@@ -51,8 +47,7 @@ $lang['note_label']		= 'Advertencia';
 $lang['success_label']		= 'Éxito';
 
 $lang['login_title']		= 'Iniciar sesión';
-$lang['global:fatal_error'] 			= 'Fatal error, is CMS installed?';
-$lang['global:demo_restrictions'] 		= 'Algunas funcionalidades deshabilitadas en versión DEMO';
+$lang['cms_fatal_error']	= 'Error grave. ¿El CMS está instalado?';
 
 $lang['login_error_label']	= 'Error al iniciar sesión';
 $lang['forgot_password_label']	= '¿Olvidó su contraseña?';
@@ -89,5 +84,5 @@ $lang['global:edit']			= 'Editar';
 $lang['global:empty']					= 'Vaciar'; 
 $lang['global:delete']			= 'Eliminar';
 $lang['global:remove']			= 'Eliminar';
-$lang['global:remove']			= 'Eliminar';
 
+$lang['global:keywords']		= 'Palabras claves'; 

@@ -1,98 +1,101 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-/**
- * PyroCMS
- *
- * An open source CMS based on CodeIgniter
- *
- * @package		PyroCMS
- * @author		PyroCMS Dev Team
- * @license		Apache License v2.0
- * @link		http://pyrocms.com
- * @since		Version 1.0-dev
- * @filesource
- */
+// General
+$lang['files:files_title']					= 'Berkas';
+$lang['files:fetching']						= 'Menerima data...';
+$lang['files:fetch_completed']				= 'Selesai';
+$lang['files:save_failed']					= 'Maaf. Perubahan tidak dapat disimpan';
+$lang['files:item_created']					= '"%s" telah dibuat';
+$lang['files:item_updated']					= '"%s" telah diperbaharui';
+$lang['files:item_deleted']					= '"%s" telah dihapus';
+$lang['files:item_not_deleted']				= '"%s" tidak dapat dihapus';
+$lang['files:item_not_found']				= 'Maaf. "%s" tidak ditemukan';
+$lang['files:sort_saved']					= 'Urutan disimpan';
+$lang['files:no_permissions']				= 'Anda tidak memiliki izin';
+
+// Labels
+$lang['files:activity']						= 'Aktivitas';
+$lang['files:places']						= 'Tempat';
+$lang['files:back']							= 'Kembali';
+$lang['files:forward']						= 'Maju';
+$lang['files:start']						= 'Mulai Mengunggah';
+$lang['files:details']						= 'Detail';
+$lang['files:id']							= 'ID'; #translate
+$lang['files:name']							= 'Nama';
+$lang['files:slug']							= 'Slug';
+$lang['files:path']							= 'Path';
+$lang['files:added']						= 'Tanggal Ditambahkan';
+$lang['files:width']						= 'Lebar';
+$lang['files:height']						= 'Tinggi';
+$lang['files:ratio']						= 'Rasio';
+$lang['files:full_size']					= 'Ukuran Penuh';
+$lang['files:filename']						= 'Nama Berkas';
+$lang['files:filesize']						= 'Ukuran Berkas';
+$lang['files:download_count']				= 'Hitungan Unduh';
+$lang['files:download']						= 'Unduh';
+$lang['files:location']						= 'Lokasi';
+$lang['files:description']					= 'Deskripsi';
+$lang['files:container']					= 'kontainer';
+$lang['files:bucket']						= 'Baskom'; // no proper word if it's translated literally
+$lang['files:check_container']				= 'Cek Validitas';
+$lang['files:search_message']				= 'Ketik dan Tekan Enter';
+$lang['files:search']						= 'Cari';
+$lang['files:synchronize']					= 'Sinkronisasikan';
+$lang['files:uploader']						= 'Letakkan berkas disini <br />atau<br />Klik untuk memilih berkas';
+
+// Context Menu
+$lang['files:open']							= 'Buka';
+$lang['files:new_folder']					= 'Folder Baru';
+$lang['files:upload']						= 'Unggah';
+$lang['files:rename']						= 'Ganti Nama';
+$lang['files:delete']						= 'Hapus';
+$lang['files:edit']							= 'Edit';
+$lang['files:details']						= 'Detail';
+
+// Folders
+
+$lang['files:no_folders']					= 'Berkas dan folder diatur sebagaimana halnya bila ada di desktop Anda. Klik kanan di area di bawah pesan ini untuk membuat folder pertama. Kemudian klik kanan pada folder untuk mengganti nama, menghapus, mengunggah berkas ke dalamnya, atau mengganti detail menautkannya ke lokasi cloud.';
+$lang['files:no_folders_places']			= 'Folder yang Anda buatakan tampil disini dalam bentuk diagram pohon yang bisa dibuka dan ditutup. Klik pada tautan "Tempat" untuk melihat folder utama.';
+$lang['files:no_folders_wysiwyg']			= 'No folders have been created yet';
+$lang['files:new_folder_name']				= 'Folder Baru';
+$lang['files:folder']						= 'Folder';
+$lang['files:folders']						= 'Folder';
+$lang['files:select_folder']				= 'Pilih Folder';
+$lang['files:subfolders']					= 'Subfolder';
+$lang['files:root']							= 'Dasar';
+$lang['files:no_subfolders']				= 'Tidak Ada Subfolder';
+$lang['files:folder_not_empty']				= 'Anda harus menghapus konten dari "%s" terlebih dahulu';
+$lang['files:mkdir_error']					= 'Kami tidak dapat membuat %s. Anda harus membuatnya secara manual';
+$lang['files:chmod_error']					= 'Direktori unggahan tidak dapat ditulisi. Modenya mesti 0777';
+$lang['files:location_saved']				= 'Lokasi folder telah disimpan';
+$lang['files:container_exists']				= '"%s" sudah ada. Simpan untuk menautkan kontennya ke folder ini';
+$lang['files:container_not_exists']			= '"%s" tidak ada di akun Anda. Simpan dan kami akan mencoba membuatnya';
+$lang['files:error_container']				= '"%s" tidak dapat dibuat dan kami tidak dapat menemukan penyebabnya';
+$lang['files:container_created']			= '"%s" sudah dibuat dan sekarang sudah tertaut ke folder ini';
+$lang['files:unwritable']					= '"%s" tidak dapat ditulisi, silakan set permissionnya ke 0777';
+$lang['files:specify_valid_folder']			= 'Anda harus menspesifikkan foledr yang benar untuk mengunggah berkas ke dalamnya';
+$lang['files:enable_cdn']					= 'Anda harus menyalakan CDN untuk "%s" via kontrol panel Rackspace Anda sebelum kami mensinkronkannya';
+$lang['files:synchronization_started']		= 'Memulai sinkronisasi';
+$lang['files:synchronization_complete']		= 'Sinkronisasi untuk "%s" telah selesai';
+$lang['files:untitled_folder']				= 'Folder Baru';
 
 // Files
-
-// Titles
-$lang['files.files_title']					= 'File';
-$lang['files.upload_title']					= 'Upload File';
-$lang['files.edit_title']					= 'Edit file "%s"';
-
-// Labels
-$lang['files.download_label']				= 'Download';
-$lang['files.upload_label']					= 'Upload';
-$lang['files.description_label']			= 'Deskripsi';
-$lang['files.type_label']					= 'Tipe';
-$lang['files.file_label']					= 'File';
-$lang['files.filename_label']				= 'Nama File';
-$lang['files.filter_label']					= 'Saring';
-$lang['files.loading_label']				= 'Memuat...';
-$lang['files.name_label']					= 'Nama';
-
-$lang['files.dropdown_select']				= '-- Pilih Folder untuk Mengupload --';
-$lang['files.dropdown_no_subfolders']		= '-- Tidak ada --';
-$lang['files.dropdown_root']				= '-- Pangkal --';
-
-$lang['files.type_a']						= 'Audio';
-$lang['files.type_v']						= 'Video';
-$lang['files.type_d']						= 'Dokumen';
-$lang['files.type_i']						= 'Gambar';
-$lang['files.type_o']						= 'Lainnya';
-
-$lang['files.display_grid']					= 'Grid';
-$lang['files.display_list']					= 'Daftar';
-
-// Messages
-$lang['files.create_success']				= '"%s" berhasil diupload.';
-$lang['files.create_error']					= 'Terjadi kesalahan.';
-$lang['files.edit_success']					= 'File berhasil disimpan.';
-$lang['files.edit_error']					= 'Terjadi kesalahan ketika mencoba menyimpan file.';
-$lang['files.delete_success']				= 'File telah dihapus.';
-$lang['files.delete_error']					= 'File tidak dapat dihapus.';
-$lang['files.mass_delete_success']			= '%d dari %d file berhasil dihapus. Diantaranya "%s dan %s"';
-$lang['files.mass_delete_error']			= 'Terjadi kesalahan ketika mencoba menghapus %d dari %d file, diantaranya "%s dan %s".';
-$lang['files.upload_error']					= 'File harus terupload dahulu.';
-$lang['files.invalid_extension']			= 'File harus memiliki exstensi yang valid.';
-$lang['files.not_exists']					= 'Folder yang salah telah dipilih.';
-$lang['files.no_files']						= 'Tidak ada file.';
-$lang['files.no_permissions']				= 'Anda tidak memiliki izin untuk melihat file modul.';
-$lang['files.no_select_error'] 				= 'Anda harus memilih file terlebih dahulu, permintaan ditolak.';
-
-// File folders
-
-// Titles
-$lang['file_folders.folders_title']			= 'Folder File';
-$lang['file_folders.manage_title']			= 'Atur Folder';
-$lang['file_folders.create_title']			= 'Folder Baru';
-$lang['file_folders.delete_title']			= 'Konfirmasi Penghapusan';
-$lang['file_folders.edit_title']			= 'Edit folder "%s"';
-
-// Labels
-$lang['file_folders.folders_label']			= 'Folder';
-$lang['file_folders.folder_label']			= 'Folder';
-$lang['file_folders.subfolders_label']		= 'Sub-Folder';
-$lang['file_folders.parent_label']			= 'Induk';
-$lang['file_folders.name_label']			= 'Nama';
-$lang['file_folders.slug_label']			= 'URL Slug';
-$lang['file_folders.created_label']			= 'Dibuat pada';
-
-// Messages
-$lang['file_folders.create_success']		= 'Folder telah disimpan.';
-$lang['file_folders.create_error']			= 'Terjadi kesalahan ketika hendak membuat folder.';
-$lang['file_folders.duplicate_error']		= 'Folder bernama "%s" sudah ada.';
-$lang['file_folders.edit_success']			= 'Folder berhasil disimpan.';
-$lang['file_folders.edit_error']			= 'Terjadi kesalahan ketika hendak menyimpan perubahan.';
-$lang['file_folders.confirm_delete']		= 'Anda yakin akan menghapus folder ini, beserta semua file dan subfolder didalamnya?';
-$lang['file_folders.delete_mass_success']	= '%d dari %d folder telah berhasi dihapus, yakni "%s dan %s.';
-$lang['file_folders.delete_mass_error']		= 'Terjadi kesalahan ketika hendak menghapus %d dari %d folder, yakni "%s dan %s".';
-$lang['file_folders.delete_success']		= 'Folder "%s" telah dihapus.';
-$lang['file_folders.delete_error']			= 'Terjadi kesalahan ketika hendak menghapus folder "%s".';
-$lang['file_folders.not_exists']			= 'Folder yang salah telah dipilih.';
-$lang['file_folders.no_subfolders']			= 'Tidak ada';
-$lang['file_folders.no_folders']			= 'File Anda diurutkan berdasarkan folders, saat ini Anda tidak punya satupun folder yang siap.';
-$lang['file_folders.mkdir_error']			= 'Tidak dapat membuat direktori upload/file';
-$lang['file_folders.chmod_error']			= 'Tidak dapat chmod direktori upload/file';
+$lang['files:no_files']						= 'Tidak ada berkas';
+$lang['files:file_uploaded']				= '"%s" sudah diunggah';
+$lang['files:unsuccessful_fetch']			= 'Tidak dapat memuat "%s". Anda yakin ini adalah berkas untuk publik?';
+$lang['files:invalid_container']			= '"%s" nampaknya bukan kontainer yang valid.';
+$lang['files:no_records_found']				= 'Tidak ditemukan satu berkas pun';
+$lang['files:invalid_extension']			= '"%s" memiliki ekstensi berkas yang tidak diperbolehkan';
+$lang['files:upload_error']					= 'Unggah berkas gagal';
+$lang['files:description_saved']			= 'Deskripsi berkas sudah disimpan';
+$lang['files:file_moved']					= '"%s" sudah dipindahkan';
+$lang['files:exceeds_server_setting']		= 'Server tidak dapat menangani besarnya berkas ini';
+$lang['files:exceeds_allowed']				= 'Berkas melebihi batas ukuran maksimal yang diperbolehkan';
+$lang['files:file_type_not_allowed']		= 'Tipe berkas ini tidak diperbolehkan';
+$lang['files:type_a']						= 'Audio';
+$lang['files:type_v']						= 'Video';
+$lang['files:type_d']						= 'Dokumen';
+$lang['files:type_i']						= 'Gambar';
+$lang['files:type_o']						= 'Lainnya';
 
 /* End of file files_lang.php */
