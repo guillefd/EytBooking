@@ -1,0 +1,36 @@
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="span3">
+                <ul class="nav nav-list">
+                    <li class="nav-header">Salas de Reunión y Capacitacion</li>
+        {{ navigation:links group="sidebar-alqsala" class="active" }} 
+                </ul>            
+            </div>
+            <div class="span3">
+                <ul class="nav nav-list">
+                    <li class="nav-header">Videoconferencias</li>
+        {{ navigation:links group="sidebar-vc" class="active" }}
+                </ul>            
+            </div>
+            <div class="span3">
+                <ul class="nav nav-list">
+                    <li class="nav-header">Sala Virtual</li>
+        {{ navigation:links group="sidebar-salavirtual" class="active" }}  
+                </ul>            
+            </div>        
+            <div class="span3">
+                <ul class="nav nav-list">
+                    <li class="nav-header">Eventos & Tecnologia</li>
+                    <li>Buenos Aires, Argentina</li>
+                    <li><abbr title="Teléfono">Tel:</abbr>{{ variables:phone_number }}</li>
+                    <li>info @ eytech.com.ar</li>
+                </ul>                          
+            </div>        
+        </div>
+        <hr>
+        <p class="pull-right"><a href="#">Ir arriba</a></p>
+        <p><small><?= date('Y') ?> &middot; &copy; {{ settings:site_name }} <i class="icon-map-marker"></i> {{ settings:site_slogan }} </small></p>            
+    </div>
+</footer>

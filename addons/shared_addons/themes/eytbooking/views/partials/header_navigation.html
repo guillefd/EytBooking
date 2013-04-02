@@ -1,0 +1,68 @@
+<div class="navbar-wrapper">
+    <div class="container">
+        <div class="navbar">
+            <div class="container">
+                <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>                
+                <div class="navbar-inner">
+                    <a class="brand" href="#">{{ theme:image file="logo_ads_transp_sm.png" }}</a>
+                    <div class="nav-collapse collapse">
+                        <ul class="nav">
+                            {{ navigation:links group="header" class="active" }}
+                        </ul>
+                    </div>
+                        <p class="social_nav pull-right">
+                            <span class='st_facebook_large' displayText='Facebook'></span>
+                            <span class='st_twitter_large' displayText='Tweet'></span>
+                            <span class='st_linkedin_large' displayText='LinkedIn'></span>
+                            <span class='st_googleplus_large' displayText='Google +'></span>
+                            <span class='st_email_large' displayText='Email'></span>                
+                        </p>        
+                </div>           
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Carousel
+    ================================================== -->
+    <div id="myCarousel" class="carousel slide">
+      <div class="carousel-inner">
+        <div class="item active">
+          {{ theme:image file="carousel/slide-01a.jpg" }}
+          <div class="container">
+            <div class="carousel-caption">
+              <h1>Example headline.</h1>
+              <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam.</p>
+              <a class="btn btn-primary" href="#">Sign up today</a>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          {{ theme:image file="carousel/slide-02a.jpg" }}
+          <div class="container">
+            <div class="carousel-caption">
+              <h1>Another example headline.</h1>
+              <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam..</p>
+              <a class="btn btn-primary" href="#">Learn more</a>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          {{ theme:image file="carousel/slide-03a.jpg" }}
+          <div class="container">
+            <div class="carousel-caption">
+              <h1>One more for good measure.</h1>
+              <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam.</p>
+              <a class="btn btn-primary" href="#">Browse gallery</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+      <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
+    </div><!-- /.carousel -->
