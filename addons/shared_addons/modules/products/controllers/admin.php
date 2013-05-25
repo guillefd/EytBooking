@@ -25,7 +25,7 @@ class Admin extends Admin_Controller
 		$this->load->model(array('products_m'));
         $this->load->helper(array('string', 'date','records_by_id', 'products','products_dropdown'));                
 		$this->lang->load(array('products', 'categories', 'locations','features','spaces'));
-		$this->load->library(array('form_validation','features_categories', 'usageunit', 'product_type','categories'));            
+		$this->load->library(array('form_validation','features_categories', 'usageunit', 'product_type','categories', 'files/files','dropzone'));            
 		$this->data->hours = array_combine($hours = range(0, 23), $hours);
 		$this->data->minutes = array_combine($minutes = range(0, 59), $minutes);
         $this->template->append_css('module::products.css')
@@ -114,16 +114,24 @@ class Admin extends Admin_Controller
 				$product->$field['field'] = set_value($field['field']);
 			}
 		}               
-        $this->data = gen_dropdown_list();               
+        $this->data = gen_dropdown_list(); 
+
+       	//load path for Dropzones assets
+	    $this->dropzone->loadAssetPath();
+		
 		$this->template
-			->title($this->module_details['name'], lang('products_create_title'))
+			->title($this->module_details['name'], lang('products_create_title'))     	
+			->append_css('module::jquery/jquery.tagsinput.css')
+            ->append_css('module::jquery/jquery.autocomplete.css')
+            ->append_css('dropzoneCSS::dropzone.css')
 			->append_js('module::jquery/jquery.tagsinput.js')
             ->append_js('module::jquery/jquery.mask.min.js')                        
 			->append_js('module::products_form.js')
             ->append_js('module::products_form_features.js')
-			->append_css('module::jquery/jquery.tagsinput.css')
-            ->append_css('module::jquery/jquery.autocomplete.css')                         
+        	->append_js('dropzoneJS::dropzone.min.js')
+        	->append_js('dropzoneJS::main.js')
 			->set('product', $product)
+			->set('dzForm', $this->dropzone->dzFormMarkup('admin/products/filetempupload_ajax'))
 			->build('admin/products/form',$this->data);
 	}
 
@@ -387,6 +395,40 @@ class Admin extends Admin_Controller
 		                        ->append_js('module::locations_index.js')
 		                        ->append_css('module::jquery/jquery.autocomplete.css')
 		                        ->build('admin/products/tables/products', $this->data);
+	}
+
+
+	public function filetemp_upload()
+	{
+		$tempfolderid = $this->check_temp_folder();
+		echo json_encode( Files::upload($tempfolderid) );
 	}	
+
+    /**
+     * [check_temp_folder description]
+     * @return [type] [description]
+     */
+	public function check_temp_folder()
+	{
+		$tempfoldername = 'Temp';
+		$tree = Files::folder_tree();
+		$notfound = true;
+		$i = 0;
+		while($notfound && $i <= count($tree) )
+		{
+			if( $tree[$i-1]['name'] == $tempfoldername )
+			{
+				$notfound = false;
+				$tempfolderid = $tree[$i-1]['id'];
+			}	
+			$i++;
+		}
+		if($notfound)
+		{
+			$result = Files::create_folder(0, $tempfoldername );
+			$tempfolderid = $result['data']['id'];	
+		}
+		return $tempfolderid;
+	}
 
 }
