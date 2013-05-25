@@ -22,14 +22,14 @@
 	<?php endif; ?>
 </section>
 <section class="item">
-<?php echo form_open(uri_string(), 'class="crud"'); ?>
 <div class="tabs">
 	<ul class="tab-menu">
 		<li><a href="#products-setup-tab"><span><?php echo lang('products_setup_label'); ?></span></a></li>
 		<li><a href="#products-features-tab"><span><?php echo lang('products_features_label'); ?></span></a></li>                
 		<li><a href="#products-images-tab"><span><?php echo lang('products_images_label'); ?></span></a></li>        
 	</ul>
-	
+
+	<?php echo form_open(uri_string(), 'class="crud"'); ?>
 	<!-- Info tab -->
 	<div class="form_inputs" id="products-setup-tab">		
 		<fieldset>	
@@ -126,18 +126,21 @@
 			</li>                                                                      
 		</ul>		
 		</fieldset>	                        
-        </div>                    
-	<!-- Info images -->
+        </div>  
+<?php echo form_close(); ?>
+
+
+<!-- Info images -->
+
         <div class="form_inputs" id="products-images-tab">
-            <fieldset>	    	            
-                <ul>		
-                </ul>		
+            <fieldset> 	    
+	            <?php echo $dzForm; ?>	   	
             </fieldset>	
         </div>        
 </div>
 <div class="buttons float-right padding-top">
 	<?php $this->load->view('admin/partials/buttons', array('buttons' => array('save', 'save_exit', 'cancel'))); ?>
 </div>
-<?php echo form_close(); ?>
+
 </section>
 
