@@ -118,7 +118,7 @@ function insertBlock(data)
 {
     var htmlblock = '<tr name="fItem'+ data.n +'" id="f_itemBlock" class="trBlock">';
         htmlblock+= '<td>' + data.name + '</td><td>' + data.usageunit + '</td><td>' + data.value + '</td><td>' + data.description + '</td>' + '<td>' + isOptional_to_text(data.isOptional) + '</td>';
-        htmlblock+= '<td><span><a name="btn_del" id="'+ data.n +'" class="btn red" href="'+ data.n +'">' + LABEL_DELETE + '</a>';
+        htmlblock+= '<td><span><a name="btn_del" id="'+ data.n +'" class="btn red" href="'+ data.n +'">' + LABEL_DELETE + '</a></span></div>';
         htmlblock+= '</tr>';   
     $("#f_itemBox").append(htmlblock);
 }

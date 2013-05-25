@@ -22,14 +22,14 @@
 	<?php endif; ?>
 </section>
 <section class="item">
-<?php echo form_open(uri_string(), 'class="crud"'); ?>
 <div class="tabs">
 	<ul class="tab-menu">
 		<li><a href="#products-setup-tab"><span><?php echo lang('products_setup_label'); ?></span></a></li>
 		<li><a href="#products-features-tab"><span><?php echo lang('products_features_label'); ?></span></a></li>                
 		<li><a href="#products-images-tab"><span><?php echo lang('products_images_label'); ?></span></a></li>        
 	</ul>
-	
+
+	<?php echo form_open(uri_string(), 'class="crud"'); ?>
 	<!-- Info tab -->
 	<div class="form_inputs" id="products-setup-tab">		
 		<fieldset>	
@@ -106,14 +106,15 @@
                     <table class="f_table"><tr>
                     <td>
 	                    <?php echo form_dropdown('dd_features', array(),'','class="med" data-placeholder="'.lang('products_no_features_select_label').'"') ?>					
-	                    <?php echo form_dropdown('dd_isOptional', $dd_yes_no,'','class="small" data-placeholder="'.lang('products_no_features_isOptional_label').'"') ?>	                    
 	                    <?php echo form_hidden('f_id','',' id = "f_id"'); ?>  
 	                    <?php echo form_input('usageunit','',' placeholder="'.lang('products_usageunit').'" class="f_small" id="usageunit" disabled'); ?>    
 	                    <?php echo form_input('f_qty','',' placeholder="'.lang('products_qty').'" class="tiny" id="f_qty"'); ?>                      
                     </td>
                     <td>
                     	<?php echo form_textarea(array('id' => 'f_description', 'name' => 'f_description', 'class' => 'f_tiny', 'placeholder' =>lang('products_f_description') )); ?>	
-                    </td>                        <td>
+                    </td>                        
+                    <td>
+                    	<?php echo form_dropdown('dd_isOptional', $dd_yes_no,'','class="small" data-placeholder="'.lang('products_no_features_isOptional_label').'"') ?>	                    
                     	<?php echo anchor('', lang('products_add'),'id="f_add" class="btn gray"'); ?> 
                     </td></tr></table>
                     <span><?php echo lang('products_features_list'); ?></span>
@@ -126,18 +127,22 @@
 			</li>                                                                      
 		</ul>		
 		</fieldset>	                        
-        </div>                    
-	<!-- Info images -->
+        </div>  
+<?php echo form_close(); ?>
+
+
+<!-- Info images -->
+
         <div class="form_inputs" id="products-images-tab">
-            <fieldset>	    	            
-                <ul>		
-                </ul>		
+            <fieldset>
+
+	            <?php echo $dzForm; //Dropzone form loader ?>  	
             </fieldset>	
         </div>        
 </div>
 <div class="buttons float-right padding-top">
 	<?php $this->load->view('admin/partials/buttons', array('buttons' => array('save', 'save_exit', 'cancel'))); ?>
 </div>
-<?php echo form_close(); ?>
+
 </section>
 
