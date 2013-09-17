@@ -94,6 +94,8 @@ $lang['products_list'] 							= 'Productos';
 //buttons
 $lang['products_btn_return']					= 'Volver';
 $lang['products:undelete']	 					= 'Restaurar';
+$lang['products_save']	 					    = 'Guardar';
+$lang['products_cancel']	 					= 'Cancelar';
 
 // messages
 $lang['products_no_posts'] 						= 'No hay productos.';

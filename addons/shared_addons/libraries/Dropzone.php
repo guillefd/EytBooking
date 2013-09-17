@@ -31,7 +31,8 @@ class Dropzone
 	}
     
     /**
-     * [dzFormMarkup returns FORM markup]
+     * dzFormMarkup returns FORM markup - 
+     * elements = FORM: contains fields, dropzone / table: contains added or existing images. 
      * @param  string $action      [action URL]
      * @param  string $dropzoneid  [Element ID for ]
      * @param  string $fileslistid [description]
@@ -40,7 +41,6 @@ class Dropzone
 	public function dzFormMarkup($action = '', $dropzoneid ='imgdropzone', $fileslistid = 'dzfileslistid' )
 	{
 		$form = form_open($action, 'class="dropzone" id="'.$dropzoneid.'"'); 
-		$form.= form_hidden($fileslistid,'',' id="'.$fileslistid.'"');
 		$form.= form_close();
 		$form.= '<div id="dzLfiles" class="dropzone-previews"></div>'
 				.'<table class="dztableBox">'
@@ -49,6 +49,34 @@ class Dropzone
 				.'</table>'; 		
 		return $form;	
 	}
+
+
+    /**
+     * [check_temp_folder description]
+     * @return [type] [description]
+     */
+	public function check_temp_folder()
+	{
+		$tempfoldername = 'dzTemp';
+		$tree = Files::folder_tree();
+		$notfound = true;
+		$i = 0;
+		while($notfound && $i <= count($tree) )
+		{
+			if( $tree[$i-1]['name'] == $tempfoldername )
+			{
+				$notfound = false;
+				$tempfolderid = $tree[$i-1]['id'];
+			}	
+			$i++;
+		}
+		if($notfound)
+		{
+			$result = Files::create_folder(0, $tempfoldername );
+			$tempfolderid = $result['data']['id'];	
+		}
+		return $tempfolderid;
+	}	
 
 
 }

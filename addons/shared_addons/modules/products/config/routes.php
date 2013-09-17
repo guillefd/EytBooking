@@ -37,4 +37,5 @@ $route['products/admin/locations_by_accountid_ajax']    = 'admin_locations/locat
 $route['products/admin/spaces_by_locationid_ajax']      = 'admin_spaces/spaces_by_locationid_ajax';
 $route['products/admin/spaces_autocomplete_ajax']       = 'admin_spaces/spaces_autocomplete_ajax';
 $route['products/admin/get_features_ajax']              = 'admin_features/get_features_ajax';
-$route['products/admin/filetempupload_ajax']            = 'admin/filetemp_upload';
+$route['products/admin/filetempupload_ajax']            = 'admin/filetemp_upload_ajax';
+$route['products/admin/getfile_ajax(/:num)?']           = 'admin/getfile_ajax$1';

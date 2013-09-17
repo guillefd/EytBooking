@@ -74,7 +74,13 @@ function validation_rules()
 						'field' => 'features',
 						'label' => 'lang:products_features_label',
 						'rules' => 'trim|required|callback__check_features'
-					),            
+					),
+					array(
+						'field' => 'dzfileslistid',
+						'label' => 'lang:products_images_label',
+						'rules' => 'trim'
+					),
+
 				);	
 }
 

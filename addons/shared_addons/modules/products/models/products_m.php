@@ -170,5 +170,15 @@ class Products_m extends MY_Model {
 	}
 
 
+// FILES ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+	function move_product_file($fileid, $newfolderid)
+	{
+		$data = array('folder_id'=>$newfolderid);
+		$this->db->where('id', $fileid);
+		return $this->db->update('files', $data);
+	}	
+
+
 
 }

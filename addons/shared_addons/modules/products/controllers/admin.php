@@ -70,6 +70,7 @@ class Admin extends Admin_Controller
 		$this->form_validation->set_rules( $validation_rules );
 		if ($this->form_validation->run())
 		{			
+			$imgIDs = $this->gen_imageIDs_array($this->input->post('dzfileslistid'));
 			// BEGIN TRANSACTION :::::::::::::::::::::::::::::::::::::
 			$this->db->trans_start();
 			$product_id = $this->products_m->insert(array(
@@ -83,6 +84,7 @@ class Admin extends Admin_Controller
 									'slug'				=> $this->input->post('slug').'_'.gen_url_addon_code(),
 									'intro'				=> $this->input->post('intro'),
 									'body'				=> $this->input->post('body'),
+									'images'			=> $this->input->post('dzfileslistid'),
 									'active'			=> $this->input->post('status'),
 									'created_on'        => now(),
 									'author_id'			=> $this->current_user->id
@@ -92,6 +94,10 @@ class Admin extends Admin_Controller
 				$features_field_list = array('product_id','default_feature_id','description','value','is_optional');
 				$features_array = array();
 				$features_array = generate_features_array_from_json( $features_field_list, $this->input->post('features'), $product_id );
+				if( ($prod_folder_id = $this->check_folder($product_id)) && (count($imgIDs)>0) )
+				{
+					$this->move_tempfiles_to_prod_folder($prod_folder_id, $imgIDs);	
+				}
 			}
 			if ($this->products_m->insert_features($features_array))
 			{
@@ -211,17 +217,26 @@ class Admin extends Admin_Controller
 				$product->$field['field'] = set_value($field['field']);
 			}
 		}
+		$product->dzfileslistid = $product->images;
 		$this->data = gen_dropdown_list();    
+
+       	//load path for Dropzones assets
+	    $this->dropzone->loadAssetPath();
+		
 		$this->template
-			->title($this->module_details['name'], lang('products_create_title'))
+			->title($this->module_details['name'], lang('products_create_title'))     	
+			->append_css('module::jquery/jquery.tagsinput.css')
+            ->append_css('module::jquery/jquery.autocomplete.css')
+            ->append_css('dropzoneCSS::dropzone.css')
 			->append_js('module::jquery/jquery.tagsinput.js')
             ->append_js('module::jquery/jquery.mask.min.js')                        
 			->append_js('module::products_form.js')
             ->append_js('module::products_form_features.js')
-			->append_css('module::jquery/jquery.tagsinput.css')
-            ->append_css('module::jquery/jquery.autocomplete.css')                         
+        	->append_js('dropzoneJS::dropzone.min.js')
+        	->append_js('dropzoneJS::main.js')
 			->set('product', $product)
-			->build('admin/products/form',$this->data);
+			->set('dzForm', $this->dropzone->dzFormMarkup('admin/products/filetempupload_ajax'))
+			->build('admin/products/form',$this->data);			
 	}
 
 
@@ -309,7 +324,64 @@ class Admin extends Admin_Controller
 	}
 
 
-// AUX _ VALIDATIONS
+	public function gen_imageIDs_array($field)
+	{
+		if($field)
+		{
+			$imgIDs = explode(";", trim($field));
+			for($i=0;$i<=count($imgIDs);$i++)
+			{
+				if($imgIDs[$i]=="" || !is_numeric($imgIDs[$i]))
+				{
+					unset($imgIDs[$i]);
+				}
+			}
+			return $imgIDs;
+		}
+		return array();
+	}
+
+	public function check_folder($product_id)
+	{
+		$prodfoldername = 'PROD'.$product_id;
+		$tree = Files::folder_tree();
+		$notfound = true;
+		$i = 0;
+		while($notfound && $i <= count($tree) )
+		{
+			if( $tree[$i-1]['name'] == $prodfoldername )
+			{
+				$notfound = false;
+				$prodfolderid = $tree[$i-1]['id'];
+			}	
+			$i++;
+		}
+		if($notfound)
+		{
+			$result = Files::create_folder(0, $prodfoldername );
+			if($result['status']==true)
+			{
+				$prodfolderid = $result['data']['id'];
+			}
+			else
+			{
+				$prodfolderid = false;
+			}		
+		}
+		return $prodfolderid;	
+	}
+
+
+	public function move_tempfiles_to_prod_folder($prodfolderid, $imgarray)
+	{
+		foreach($imgarray as $imgid)
+		{
+			$this->products_m->move_product_file($imgid, $prodfolderid);
+		}
+	}
+
+
+// AUX _ VALIDATIONS :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 	public function _check_seller_account_option()
 	{
@@ -350,7 +422,9 @@ class Admin extends Admin_Controller
 			}	
 	}
 
-        /**
+// :::::::: AJAX ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+     /**
 	 * method to fetch filtered results for products list
 	 * @access public
 	 * @return void
@@ -397,38 +471,25 @@ class Admin extends Admin_Controller
 		                        ->build('admin/products/tables/products', $this->data);
 	}
 
-
-	public function filetemp_upload()
+    
+	public function filetemp_upload_ajax()
 	{
-		$tempfolderid = $this->check_temp_folder();
+		$tempfolderid = $this->dropzone->check_temp_folder();
 		echo json_encode( Files::upload($tempfolderid) );
-	}	
-
-    /**
-     * [check_temp_folder description]
-     * @return [type] [description]
-     */
-	public function check_temp_folder()
-	{
-		$tempfoldername = 'Temp';
-		$tree = Files::folder_tree();
-		$notfound = true;
-		$i = 0;
-		while($notfound && $i <= count($tree) )
-		{
-			if( $tree[$i-1]['name'] == $tempfoldername )
-			{
-				$notfound = false;
-				$tempfolderid = $tree[$i-1]['id'];
-			}	
-			$i++;
-		}
-		if($notfound)
-		{
-			$result = Files::create_folder(0, $tempfoldername );
-			$tempfolderid = $result['data']['id'];	
-		}
-		return $tempfolderid;
 	}
+
+
+	public function getFile_ajax($fileid)
+	{
+		
+		if( $fileid!="" && is_numeric($fileid) )
+		{
+			echo json_encode( Files::get_file($fileid));
+		}
+		else
+		{
+			echo json_encode( array('status'=>'false', 'message'=>'No valid ID provided.') );
+		}
+	}	
 
 }

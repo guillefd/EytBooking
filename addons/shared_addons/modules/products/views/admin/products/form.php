@@ -6,7 +6,8 @@
     var MSG_ADD_ITEM_ERROR = "<?php echo lang('products_add_feature_empty') ?>";
     var MSG_ALERT_CATEGORY_CHANGE = "<?php echo lang('products_change_category_feature_alert') ?>";
     var LABEL_DELETE = "<?php echo lang('products_delete') ?>";    
-    var LABEL_EDIT = "<?php echo lang('products_edit') ?>";  
+    var LABEL_EDIT = "<?php echo lang('products_edit') ?>";
+    var LABEL_SAVE = "<?php echo lang('products_save') ?>";  
 	// Select location and space fix (for repopulate)
 	var SPACEID = "<?php echo $product->space_id; ?>";
 	var LOCATIONID = "<?php echo $product->location_id; ?>";
@@ -29,7 +30,8 @@
 		<li><a href="#products-images-tab"><span><?php echo lang('products_images_label'); ?></span></a></li>        
 	</ul>
 
-	<?php echo form_open(uri_string(), 'class="crud"'); ?>
+	<?php echo form_open(uri_string(), 'class="crud" id="dzmainform" '); ?>
+
 	<!-- Info tab -->
 	<div class="form_inputs" id="products-setup-tab">		
 		<fieldset>	
@@ -128,6 +130,10 @@
 		</ul>		
 		</fieldset>	                        
         </div>  
+        
+		<!-- Drop zone DATA FIELD -->
+		<?php echo form_hidden('dzfileslistid', $product->dzfileslistid); ?>
+
 <?php echo form_close(); ?>
 
 
@@ -135,13 +141,13 @@
 
         <div class="form_inputs" id="products-images-tab">
             <fieldset>
-
 	            <?php echo $dzForm; //Dropzone form loader ?>  	
             </fieldset>	
         </div>        
 </div>
 <div class="buttons float-right padding-top">
-	<?php $this->load->view('admin/partials/buttons', array('buttons' => array('save', 'save_exit', 'cancel'))); ?>
+	<button id="dzmainsubmit" class="btn blue" name="btnAction" value="save"><span><?php echo lang('products_save') ?></span></button>
+	<a href="<?php echo base_url().'admin/products' ?>" class="btn gray cancel"><?php echo lang('products_cancel') ?></a>
 </div>
 
 </section>
